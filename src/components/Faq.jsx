@@ -7,13 +7,20 @@ export default function Faq({
   tag = "FAQ",
   title,
   text,
+  light = false,
 }) {
   const [openIndex, setOpenIndex] = useState(0);
+  const colors = {
+    text: light ? C.lightText : C.text,
+    textSoft: light ? C.lightTextSoft : C.textSoft,
+    border: light ? C.lightBorder : C.border,
+  };
 
   return (
     <>
       <SectionHeading
         tag={tag}
+        light={light}
         title={
           title || (
             <>
@@ -27,7 +34,7 @@ export default function Faq({
       <div style={{ marginTop: 28, maxWidth: 760 }}>
         {items.map((item, index) => (
           <Reveal key={item.q} delay={0.08 + index * 0.03}>
-            <div style={{ borderBottom: `1px solid ${C.border}` }}>
+            <div style={{ borderBottom: `1px solid ${colors.border}` }}>
               <button
                 onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
                 style={{
@@ -43,7 +50,7 @@ export default function Faq({
                   fontFamily: BODY,
                   fontSize: "0.88rem",
                   fontWeight: 600,
-                  color: C.text,
+                  color: colors.text,
                 }}
               >
                 {item.q}
@@ -69,7 +76,7 @@ export default function Faq({
               >
                 <p
                   style={{
-                    color: C.textSoft,
+                    color: colors.textSoft,
                     fontSize: "0.82rem",
                     lineHeight: 1.7,
                     fontFamily: BODY,

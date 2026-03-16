@@ -1,5 +1,6 @@
 export const C = {
   bg: "#0B1120",
+  bgAlt: "#111827",
   bg2: "#0F172A",
   bg3: "#1E293B",
   surface: "#1E293B",
@@ -15,6 +16,15 @@ export const C = {
   borderLight: "rgba(255,255,255,0.1)",
   accent: "#F59E0B",
   danger: "#EF4444",
+
+  // Light section colors (blue-tinted theme)
+  lightBg: "#F0F4F8",
+  lightText: "#0C2D4A",
+  lightTextSoft: "#3D5A80",
+  lightTextMuted: "#6B8DB5",
+  lightBorder: "rgba(14,165,233,0.12)",
+  lightCard: "#FFFFFF",
+  lightCardBorder: "rgba(14,165,233,0.08)",
 };
 
 export const DISPLAY = "'DM Serif Display', Georgia, serif";
@@ -46,5 +56,6 @@ export const shell = {
     lineHeight: 1.78,
     fontSize: "0.9rem",
     fontFamily: BODY,
+    maxWidth: 640,
   },
 };

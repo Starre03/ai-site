@@ -98,13 +98,13 @@ textarea::placeholder {
 .card-grid-two {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 16px;
 }
 
 .card-grid-three {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 16px;
 }
 
 @keyframes blink {

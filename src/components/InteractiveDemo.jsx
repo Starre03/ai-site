@@ -106,6 +106,7 @@ export default function InteractiveDemo() {
     <>
       <SectionHeading
         tag="Voorbeelden"
+        light
         title={
           <>
             Zo zien de drie diensten van starre.ai eruit
@@ -129,9 +130,10 @@ export default function InteractiveDemo() {
                 cursor: "pointer",
                 fontFamily: BODY,
                 fontSize: "0.78rem",
-                border: `1px solid ${active === index ? `${C.primary}35` : C.border}`,
-                background: active === index ? C.primaryDim : "transparent",
-                color: active === index ? C.primaryLight : C.textMuted,
+                border: `1px solid ${active === index ? C.primary : C.border}`,
+                background: active === index ? C.primary : C.bg2,
+                color: active === index ? "#fff" : C.textSoft,
+                boxShadow: active === index ? `0 4px 12px ${C.primary}30` : "none",
                 fontWeight: active === index ? 600 : 400,
                 transition: "all 0.4s cubic-bezier(.22,1,.36,1)",
               }}
@@ -144,10 +146,10 @@ export default function InteractiveDemo() {
       <Reveal delay={0.22}>
         <div className="two-col" style={{ marginTop: 24, alignItems: "stretch" }}>
           <div>
-            <h3 style={{ color: C.text, fontFamily: BODY, fontSize: "1.08rem", fontWeight: 600 }}>
+            <h3 style={{ color: C.lightText, fontFamily: BODY, fontSize: "1.08rem", fontWeight: 600 }}>
               {item.title}
             </h3>
-            <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.8, fontSize: "0.86rem", marginTop: 12 }}>
+            <p style={{ color: C.lightTextSoft, fontFamily: BODY, lineHeight: 1.8, fontSize: "0.86rem", marginTop: 12 }}>
               {active === 0
                 ? "Voor bedrijven die eerst een AI audit willen: waar zitten de bottlenecks, welke AI kansen zijn haalbaar en welke implementatievolgorde levert het meeste op."
                 : active === 1

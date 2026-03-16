@@ -30,6 +30,7 @@ export function SmoothSection({
   zIndex = 1,
   minH = "120vh",
   center = false,
+  blendFrom,
 }) {
   const ref = useRef(null);
   const progress = useSectionProgress(ref);
@@ -49,8 +50,10 @@ export function SmoothSection({
           justifyContent: "center",
           alignItems: center ? "center" : undefined,
           textAlign: center ? "center" : undefined,
-          padding: "5rem clamp(1.5rem, 5vw, 5rem)",
-          background: bg,
+          padding: "6rem clamp(1.5rem, 5vw, 5rem)",
+          background: blendFrom
+            ? `linear-gradient(to bottom, ${blendFrom} 0%, ${bg} 12%)`
+            : bg,
           zIndex,
           opacity: fadeOut,
           transform: `translateY(${drift}px) translateZ(0)`,
@@ -63,7 +66,7 @@ export function SmoothSection({
   );
 }
 
-export function PageSection({ children, bg = C.bg, pad = "7rem clamp(1.5rem, 5vw, 5rem)" }) {
+export function PageSection({ children, bg = C.bg, pad = "9rem clamp(1.5rem, 5vw, 5rem)" }) {
   return (
     <section style={{ position: "relative", background: bg, padding: pad }}>
       <div style={shell.content}>{children}</div>
@@ -71,7 +74,7 @@ export function PageSection({ children, bg = C.bg, pad = "7rem clamp(1.5rem, 5vw
   );
 }
 
-export function GlowCard({ children, style = {} }) {
+export function GlowCard({ children, style = {}, light = false }) {
   const ref = useRef(null);
   const [glow, setGlow] = useState({ x: 50, y: 50, on: false });
 
@@ -89,7 +92,7 @@ export function GlowCard({ children, style = {} }) {
       onMouseLeave={() => setGlow((current) => ({ ...current, on: false }))}
       style={{
         position: "relative",
-        borderRadius: 14,
+        borderRadius: 18,
         overflow: "hidden",
         transition: "transform 0.4s cubic-bezier(.22,1,.36,1)",
         ...style,
@@ -99,7 +102,7 @@ export function GlowCard({ children, style = {} }) {
         style={{
           position: "absolute",
           inset: -1,
-          borderRadius: 14,
+          borderRadius: 18,
           pointerEvents: "none",
           background: `radial-gradient(220px at ${glow.x}% ${glow.y}%, ${C.primary}15, transparent 70%)`,
           opacity: glow.on ? 1 : 0,
@@ -110,9 +113,9 @@ export function GlowCard({ children, style = {} }) {
         style={{
           position: "absolute",
           inset: 0,
-          borderRadius: 14,
+          borderRadius: 18,
           pointerEvents: "none",
-          border: `1px solid ${glow.on ? `${C.primary}20` : C.border}`,
+          border: `1px solid ${glow.on ? `${C.primary}20` : light ? C.lightCardBorder : C.border}`,
           transition: "border-color 0.6s ease",
         }}
       />
@@ -156,8 +159,8 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false }
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    padding: "14px 30px",
-    borderRadius: 10,
+    padding: "16px 36px",
+    borderRadius: 12,
     fontWeight: 600,
     fontSize: "0.92rem",
     textDecoration: "none",
@@ -254,31 +257,31 @@ export function TyperText({
   );
 }
 
-export function SectionHeading({ tag, title, text, width = 640 }) {
+export function SectionHeading({ tag, title, text, width = 640, light = false }) {
   return (
     <>
       <Reveal>
         <Tag>{tag}</Tag>
       </Reveal>
       <Reveal delay={0.06}>
-        <h2 style={{ ...shell.sectionTitle, maxWidth: width }}>{title}</h2>
+        <h2 style={{ ...shell.sectionTitle, maxWidth: width, ...(light ? { color: C.lightText } : {}) }}>{title}</h2>
       </Reveal>
       {text ? (
         <Reveal delay={0.12}>
-          <p style={{ ...shell.sectionText, maxWidth: Math.min(width, 560), marginTop: 14 }}>{text}</p>
+          <p style={{ ...shell.sectionText, maxWidth: Math.min(width, 560), marginTop: 14, ...(light ? { color: C.lightTextSoft } : {}) }}>{text}</p>
         </Reveal>
       ) : null}
     </>
   );
 }
 
-export function BulletList({ items }) {
+export function BulletList({ items, light = false }) {
   return (
     <div style={{ display: "grid", gap: 8 }}>
       {items.map((item) => (
         <div
           key={item}
-          style={{ display: "flex", alignItems: "flex-start", gap: 8, color: C.textSoft, fontFamily: BODY }}
+          style={{ display: "flex", alignItems: "flex-start", gap: 8, color: light ? C.lightTextSoft : C.textSoft, fontFamily: BODY }}
         >
           <span style={{ color: C.primary, fontSize: "0.72rem", marginTop: 4 }}>✓</span>
           <span style={{ fontSize: "0.82rem", lineHeight: 1.7 }}>{item}</span>

@@ -124,10 +124,10 @@ function ProblemSection() {
   ];
 
   return (
-    <SmoothSection bg={C.bg} zIndex={2} minH="120vh">
-      <div className="ambient ambient-right" />
+    <SmoothSection bg={C.lightBg} zIndex={2} minH="120vh">
       <SectionHeading
         tag="Waarom bedrijven vastlopen"
+        light
         title={
           <>
             Bedrijven weten dat AI bestaat,
@@ -136,13 +136,13 @@ function ProblemSection() {
         }
         text="AI voor bedrijven is inmiddels overal zichtbaar. Toch blijven veel teams steken tussen losse demo's, proefaccounts en inspiratie. Het echte probleem is niet gebrek aan tools, maar gebrek aan duidelijkheid over welke AI implementatie nu direct waarde oplevert."
       />
-      <div className="card-grid-two" style={{ marginTop: 30 }}>
+      <div className="card-grid-two" style={{ marginTop: 40 }}>
         {items.map((item, index) => (
           <Reveal key={item.title} delay={0.14 + index * 0.06} fill>
-            <GlowCard style={{ background: C.bg2, height: "100%" }}>
-              <div style={{ padding: "1.35rem", height: "100%" }}>
-                <h3 style={{ fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, color: C.text }}>{item.title}</h3>
-                <p style={{ color: C.textSoft, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10, fontFamily: BODY }}>
+            <GlowCard light style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+              <div style={{ padding: "1.8rem", height: "100%" }}>
+                <h3 style={{ fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, color: C.lightText }}>{item.title}</h3>
+                <p style={{ color: C.lightTextSoft, fontSize: "0.88rem", lineHeight: 1.75, marginTop: 10, fontFamily: BODY }}>
                   {item.desc}
                 </p>
               </div>
@@ -156,7 +156,7 @@ function ProblemSection() {
 
 function ServicesOverview() {
   return (
-    <SmoothSection bg={C.bg2} zIndex={3} minH="120vh">
+    <SmoothSection bg={C.bg} zIndex={3} minH="120vh">
       <SectionHeading
         tag="Drie diensten"
         title={
@@ -168,11 +168,11 @@ function ServicesOverview() {
         text="Elke dienst van starre.ai is los af te nemen. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor AI integraties of OpenClaw AI agents. Het uitgangspunt is niet een vaste funnel, maar de juiste dienst op het juiste moment."
         width={760}
       />
-      <div className="card-grid-three" style={{ marginTop: 28 }}>
+      <div className="card-grid-three" style={{ marginTop: 40 }}>
         {serviceCards.map((card, index) => (
           <Reveal key={card.slug} delay={0.12 + index * 0.05} fill>
             <GlowCard style={{ background: C.bg, height: "100%" }}>
-              <div style={{ padding: "1.4rem", display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
+              <div style={{ padding: "1.8rem", display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
                 <div>
                   <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: BODY }}>
                     {card.eyebrow}
@@ -180,7 +180,7 @@ function ServicesOverview() {
                   <h3 style={{ fontFamily: BODY, fontSize: "1rem", fontWeight: 600, marginTop: 10, color: C.text }}>
                     {card.title}
                   </h3>
-                  <p style={{ color: C.textSoft, fontSize: "0.84rem", lineHeight: 1.75, marginTop: 10, fontFamily: BODY }}>
+                  <p style={{ color: C.textSoft, fontSize: "0.88rem", lineHeight: 1.75, marginTop: 10, fontFamily: BODY }}>
                     {card.summary}
                   </p>
                 </div>
@@ -220,13 +220,14 @@ export default function Home() {
       <Hero />
       <ProblemSection />
       <ServicesOverview />
-      <SmoothSection bg={C.bg2} zIndex={4} minH="120vh">
+      <SmoothSection bg={C.lightBg} zIndex={4} minH="120vh">
         <InteractiveDemo />
       </SmoothSection>
       <METRSection />
-      <section style={{ padding: "6rem clamp(1.5rem, 5vw, 5rem)", background: C.bg2 }}>
+      <section style={{ padding: "6rem clamp(1.5rem, 5vw, 5rem)", background: C.lightBg }}>
         <div style={{ ...shell.content, maxWidth: 880 }}>
           <Faq
+            light
             items={homeFaq}
             title={
               <>
