@@ -1,0 +1,174 @@
+import IntakeForm from "../components/IntakeForm";
+import { BODY, C } from "../lib/theme";
+import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, TyperText, usePageSeo } from "../components/ui";
+
+export default function AgentsPage() {
+  usePageSeo({
+    title: "starre.ai | OpenClaw setup en AI agents voor inbox automation, leads en support",
+    description:
+      "OpenClaw AI agents en agent systems voor bedrijven. Voor inbox automation, lead qualification, intake automation, support routing en AI workflow automatisering.",
+  });
+
+  return (
+    <>
+      <PageHero
+        badge="OpenClaw setups · AI Agents"
+        title={
+          <>
+            OpenClaw AI agents voor inbox automation,
+            <span style={{ color: C.primary }}> lead qualification en support routing.</span>
+          </>
+        }
+        text="starre.ai bouwt OpenClaw setups en AI agents voor bedrijven die meer willen dan losse AI antwoorden. Dit gaat over mail begrijpen, intake automation, leads analyseren, support routeren en acties klaarzetten of uitvoeren via moderne agent systems."
+        actions={[
+          <PrimaryButton key="intake" href="#intake" onClick={(event) => {
+            event.preventDefault();
+            document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}>
+            Bespreek OpenClaw setup →
+          </PrimaryButton>,
+          <PrimaryButton key="audit" secondary to="/ai-audit">
+            Start met AI audit
+          </PrimaryButton>,
+        ]}
+        aside={
+          <GlowCard style={{ background: C.bg2, maxWidth: 380 }}>
+            <div style={{ padding: "1.35rem" }}>
+              <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
+                OpenClaw concreet
+              </div>
+              <p style={{ color: C.text, fontFamily: BODY, fontWeight: 600, marginTop: 12 }}>
+                Inbox lezen, mail begrijpen, intake starten, CRM checken en opvolging klaarzetten.
+              </p>
+              <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.75, fontSize: "0.82rem", marginTop: 10 }}>
+                <TyperText
+                  items={[
+                    "Mail begrijpen en routing starten",
+                    "Leads analyseren en intake automation starten",
+                    "Support routeren en opvolging klaarzetten",
+                  ]}
+                  primaryCursor={false}
+                />
+              </p>
+            </div>
+          </GlowCard>
+        }
+      />
+
+      <PageSection bg={C.bg2}>
+        <SectionHeading
+          tag="Wat OpenClaw doet"
+          title={
+            <>
+              OpenClaw is geen losse demo,
+              <em style={{ color: C.primary, fontStyle: "italic" }}> maar een agent system dat werk doorzet en uitvoert</em>
+            </>
+          }
+          text="Daarmee verschilt deze dienst fundamenteel van AI integraties. Integraties helpen medewerkers sneller werken. OpenClaw AI agents pakken werk op, routeren het door, verrijken context en zetten vervolgstappen klaar of voeren ze uit."
+        />
+        <div className="card-grid-two" style={{ marginTop: 28 }}>
+          {[
+            {
+              title: "Mail checken en begrijpen",
+              body: "Een inbox-agent leest binnenkomende mails, herkent intentie en bepaalt of het gaat om support, sales, intake, opvolging of escalatie.",
+            },
+            {
+              title: "Conceptantwoorden voorbereiden",
+              body: "Een antwoord-agent verzamelt context uit documentatie of systemen en zet een passend antwoord klaar voor review of directe verzending.",
+            },
+            {
+              title: "Leads analyseren en intake starten",
+              body: "Een lead-agent beoordeelt fit, haalt context uit CRM, stuurt intakevragen uit en zet de juiste vervolgstappen klaar voor sales of operations.",
+            },
+            {
+              title: "Samenwerkende agents",
+              body: "Verschillende agents kunnen achter elkaar of parallel werken: inbox-agent, CRM-agent, support-agent en routing-agent binnen één flow.",
+            },
+            {
+              title: "Support categoriseren en routeren",
+              body: "Tickets of mails worden automatisch gelabeld, verrijkt en doorgestuurd naar de juiste queue, persoon of vervolgactie.",
+            },
+            {
+              title: "Acties voorstellen of uitvoeren",
+              body: "Afhankelijk van het proces kunnen agents taken klaarzetten, statussen updaten, workflows triggeren of voorstellen doen voordat een medewerker bevestigt.",
+            },
+          ].map((item, index) => (
+            <Reveal key={item.title} delay={0.12 + index * 0.04} fill>
+              <GlowCard style={{ background: C.bg, height: "100%" }}>
+                <div style={{ padding: "1.35rem", height: "100%" }}>
+                  <h3 style={{ color: C.text, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                  <p style={{ color: C.textSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                    {item.body}
+                  </p>
+                </div>
+              </GlowCard>
+            </Reveal>
+          ))}
+        </div>
+      </PageSection>
+
+      <PageSection bg={C.bg}>
+        <div className="two-col" style={{ alignItems: "start" }}>
+          <div>
+            <SectionHeading
+              tag="Wanneer dit past"
+              title={<>Kies AI agents zodra werk niet mag stoppen bij een antwoord, maar door moet naar actie</>}
+              text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heb je geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
+            />
+          </div>
+          <Reveal delay={0.18}>
+            <GlowCard style={{ background: C.bg2 }}>
+              <div style={{ padding: "1.35rem" }}>
+                <BulletList
+                  items={[
+                    "Je wilt inbox, leads of supportstromen slimmer afhandelen",
+                    "Meerdere systemen moeten samenwerken in één flow",
+                    "Taken moeten worden doorgezet of uitgevoerd, niet alleen beoordeeld",
+                    "Je zoekt een concreet OpenClaw setup in plaats van een losse AI demo",
+                  ]}
+                />
+              </div>
+            </GlowCard>
+          </Reveal>
+        </div>
+      </PageSection>
+
+      <PageSection bg={C.bg2}>
+        <div className="two-col" style={{ alignItems: "start" }}>
+          <div>
+            <SectionHeading
+              tag="Waarom OpenClaw"
+              title={<>OpenClaw voelt onderscheidend omdat meerdere agents tegelijk kunnen kijken, redeneren en handelen</>}
+              text="Dat maakt OpenClaw interessant voor bedrijven die nieuwsgierig zijn naar moderne AI agents voor bedrijven, AI automatisering en agent systems die samenwerken tussen inbox, CRM, routing en opvolging."
+            />
+          </div>
+          <Reveal delay={0.18}>
+            <GlowCard style={{ background: C.bg }}>
+              <div style={{ padding: "1.35rem" }}>
+                <BulletList
+                  items={[
+                    "Een inbox-agent kan mail begrijpen terwijl een CRM-agent context ophaalt en een routing-agent de volgende stap voorbereidt",
+                    "Lead qualification, intake automation en support routing kunnen binnen één OpenClaw setup samenkomen",
+                    "Agents kunnen acties klaarzetten of uitvoeren in plaats van alleen suggesties teruggeven",
+                    "Dit maakt OpenClaw krachtig voor AI workflow automatisering met echte bedrijfslogica",
+                  ]}
+                />
+              </div>
+            </GlowCard>
+          </Reveal>
+        </div>
+      </PageSection>
+
+      <IntakeForm
+        preferredRoute="AI Agents"
+        title={
+          <>
+            Onderzoek of een OpenClaw setup
+            <em style={{ color: C.primary, fontStyle: "italic" }}> direct werk kan overnemen in je team</em>
+          </>
+        }
+        text="Vertel welke inbox-, support-, intake- of leadprocessen nu handmatig blijven hangen. Dan kunnen we direct inschatten of een OpenClaw setup met AI agents past."
+      />
+    </>
+  );
+}
