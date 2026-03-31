@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function IntegrationsPage() {
   usePageSeo({
-    title: "starre.ai | Claude integratie, ChatGPT integratie en OpenAI integratie voor bedrijven",
+    title: "starre.ai | AI implementatie, Claude integratie, ChatGPT integratie en OpenAI integratie",
     description:
       "AI integraties voor bedrijven met Claude, ChatGPT en OpenAI. Voor support, documentanalyse, AI kennisassistenten en workflow verbetering in bestaande processen.",
   });
@@ -12,10 +12,10 @@ export default function IntegrationsPage() {
   return (
     <>
       <PageHero
-        badge="Claude integratie · ChatGPT integratie · OpenAI integratie"
+        badge="AI implementatie · Claude integratie · ChatGPT integratie · OpenAI integratie"
         title={
           <>
-            AI integraties voor support,
+            AI implementatie voor support,
             <span style={{ color: C.primary }}> document AI en kenniswerk.</span>
           </>
         }

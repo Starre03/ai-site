@@ -1,14 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { navLinks } from "../content/siteContent";
+import { serviceMenuLinks, solutionMenuLinks } from "../content/siteContent";
 import { BODY, C } from "../lib/theme";
 import { BrandMark } from "./ui";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [desktopMenu, setDesktopMenu] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const menus = useMemo(
+    () => [
+      { label: "Diensten", items: serviceMenuLinks },
+      { label: "Oplossingen", items: solutionMenuLinks },
+    ],
+    [],
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -18,6 +27,7 @@ export default function Nav() {
 
   useEffect(() => {
     setOpen(false);
+    setDesktopMenu(null);
   }, [location.pathname]);
 
   const goToIntake = () => {
@@ -31,6 +41,8 @@ export default function Nav() {
 
     document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const groupIsActive = (items) => items.some((item) => item.to === location.pathname);
 
   return (
     <nav
@@ -53,27 +65,98 @@ export default function Nav() {
         borderBottom: scrolled ? `1px solid ${C.border}` : "1px solid transparent",
         transition: "all 0.5s cubic-bezier(.22,1,.36,1)",
       }}
+      onMouseLeave={() => setDesktopMenu(null)}
     >
       <Link id="nav-logo" to="/" style={{ textDecoration: "none" }} aria-label="Ga naar home">
         <BrandMark />
       </Link>
-      <div className="desktop-nav" style={{ display: "flex", gap: 24, alignItems: "center" }}>
-        {navLinks.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            style={({ isActive }) => ({
-              color: isActive ? C.text : C.textMuted,
-              textDecoration: "none",
-              fontSize: "0.78rem",
-              fontWeight: isActive ? 600 : 500,
-              transition: "color 0.3s",
-              fontFamily: BODY,
-            })}
-          >
-            {link.label}
-          </NavLink>
-        ))}
+      <div className="desktop-nav" style={{ display: "flex", gap: 24, alignItems: "center", position: "relative" }}>
+        {menus.map((group) => {
+          const active = groupIsActive(group.items);
+          const isOpen = desktopMenu === group.label;
+
+          return (
+            <div
+              key={group.label}
+              style={{ position: "relative" }}
+              onMouseEnter={() => setDesktopMenu(group.label)}
+            >
+              <button
+                onClick={() => setDesktopMenu((current) => (current === group.label ? null : group.label))}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: active || isOpen ? C.text : C.textMuted,
+                  textDecoration: "none",
+                  fontSize: "0.78rem",
+                  fontWeight: active || isOpen ? 600 : 500,
+                  transition: "color 0.3s",
+                  fontFamily: BODY,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: 0,
+                }}
+              >
+                {group.label}
+                <span style={{ fontSize: "0.65rem", opacity: 0.8 }}>{isOpen ? "▴" : "▾"}</span>
+              </button>
+              {isOpen ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 34,
+                    left: -20,
+                    width: 440,
+                    padding: 14,
+                    borderRadius: 20,
+                    background: "rgba(10,16,28,0.94)",
+                    border: `1px solid ${C.border}`,
+                    backdropFilter: "blur(24px) saturate(1.2)",
+                    WebkitBackdropFilter: "blur(24px) saturate(1.2)",
+                    boxShadow: "0 18px 60px rgba(0,0,0,0.34)",
+                    display: "grid",
+                    gap: 8,
+                  }}
+                >
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.to + item.label}
+                      to={item.to}
+                      style={{
+                        textDecoration: "none",
+                        color: "inherit",
+                        borderRadius: 14,
+                        padding: "12px 14px",
+                        background: item.to === location.pathname ? "rgba(14,165,233,0.08)" : "transparent",
+                        transition: "background 0.25s ease",
+                      }}
+                    >
+                      <div style={{ color: C.text, fontFamily: BODY, fontWeight: 600, fontSize: "0.84rem" }}>{item.label}</div>
+                      <div style={{ color: C.textSoft, fontFamily: BODY, fontSize: "0.76rem", lineHeight: 1.65, marginTop: 5 }}>
+                        {item.description}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
+        <NavLink
+          to="/over"
+          style={({ isActive }) => ({
+            color: isActive ? C.text : C.textMuted,
+            textDecoration: "none",
+            fontSize: "0.78rem",
+            fontWeight: isActive ? 600 : 500,
+            transition: "color 0.3s",
+            fontFamily: BODY,
+          })}
+        >
+          Over
+        </NavLink>
         <button
           onClick={goToIntake}
           style={{
@@ -124,20 +207,47 @@ export default function Nav() {
             gap: 14,
           }}
         >
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              style={({ isActive }) => ({
-                color: isActive ? C.text : C.textSoft,
-                textDecoration: "none",
-                fontFamily: BODY,
-                fontSize: "0.9rem",
-              })}
-            >
-              {link.label}
-            </NavLink>
+          {menus.map((group) => (
+            <div key={group.label} style={{ display: "grid", gap: 10 }}>
+              <div
+                style={{
+                  color: C.textMuted,
+                  fontFamily: BODY,
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {group.label}
+              </div>
+              {group.items.map((item) => (
+                <NavLink
+                  key={item.to + item.label}
+                  to={item.to}
+                  style={({ isActive }) => ({
+                    color: isActive ? C.text : C.textSoft,
+                    textDecoration: "none",
+                    fontFamily: BODY,
+                    fontSize: "0.9rem",
+                    lineHeight: 1.4,
+                  })}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
           ))}
+          <NavLink
+            to="/over"
+            style={({ isActive }) => ({
+              color: isActive ? C.text : C.textSoft,
+              textDecoration: "none",
+              fontFamily: BODY,
+              fontSize: "0.9rem",
+            })}
+          >
+            Over
+          </NavLink>
           <button
             onClick={goToIntake}
             style={{

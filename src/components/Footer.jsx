@@ -46,6 +46,12 @@ export default function Footer() {
           Privacy
         </Link>
         <Link
+          to="/over"
+          style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", fontFamily: BODY }}
+        >
+          Over
+        </Link>
+        <Link
           to="/voorwaarden"
           style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", fontFamily: BODY }}
         >

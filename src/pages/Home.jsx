@@ -156,19 +156,19 @@ function ProblemSection() {
 
 function ServicesOverview() {
   return (
-    <SmoothSection bg={C.bg} zIndex={3} minH="120vh">
+    <SmoothSection id="diensten" bg={C.bg} zIndex={3} minH="120vh">
       <SectionHeading
-        tag="Drie diensten"
+        tag="Vier diensten"
         title={
           <>
-            Drie diensten voor bedrijven die AI
+            Vier diensten voor bedrijven die AI
             <em style={{ color: C.primary, fontStyle: "italic" }}> echt willen inzetten</em>
           </>
         }
-        text="Elke dienst van starre.ai is los af te nemen. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor AI integraties of OpenClaw AI agents. Het uitgangspunt is niet een vaste funnel, maar de juiste dienst op het juiste moment."
+        text="Elke dienst van starre.ai is los af te nemen. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor AI implementatie, OpenClaw agents of eerst een AI workshop om intern scherpte te krijgen."
         width={760}
       />
-      <div className="card-grid-three" style={{ marginTop: 40 }}>
+      <div className="card-grid-four" style={{ marginTop: 40 }}>
         {serviceCards.map((card, index) => (
           <Reveal key={card.slug} delay={0.12 + index * 0.05} fill>
             <GlowCard style={{ background: C.bg, height: "100%" }}>
@@ -220,7 +220,7 @@ export default function Home() {
       <Hero />
       <ProblemSection />
       <ServicesOverview />
-      <SmoothSection bg={C.lightBg} zIndex={4} minH="120vh">
+      <SmoothSection id="oplossingen" bg={C.lightBg} zIndex={4} minH="120vh">
         <InteractiveDemo />
       </SmoothSection>
       <METRSection />

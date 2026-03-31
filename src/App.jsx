@@ -6,12 +6,14 @@ import Nav from "./components/Nav";
 import StickyButton from "./components/StickyButton";
 import { C, shell } from "./lib/theme";
 import AgentsPage from "./pages/Agents";
+import AboutPage from "./pages/About";
 import AuditPage from "./pages/Audit";
 import Home from "./pages/Home";
 import IntegrationsPage from "./pages/Integrations";
 import NotFoundPage from "./pages/NotFound";
 import PrivacyPage from "./pages/Privacy";
 import TermsPage from "./pages/Terms";
+import WorkshopPage from "./pages/Workshop";
 
 function ScrollManager() {
   const location = useLocation();
@@ -52,6 +54,8 @@ export default function App() {
           <Route path="/ai-audit" element={<AuditPage />} />
           <Route path="/ai-integraties" element={<IntegrationsPage />} />
           <Route path="/ai-agents" element={<AgentsPage />} />
+          <Route path="/ai-workshop" element={<WorkshopPage />} />
+          <Route path="/over" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/voorwaarden" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />

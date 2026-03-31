@@ -107,6 +107,12 @@ textarea::placeholder {
   gap: 16px;
 }
 
+.card-grid-four {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
 @keyframes blink {
   50% {
     opacity: 0;
@@ -143,6 +149,10 @@ textarea:focus-visible {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .card-grid-four {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .two-col {
     grid-template-columns: 1fr;
   }
@@ -158,7 +168,8 @@ textarea:focus-visible {
   }
 
   .card-grid-two,
-  .card-grid-three {
+  .card-grid-three,
+  .card-grid-four {
     grid-template-columns: 1fr !important;
   }
 
