@@ -8,6 +8,7 @@ import { C, shell } from "./lib/theme";
 import AgentsPage from "./pages/Agents";
 import AboutPage from "./pages/About";
 import AuditPage from "./pages/Audit";
+import BrandPreviewPage from "./pages/BrandPreview";
 import Home from "./pages/Home";
 import IntegrationsPage from "./pages/Integrations";
 import NotFoundPage from "./pages/NotFound";
@@ -56,6 +57,7 @@ export default function App() {
           <Route path="/ai-agents" element={<AgentsPage />} />
           <Route path="/ai-workshop" element={<WorkshopPage />} />
           <Route path="/over" element={<AboutPage />} />
+          <Route path="/brand-preview" element={<BrandPreviewPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/voorwaarden" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />

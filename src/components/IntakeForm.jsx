@@ -179,7 +179,7 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
                 ✓
               </div>
               <h2 style={{ fontFamily: BODY, fontSize: "1.6rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
-                Je intake voor starre.ai is binnen
+                Je intake voor StarLeo is binnen
               </h2>
               <p style={{ color: C.textSoft, marginTop: 12, lineHeight: 1.7, fontFamily: BODY }}>
                 We gebruiken je antwoorden om direct inhoudelijk te spreken over AI audit, AI integraties of OpenClaw
@@ -208,7 +208,7 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
           }
           text={
             text ||
-            "Deze premium intake helpt starre.ai snel bepalen welke dienst past: AI audit, AI integraties of OpenClaw AI agents. Zo wordt het eerste gesprek direct concreet."
+            "Deze premium intake helpt StarLeo snel bepalen welke dienst past: AI audit, AI integraties of OpenClaw AI agents. Zo wordt het eerste gesprek direct concreet."
           }
         />
         <Reveal delay={0.18}>

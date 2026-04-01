@@ -215,7 +215,7 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false }
 
 export function usePageSeo({ title, description }) {
   useEffect(() => {
-    document.title = title;
+    document.title = title.replace(/starre\.ai/gi, "StarLeo");
 
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {
@@ -410,8 +410,22 @@ export function PageHero({
 
 export function BrandMark() {
   return (
-    <span style={{ fontFamily: DISPLAY, fontSize: "1.15rem", color: C.text }}>
-      starre<span style={{ color: C.primary }}>.ai</span>
+    <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1 }}>
+      <span style={{ fontFamily: BODY, fontSize: "1.02rem", fontWeight: 700, letterSpacing: "-0.04em", color: C.text }}>
+        Star<span style={{ color: C.primary }}>Leo</span>
+      </span>
+      <span
+        style={{
+          fontFamily: BODY,
+          fontSize: "0.62rem",
+          fontWeight: 500,
+          letterSpacing: "0.01em",
+          color: C.textMuted,
+          marginTop: 4,
+        }}
+      >
+        Benut de kracht van AI.
+      </span>
     </span>
   );
 }

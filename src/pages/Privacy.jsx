@@ -3,14 +3,14 @@ import { PageSection, Reveal, SectionHeading, usePageSeo } from "../components/u
 
 export default function PrivacyPage() {
   usePageSeo({
-    title: "starre.ai | Privacyverklaring",
-    description: "Privacyverklaring van starre.ai. Hoe wij omgaan met persoonsgegevens die via het intakeformulier en de website worden verzameld.",
+    title: "StarLeo | Privacyverklaring",
+    description: "Privacyverklaring van StarLeo. Hoe wij omgaan met persoonsgegevens die via het intakeformulier en de website worden verzameld.",
   });
 
   const sections = [
     {
       title: "1. Wie is verantwoordelijk?",
-      text: "starre.ai is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Voor vragen over deze verklaring kun je contact opnemen via info@starre.ai.",
+      text: "StarLeo is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Voor vragen over deze verklaring kun je contact opnemen via info@starleo.ai.",
     },
     {
       title: "2. Welke gegevens verzamelen wij?",
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
     },
     {
       title: "6. Jouw rechten",
-      text: "Je hebt het recht om je gegevens in te zien, te corrigeren of te laten verwijderen. Ook kun je bezwaar maken tegen de verwerking of verzoeken om gegevensoverdracht. Neem hiervoor contact op via info@starre.ai.",
+      text: "Je hebt het recht om je gegevens in te zien, te corrigeren of te laten verwijderen. Ook kun je bezwaar maken tegen de verwerking of verzoeken om gegevensoverdracht. Neem hiervoor contact op via info@starleo.ai.",
     },
     {
       title: "7. Cookies",
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
       <SectionHeading
         tag="Privacy"
         title="Privacyverklaring"
-        text="Hoe starre.ai omgaat met je gegevens."
+        text="Hoe StarLeo omgaat met je gegevens."
       />
       <div style={{ marginTop: 32, maxWidth: 720 }}>
         {sections.map((section, index) => (

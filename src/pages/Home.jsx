@@ -165,7 +165,7 @@ function ServicesOverview() {
             <em style={{ color: C.primary, fontStyle: "italic" }}> echt willen inzetten</em>
           </>
         }
-        text="Elke dienst van starre.ai is los af te nemen. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor AI implementatie, OpenClaw agents of eerst een AI workshop om intern scherpte te krijgen."
+        text="Elke dienst van StarLeo is los af te nemen. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor AI implementatie, OpenClaw agents of eerst een AI workshop om intern scherpte te krijgen."
         width={760}
       />
       <div className="card-grid-four" style={{ marginTop: 40 }}>
@@ -210,9 +210,9 @@ function ServicesOverview() {
 
 export default function Home() {
   usePageSeo({
-    title: "starre.ai | AI audit, AI integraties en OpenClaw AI agents voor bedrijven",
+    title: "StarLeo | AI audit, AI integraties en OpenClaw AI agents voor bedrijven",
     description:
-      "starre.ai helpt bedrijven met AI audit, AI consultancy, AI implementatie, Claude integraties, ChatGPT integraties en OpenClaw AI agents voor support, documentprocessen en workflow automatisering.",
+      "StarLeo helpt bedrijven met AI audit, AI consultancy, AI implementatie, Claude integraties, ChatGPT integraties en OpenClaw AI agents voor support, documentprocessen en workflow automatisering.",
   });
 
   return (

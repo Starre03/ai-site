@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function AgentsPage() {
   usePageSeo({
-    title: "starre.ai | OpenClaw setup en AI agents voor inbox automation, leads en support",
+    title: "StarLeo | OpenClaw setup en AI agents voor inbox automation, leads en support",
     description:
       "OpenClaw AI agents en agent systems voor bedrijven. Voor inbox automation, lead qualification, intake automation, support routing en AI workflow automatisering.",
   });
@@ -19,7 +19,7 @@ export default function AgentsPage() {
             <span style={{ color: C.primary }}> lead qualification en support routing.</span>
           </>
         }
-        text="starre.ai bouwt OpenClaw setups en AI agents voor bedrijven die meer willen dan losse AI antwoorden. Dit gaat over mail begrijpen, intake automation, leads analyseren, support routeren en acties klaarzetten of uitvoeren via moderne agent systems."
+        text="StarLeo bouwt OpenClaw setups en AI agents voor bedrijven die meer willen dan losse AI antwoorden. Dit gaat over mail begrijpen, intake automation, leads analyseren, support routeren en acties klaarzetten of uitvoeren via moderne agent systems."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();

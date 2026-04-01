@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function IntegrationsPage() {
   usePageSeo({
-    title: "starre.ai | AI implementatie, Claude integratie, ChatGPT integratie en OpenAI integratie",
+    title: "StarLeo | AI implementatie, Claude integratie, ChatGPT integratie en OpenAI integratie",
     description:
       "AI integraties voor bedrijven met Claude, ChatGPT en OpenAI. Voor support, documentanalyse, AI kennisassistenten en workflow verbetering in bestaande processen.",
   });
@@ -19,7 +19,7 @@ export default function IntegrationsPage() {
             <span style={{ color: C.primary }}> document AI en kenniswerk.</span>
           </>
         }
-        text="starre.ai bouwt Claude integraties, ChatGPT integraties en OpenAI integraties voor bedrijven die support, documentanalyse, interne kennis en bestaande workflows slimmer willen maken. Geen OpenClaw hier, maar gerichte AI implementatie binnen bestaand werk."
+        text="StarLeo bouwt Claude integraties, ChatGPT integraties en OpenAI integraties voor bedrijven die support, documentanalyse, interne kennis en bestaande workflows slimmer willen maken. Geen OpenClaw hier, maar gerichte AI implementatie binnen bestaand werk."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();

@@ -1,0 +1,6 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="18" fill="#0F172A"/>
+  <rect x="1" y="1" width="62" height="62" rx="17" stroke="rgba(255,255,255,0.10)"/>
+  <text x="22.5" y="43" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#F8FAFC">S</text>
+  <text x="41.5" y="43" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#0EA5E9">L</text>
+</svg>

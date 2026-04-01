@@ -219,7 +219,7 @@ export default function METRSection() {
               text: "Bedrijven die nu alleen experimenteren met losse tools bouwen zelden een voorsprong op. Bedrijven die AI implementatie koppelen aan support, documentprocessen, intake en workflows wel.",
             },
             {
-              title: "Daarom werkt starre.ai met drie diensten die los te starten zijn",
+              title: "Daarom werkt StarLeo met drie diensten die los te starten zijn",
               text: "Soms is een AI audit de beste eerste stap. Soms kun je direct door met een Claude integratie of ChatGPT integratie. En soms is het momentum er voor OpenClaw AI agents die werk uitvoeren.",
             },
             {

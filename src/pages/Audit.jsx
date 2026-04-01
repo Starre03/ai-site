@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function AuditPage() {
   usePageSeo({
-    title: "starre.ai | AI audit voor bedrijven, workflow analyse en implementatie roadmap",
+    title: "StarLeo | AI audit voor bedrijven, workflow analyse en implementatie roadmap",
     description:
       "AI audit voor bedrijven die eerst duidelijkheid willen over AI implementatie. Inclusief workflow analyse, bottleneck analyse, AI kansen, tooladvies en implementatie roadmap.",
   });

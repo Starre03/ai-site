@@ -19,20 +19,19 @@ export default function Footer() {
     >
       <div>
         <BrandMark />
-        <br />
-        <span style={{ color: C.textMuted, fontSize: "0.68rem", fontFamily: BODY }}>
-          © 2026 · starre.ai
+        <span style={{ color: C.textMuted, fontSize: "0.68rem", fontFamily: BODY, display: "block", marginTop: 8 }}>
+          © 2026 · StarLeo
         </span>
       </div>
       <div style={{ display: "flex", gap: 20 }}>
         <a
-          href="mailto:info@starre.ai"
+          href="mailto:info@starleo.ai"
           style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", fontFamily: BODY }}
         >
           E-mail
         </a>
         <a
-          href="https://linkedin.com/company/starre-ai"
+          href="https://linkedin.com/company/starleo-ai"
           target="_blank"
           rel="noreferrer"
           style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", fontFamily: BODY }}

@@ -4,8 +4,8 @@ import { PageSection, PrimaryButton, Reveal, usePageSeo } from "../components/ui
 
 export default function NotFoundPage() {
   usePageSeo({
-    title: "starre.ai | Pagina niet gevonden",
-    description: "Deze pagina bestaat niet. Ga terug naar de homepage van starre.ai.",
+    title: "StarLeo | Pagina niet gevonden",
+    description: "Deze pagina bestaat niet. Ga terug naar de homepage van StarLeo.",
   });
 
   return (

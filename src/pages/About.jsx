@@ -3,22 +3,22 @@ import { GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading,
 
 export default function AboutPage() {
   usePageSeo({
-    title: "starre.ai | Over starre.ai",
+    title: "StarLeo | Over StarLeo",
     description:
-      "Over starre.ai. Een zelfstandige AI studio voor bedrijven die AI audit, implementatie, workshops en OpenClaw agents concreet willen inzetten.",
+      "Over StarLeo. Een zelfstandige AI studio voor bedrijven die AI audit, implementatie, workshops en OpenClaw agents concreet willen inzetten.",
   });
 
   return (
     <>
       <PageHero
-        badge="Over starre.ai"
+        badge="Over StarLeo"
         title={
           <>
             Een zelfstandige AI studio voor bedrijven die
             <span style={{ color: C.primary }}> duidelijkheid en uitvoering zoeken.</span>
           </>
         }
-        text="starre.ai helpt bedrijven om AI niet als losse trend te benaderen, maar als praktische stap in processen, support, documenten, kenniswerk en agent workflows. Klein in opzet, scherp in uitvoering en bewust concreet in positionering."
+        text="StarLeo helpt bedrijven om AI niet als losse trend te benaderen, maar als praktische stap in processen, support, documenten, kenniswerk en agent workflows. Klein in opzet, scherp in uitvoering en bewust concreet in positionering."
         actions={[
           <PrimaryButton key="intake" to="/">
             Terug naar home
@@ -45,7 +45,7 @@ export default function AboutPage() {
         <SectionHeading
           tag="Werkwijze"
           title={<>Scherp op inhoud, helder in keuzes en gericht op werk dat echt beter moet draaien</>}
-          text="starre.ai is gebouwd voor bedrijven die niet nóg een AI-tool zoeken, maar duidelijkheid, structuur en bruikbare implementatie. Daarom zijn de diensten bewust concreet en nuchter opgezet."
+          text="StarLeo is gebouwd voor bedrijven die niet nóg een AI-tool zoeken, maar duidelijkheid, structuur en bruikbare implementatie. Daarom zijn de diensten bewust concreet en nuchter opgezet."
         />
         <div className="card-grid-two" style={{ marginTop: 28 }}>
           {[

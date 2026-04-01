@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function WorkshopPage() {
   usePageSeo({
-    title: "starre.ai | AI workshop voor teams en management",
+    title: "StarLeo | AI workshop voor teams en management",
     description:
       "AI workshop voor bedrijven die willen begrijpen hoe AI werkt, hoe je beter prompt en hoe AI direct bruikbaar is in support, documenten, kenniswerk en dagelijkse taken.",
   });
@@ -19,7 +19,7 @@ export default function WorkshopPage() {
             <span style={{ color: C.primary }}> hoe AI werkt en hoe je er goed mee werkt.</span>
           </>
         }
-        text="De AI workshop van starre.ai is bedoeld voor teams of management die AI beter willen begrijpen in de praktijk. Denk aan hoe modellen werken, hoe je beter prompt, waar AI sterk of juist zwak in is en hoe je het slim toepast in support, documenten, kenniswerk en dagelijkse workflows."
+        text="De AI workshop van StarLeo is bedoeld voor teams of management die AI beter willen begrijpen in de praktijk. Denk aan hoe modellen werken, hoe je beter prompt, waar AI sterk of juist zwak in is en hoe je het slim toepast in support, documenten, kenniswerk en dagelijkse workflows."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();

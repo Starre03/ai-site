@@ -88,7 +88,7 @@ function DemoPreview({ item, resetKey }) {
             letterSpacing: "0.05em",
           }}
       >
-          starre.ai FLOW
+          StarLeo FLOW
         </span>
         {item.answer.slice(0, aChars)}
         {showAnswer && aChars < item.answer.length ? <span className="cursor-blink primary" /> : null}
@@ -109,7 +109,7 @@ export default function InteractiveDemo() {
         light
         title={
           <>
-            Zo zien de drie diensten van starre.ai eruit
+            Zo zien de drie diensten van StarLeo eruit
             <em style={{ color: C.primary, fontStyle: "italic" }}> zodra AI echt in het werk landt</em>
           </>
         }

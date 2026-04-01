@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { C, DISPLAY } from "../lib/theme";
+import { BODY, C } from "../lib/theme";
 
 export default function Intro({ onDone }) {
   const [phase, setPhase] = useState(0);
@@ -17,8 +17,8 @@ export default function Intro({ onDone }) {
   useEffect(() => {
     const timers = [
       setTimeout(() => setPhase(1), 100),
-      setTimeout(() => setPhase(2), 500),
-      setTimeout(() => setPhase(3), 1100),
+      setTimeout(() => setPhase(2), 650),
+      setTimeout(() => setPhase(3), 1450),
       setTimeout(() => {
         const navLogo = document.getElementById("nav-logo");
         const introLogo = logoRef.current;
@@ -29,21 +29,18 @@ export default function Intro({ onDone }) {
           setTarget({
             x: navRect.left + navRect.width / 2 - (introRect.left + introRect.width / 2),
             y: navRect.top + navRect.height / 2 - (introRect.top + introRect.height / 2),
+            scale: navRect.width / introRect.width,
           });
         }
 
         setPhase(4);
-      }, 1700),
-      setTimeout(() => setPhase(5), 2100),
-      setTimeout(() => finish(), 2600),
+      }, 2400),
+      setTimeout(() => setPhase(5), 2950),
+      setTimeout(() => finish(), 3450),
     ];
 
     return () => timers.forEach(clearTimeout);
   }, [finish]);
-
-  const introSize = typeof window !== "undefined" ? Math.min(window.innerWidth * 0.07, 88) : 88;
-  const navSize = 18.4;
-  const scaleRatio = navSize / introSize;
 
   return (
     <div
@@ -91,15 +88,15 @@ export default function Intro({ onDone }) {
       <div
         ref={logoRef}
         style={{
-          fontFamily: DISPLAY,
-          fontWeight: 400,
-          letterSpacing: "-0.02em",
+          fontFamily: BODY,
+          fontWeight: 700,
+          letterSpacing: "-0.04em",
           position: "relative",
           zIndex: 2,
-          fontSize: "clamp(3rem, 7vw, 5.5rem)",
+          fontSize: "clamp(3rem, 7vw, 5rem)",
           transform:
             phase >= 4 && target
-              ? `translate(${target.x}px, ${target.y}px) scale(${scaleRatio})`
+              ? `translate(${target.x}px, ${target.y}px) scale(${target.scale})`
               : phase >= 1
                 ? "none"
                 : "translateY(20px)",
@@ -108,7 +105,7 @@ export default function Intro({ onDone }) {
           transition: "all 0.7s cubic-bezier(.22,1,.36,1)",
         }}
       >
-        {"starre".split("").map((char, index) => (
+        {"StarLeo".split("").map((char, index) => (
           <span
             key={index}
             style={{
@@ -116,38 +113,28 @@ export default function Intro({ onDone }) {
               opacity: phase >= 1 ? 1 : 0,
               transform: phase >= 1 ? "none" : "translateY(14px)",
               transition: `all 0.45s cubic-bezier(.22,1,.36,1) ${0.15 + index * 0.04}s`,
+              color: index >= 4 ? C.primary : C.text,
             }}
           >
             {char}
           </span>
         ))}
-        <span
-          style={{
-            color: C.primary,
-            display: "inline-block",
-            opacity: phase >= 2 ? 1 : 0,
-            transform: phase >= 2 ? "scale(1)" : "scale(0)",
-            transition: "all 0.35s cubic-bezier(.34,1.56,.64,1) 0.06s",
-            textShadow: `0 0 20px ${C.primary}40`,
-          }}
-        >
-          .ai
-        </span>
       </div>
       <div
         style={{
-          fontSize: "0.75rem",
+          fontSize: "0.95rem",
           color: "#94A3B8",
-          letterSpacing: "0.25em",
-          textTransform: "uppercase",
-          marginTop: 18,
+          letterSpacing: "0.01em",
+          marginTop: 20,
           zIndex: 2,
           opacity: phase >= 3 && phase < 4 ? 1 : 0,
           transform: phase >= 4 ? "translateY(-30px)" : phase >= 3 ? "none" : "translateY(10px)",
           transition: "all 0.5s cubic-bezier(.22,1,.36,1)",
+          fontFamily: BODY,
+          fontWeight: 500,
         }}
       >
-        starre.ai · AI audit · integraties · agents
+        Benut de kracht van AI.
       </div>
     </div>
   );

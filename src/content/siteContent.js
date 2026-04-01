@@ -102,7 +102,7 @@ export const serviceCards = [
 export const homeFaq = [
   {
     q: "Wat is een AI audit voor bedrijven precies?",
-    a: "Een AI audit brengt in kaart waar AI in jouw bedrijf het meeste oplevert. starre.ai kijkt naar workflows, bottlenecks, AI kansen, tooladvies en een logische implementatie roadmap. De audit is een zelfstandige dienst en hoeft niet gevolgd te worden door implementatie.",
+    a: "Een AI audit brengt in kaart waar AI in jouw bedrijf het meeste oplevert. StarLeo kijkt naar workflows, bottlenecks, AI kansen, tooladvies en een logische implementatie roadmap. De audit is een zelfstandige dienst en hoeft niet gevolgd te worden door implementatie.",
   },
   {
     q: "Wanneer kies je voor AI integraties en wanneer voor AI agents?",

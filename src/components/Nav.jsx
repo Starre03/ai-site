@@ -54,7 +54,7 @@ export default function Nav() {
         left: 0,
         right: 0,
         zIndex: 1000,
-        height: 56,
+        height: 66,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -195,7 +195,7 @@ export default function Nav() {
         <div
           style={{
             position: "absolute",
-            top: 56,
+            top: 66,
             left: 0,
             right: 0,
             background: "rgba(11,17,32,0.97)",
