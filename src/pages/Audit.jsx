@@ -13,13 +13,20 @@ export default function AuditPage() {
     <>
       <PageHero
         badge="Zelfstandige dienst · AI audit"
+        pad="7.4rem clamp(1.5rem, 5vw, 5rem) 4.6rem"
+        minH="100vh"
+        centerY
+        titleSize="clamp(2.2rem, 5vw, 4.15rem)"
+        titleMaxWidth={760}
+        textMaxWidth={600}
+        align="center"
         title={
           <>
-            AI audit voor bedrijven die eerst duidelijkheid willen
-            <span style={{ color: C.primary }}> over AI implementatie.</span>
+            AI audit voor bedrijven die eerst willen weten
+            <span style={{ color: C.primary }}> waar AI het meeste oplevert.</span>
           </>
         }
-        text="De AI audit van starre.ai is een zelfstandige dienst voor bedrijven die eerst willen weten waar AI het meeste oplevert. Je krijgt workflow analyse, bottleneck analyse, AI kansen, tooladvies en een concrete implementatie roadmap zonder verplicht vervolgtraject."
+        text="Krijg scherp waar AI in uw bedrijf direct waarde toevoegt, welke processen eerst aandacht verdienen en welke volgende stap logisch is. Zonder direct een implementatietraject in te hoeven."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
@@ -28,21 +35,27 @@ export default function AuditPage() {
             Plan AI audit →
           </PrimaryButton>,
           <PrimaryButton key="services" secondary to="/ai-integraties">
-            Bekijk AI integraties
+            Vergelijk met implementatie
           </PrimaryButton>,
         ]}
         aside={
           <GlowCard style={{ background: C.bg2, maxWidth: 360 }}>
-            <div style={{ padding: "1.35rem" }}>
+            <div style={{ padding: "1.25rem 1.25rem 1.1rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                Resultaat
+                Direct helder
               </div>
-              <p style={{ color: C.text, fontFamily: BODY, fontWeight: 600, marginTop: 12 }}>
-                Geen losse ideeën, maar een bruikbaar besluitdocument voor AI implementatie.
+              <p style={{ color: C.text, fontFamily: BODY, fontWeight: 650, lineHeight: 1.45, marginTop: 12 }}>
+                Geen lang voortraject, maar snel zicht op waar AI bruikbaar is en wat het kan opleveren.
               </p>
-              <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.75, fontSize: "0.82rem", marginTop: 10 }}>
-                Inclusief workflow analyse, bottleneck analyse, AI kansen, tooladvies, prioriteiten en implementatie roadmap.
-              </p>
+              <div style={{ marginTop: 16 }}>
+                <BulletList
+                  items={[
+                    "Waar AI direct tijd of capaciteit terugwint",
+                    "Welke processen eerst prioriteit moeten krijgen",
+                    "Welke volgende stap logisch is zonder vervolgverplichting",
+                  ]}
+                />
+              </div>
             </div>
           </GlowCard>
         }

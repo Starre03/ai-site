@@ -81,10 +81,12 @@ export function PageSection({
         padding: pad,
         minHeight: minH,
         display: centerY ? "flex" : undefined,
+        flexDirection: centerY ? "column" : undefined,
+        justifyContent: centerY ? "center" : undefined,
         alignItems: centerY ? "center" : undefined,
       }}
     >
-      <div style={shell.content}>{children}</div>
+      <div style={{ ...shell.content, width: "100%" }}>{children}</div>
     </section>
   );
 }
@@ -329,11 +331,24 @@ export function StatPill({ value, label }) {
   );
 }
 
-export function PageHero({ badge, title, text, actions, aside }) {
+export function PageHero({
+  badge,
+  title,
+  text,
+  actions,
+  aside,
+  pad = "8.5rem clamp(1.5rem, 5vw, 5rem) 5rem",
+  titleSize = "clamp(2.4rem, 6vw, 4.6rem)",
+  titleMaxWidth = 760,
+  textMaxWidth = 620,
+  align = "end",
+  minH,
+  centerY = false,
+}) {
   return (
-    <PageSection pad="8.5rem clamp(1.5rem, 5vw, 5rem) 5rem">
-      <div className="two-col" style={{ alignItems: "end", gap: 24 }}>
-        <div style={{ maxWidth: 760 }}>
+    <PageSection pad={pad} minH={minH} centerY={centerY}>
+      <div className="two-col" style={{ alignItems: align, gap: 24 }}>
+        <div style={{ maxWidth: titleMaxWidth }}>
           <Reveal>
             <span
               style={{
@@ -366,20 +381,20 @@ export function PageHero({ badge, title, text, actions, aside }) {
             <h1
               style={{
                 fontFamily: BODY,
-                fontSize: "clamp(2.4rem, 6vw, 4.6rem)",
+                fontSize: titleSize,
                 lineHeight: 1.06,
                 fontWeight: 700,
                 margin: "22px 0 0",
                 letterSpacing: "-0.02em",
                 color: C.text,
-                maxWidth: 760,
+                maxWidth: titleMaxWidth,
               }}
             >
               {title}
             </h1>
           </Reveal>
           <Reveal delay={0.14}>
-            <p style={{ ...shell.sectionText, maxWidth: 620, marginTop: 20, fontSize: "1rem" }}>{text}</p>
+            <p style={{ ...shell.sectionText, maxWidth: textMaxWidth, marginTop: 20, fontSize: "1rem" }}>{text}</p>
           </Reveal>
           {actions ? (
             <Reveal delay={0.2}>
