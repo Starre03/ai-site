@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import InteractiveDemo from "../components/InteractiveDemo";
 import Faq from "../components/Faq";
@@ -7,96 +8,105 @@ import { BODY, C, shell } from "../lib/theme";
 import {
   BulletList,
   GlowCard,
-  MiniNote,
   PrimaryButton,
   Reveal,
   SectionHeading,
   SmoothSection,
-  TyperText,
   usePageSeo,
 } from "../components/ui";
 import METRSection from "../components/METRSection";
 
+const heroLines = [
+  "voor rapportages, marktonderzoek en documentwerk",
+  "voor teams die wekelijks uren willen terugwinnen",
+  "voor een agent die uw inbox beheert en prioriteert",
+  "voor contracten die AI direct op risico's controleert",
+  "voor kwartaalcijfers die AI automatisch analyseert en samenvat",
+  "voor leadopvolging die volledig automatisch verloopt",
+];
+
+function FadeSwitcher() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const fadeOut = setTimeout(() => setVisible(false), 2600);
+    const swap = setTimeout(() => {
+      setIndex((current) => (current + 1) % heroLines.length);
+      setVisible(true);
+    }, 3350);
+
+    return () => {
+      clearTimeout(fadeOut);
+      clearTimeout(swap);
+    };
+  }, [index]);
+
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        minHeight: "2.2em",
+        maxWidth: 1120,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(10px)",
+        filter: visible ? "blur(0px)" : "blur(4px)",
+        transition: "opacity 0.95s cubic-bezier(.22,1,.36,1), transform 0.95s cubic-bezier(.22,1,.36,1), filter 0.95s cubic-bezier(.22,1,.36,1)",
+        lineHeight: 1.06,
+      }}
+    >
+      {heroLines[index]}
+    </span>
+  );
+}
+
 function Hero() {
   return (
-    <SmoothSection bg={C.bg} zIndex={1} minH="120vh">
+    <SmoothSection bg={C.bg} zIndex={1} minH="120vh" center>
       <div className="ambient ambient-left" />
-      <div style={{ maxWidth: 900 }}>
-        <Reveal>
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: C.primaryDim,
-              border: `1px solid ${C.primary}15`,
-              borderRadius: 100,
-              padding: "6px 16px",
-              fontSize: "0.72rem",
-              color: C.primaryLight,
-              fontWeight: 500,
-              fontFamily: BODY,
-            }}
-          >
-            <span
-              style={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: C.primary,
-                boxShadow: `0 0 8px ${C.primary}`,
-              }}
-            />
-            AI consultancy & implementatie
-          </span>
-        </Reveal>
+      <div style={{ maxWidth: 980, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.08}>
           <h1
             style={{
               fontFamily: BODY,
-              fontSize: "clamp(2.5rem, 6vw, 4.9rem)",
-              lineHeight: 1.05,
+              fontSize: "clamp(2.6rem, 6.2vw, 5.1rem)",
+              lineHeight: 1.04,
               fontWeight: 700,
-              margin: "22px 0 0",
+              margin: 0,
               letterSpacing: "-0.03em",
               color: C.text,
-              maxWidth: 860,
+              maxWidth: 1120,
+              marginInline: "auto",
             }}
           >
-            AI audit, AI integraties en OpenClaw AI agents
-            <span style={{ display: "block", color: C.primary }}>
-              <TyperText
-                items={[
-                  "ontdek welke taken AI morgen al kan overnemen",
-                  "ontdek waar AI uw team uren per week bespaart",
-                  "voor een AI agent die uw inbox beheert en prioriteert",
-                  "voor een AI agent die contracten analyseert op risico's",
-                  "laat AI uw kwartaalcijfers analyseren en samenvatten",
-                  "van maandelijkse rapportages naar realtime dashboards met AI",
-                  "voor een AI agent die uw volledige leadopvolging automatiseert",
-                ]}
-              />
+            Benut de kracht van AI
+            <span
+              style={{
+                display: "block",
+                color: C.primary,
+                fontSize: "0.68em",
+                marginTop: "0.08em",
+              }}
+            >
+              <FadeSwitcher />
             </span>
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
-          <p style={{ ...shell.sectionText, maxWidth: 610, marginTop: 20, fontSize: "1rem" }}>
-            Wij brengen in kaart waar AI rendeert, bouwen de implementatie en zorgen dat het draait. Zodat uw team tijd overhoudt voor het werk dat er echt toe doet.
-          </p>
-        </Reveal>
-        <Reveal delay={0.22}>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 28 }}>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginTop: 30 }}>
             <PrimaryButton href="#intake" onClick={(event) => {
               event.preventDefault();
               document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
             }}>
               Plan AI intake →
             </PrimaryButton>
-            <PrimaryButton secondary to="/ai-integraties">
-              Bekijk AI integraties
+            <PrimaryButton secondary href="#diensten" onClick={(event) => {
+              event.preventDefault();
+              document.getElementById("diensten")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}>
+              Bekijk mogelijkheden
             </PrimaryButton>
           </div>
-          <MiniNote>AI implementatie voor bedrijven die geen losse tools zoeken, maar resultaat.</MiniNote>
         </Reveal>
       </div>
     </SmoothSection>

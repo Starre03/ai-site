@@ -414,18 +414,6 @@ export function BrandMark() {
       <span style={{ fontFamily: BODY, fontSize: "1.02rem", fontWeight: 700, letterSpacing: "-0.04em", color: C.text }}>
         Star<span style={{ color: C.primary }}>Leo</span>
       </span>
-      <span
-        style={{
-          fontFamily: BODY,
-          fontSize: "0.62rem",
-          fontWeight: 500,
-          letterSpacing: "0.01em",
-          color: C.textMuted,
-          marginTop: 4,
-        }}
-      >
-        Benut de kracht van AI.
-      </span>
     </span>
   );
 }
