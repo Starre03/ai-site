@@ -66,9 +66,24 @@ export function SmoothSection({
   );
 }
 
-export function PageSection({ children, bg = C.bg, pad = "9rem clamp(1.5rem, 5vw, 5rem)" }) {
+export function PageSection({
+  children,
+  bg = C.bg,
+  pad = "9rem clamp(1.5rem, 5vw, 5rem)",
+  minH,
+  centerY = false,
+}) {
   return (
-    <section style={{ position: "relative", background: bg, padding: pad }}>
+    <section
+      style={{
+        position: "relative",
+        background: bg,
+        padding: pad,
+        minHeight: minH,
+        display: centerY ? "flex" : undefined,
+        alignItems: centerY ? "center" : undefined,
+      }}
+    >
       <div style={shell.content}>{children}</div>
     </section>
   );
