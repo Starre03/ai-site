@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { demoTabs } from "../content/siteContent";
 import { BODY, C } from "../lib/theme";
 import { GlowCard, Reveal, SmoothSection, Tag, usePageSeo } from "../components/ui";
 
@@ -171,20 +170,8 @@ function DemoPreview({ item, resetKey, label, answerLabel, approvalMessage, foll
 export default function ExamplesSectionPreviewPage() {
   const [active, setActive] = useState(0);
   const [previewKey, setPreviewKey] = useState(0);
-  const item = demoTabs[active];
 
   const previewItems = [
-    {
-      title: "AI audit voor bedrijven die eerst helder willen krijgen waar AI rendeert",
-      prompt: "Ik analyseer het proces van intake tot opvolging en laat zien waar AI direct tijd kan terugwinnen.",
-      answer:
-        "Analyse afgerond. Grootste winst zit in intake, documentverwerking en support-triage. Advies: start met een AI audit voor prioritering, daarna een gerichte implementatie voor documentanalyse. Verwachte besparing: 11 tot 16 uur per week.",
-      label: "Audit-output",
-      answerLabel: "AUDIT-OUTPUT",
-      approvalMessage: "",
-      followUp: "",
-      autoDetected: true,
-    },
     {
       title: "AI implementatie voor support, documenten en kennisprocessen",
       prompt: "Vat deze klantmail samen, haal actiepunten eruit en controleer de relevante documentatie voordat je een antwoord voorbereidt.",
@@ -210,6 +197,8 @@ export default function ExamplesSectionPreviewPage() {
   ];
 
   const current = previewItems[active];
+
+  const tabLabels = ["AI Integraties", "AI Agents"];
 
   usePageSeo({
     title: "StarLeo | Voorbeeldenblok preview",
@@ -255,15 +244,15 @@ export default function ExamplesSectionPreviewPage() {
               fontFamily: BODY,
             }}
           >
-            Geen losse demo's, maar concrete voorbeelden van hoe audit, implementatie en agents werk slimmer laten lopen.
+            Concrete voorbeelden van hoe AI processen efficiënter maakt.
           </p>
         </Reveal>
 
         <Reveal delay={0.2}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginTop: 26 }}>
-            {previewItems.map((tab, index) => (
+            {tabLabels.map((tab, index) => (
               <button
-                key={tab.label}
+                key={tab}
                 onClick={() => {
                   setActive(index);
                   setPreviewKey((current) => current + 1);
@@ -282,10 +271,10 @@ export default function ExamplesSectionPreviewPage() {
                   transition: "all 0.4s cubic-bezier(.22,1,.36,1)",
                 }}
               >
-                  {demoTabs[index].label}
-                </button>
-              ))}
-            </div>
+                {tab}
+              </button>
+            ))}
+          </div>
         </Reveal>
 
         <Reveal delay={0.26}>
@@ -311,14 +300,12 @@ export default function ExamplesSectionPreviewPage() {
                   Wat er gebeurt
                 </div>
                 <h3 style={{ color: C.text, fontFamily: BODY, fontSize: "1.08rem", fontWeight: 700, margin: "12px 0 0" }}>
-                  {active === 0 ? "Van losse ideeën naar prioriteit" : active === 1 ? "Van AI-tool naar werkende integratie" : "Van assistent naar agentflow"}
+                  {active === 0 ? "Van handmatig werk naar slimme ondersteuning" : "Van handmatig opvolgen naar automatische uitvoering"}
                 </h3>
                 <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.8, fontSize: "0.9rem", marginTop: 14 }}>
                   {active === 0
-                    ? "Wij analyseren waar de meeste winst zit, welke bottlenecks eerst aandacht vragen en welke implementatievolgorde logisch is."
-                    : active === 1
-                      ? "Wij koppelen AI aan bestaand werk, zodat support, documenten en kennisprocessen direct slimmer en sneller gaan lopen."
-                      : "Wij richten agentflows zo in dat inbox, intake en opvolging niet meer blijven hangen in handmatige tussenstappen."}
+                    ? "Wij koppelen AI aan bestaand werk, zodat support, documentwerk en kennisprocessen sneller, consistenter en betrouwbaarder verlopen."
+                    : "Wij zetten agents in die signalen herkennen, context ophalen en vervolgstappen automatisch of na akkoord uitvoeren."}
                 </p>
               </div>
             </GlowCard>
