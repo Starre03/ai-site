@@ -31,6 +31,7 @@ export default function StickyButton() {
   const intakeVisible = useIntakeVisible();
   const location = useLocation();
   const navigate = useNavigate();
+  const hiddenPreviewRoute = ["/brand-preview", "/problem-section-preview", "/services-section-preview", "/examples-section-preview", "/home-flow-preview"].includes(location.pathname);
 
   const handleClick = () => {
     if (location.pathname !== "/") {
@@ -51,10 +52,10 @@ export default function StickyButton() {
         bottom: 18,
         right: 18,
         zIndex: 999,
-        opacity: show && !intakeVisible ? 1 : 0,
-        transform: show && !intakeVisible ? "translateY(0)" : "translateY(12px)",
+        opacity: show && !intakeVisible && !hiddenPreviewRoute ? 1 : 0,
+        transform: show && !intakeVisible && !hiddenPreviewRoute ? "translateY(0)" : "translateY(12px)",
         transition: "all 0.5s cubic-bezier(.22,1,.36,1)",
-        pointerEvents: show && !intakeVisible ? "all" : "none",
+        pointerEvents: show && !intakeVisible && !hiddenPreviewRoute ? "all" : "none",
       }}
     >
       <button

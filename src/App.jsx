@@ -9,10 +9,14 @@ import AgentsPage from "./pages/Agents";
 import AboutPage from "./pages/About";
 import AuditPage from "./pages/Audit";
 import BrandPreviewPage from "./pages/BrandPreview";
+import ExamplesSectionPreviewPage from "./pages/ExamplesSectionPreview";
 import Home from "./pages/Home";
+import HomeFlowPreviewPage from "./pages/HomeFlowPreview";
 import IntegrationsPage from "./pages/Integrations";
 import NotFoundPage from "./pages/NotFound";
 import PrivacyPage from "./pages/Privacy";
+import ServicesSectionPreviewPage from "./pages/ServicesSectionPreview";
+import ProblemSectionPreviewPage from "./pages/ProblemSectionPreview";
 import TermsPage from "./pages/Terms";
 import WorkshopPage from "./pages/Workshop";
 
@@ -52,12 +56,16 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/home-flow-preview" element={<HomeFlowPreviewPage />} />
           <Route path="/ai-audit" element={<AuditPage />} />
           <Route path="/ai-integraties" element={<IntegrationsPage />} />
           <Route path="/ai-agents" element={<AgentsPage />} />
           <Route path="/ai-workshop" element={<WorkshopPage />} />
           <Route path="/over" element={<AboutPage />} />
           <Route path="/brand-preview" element={<BrandPreviewPage />} />
+          <Route path="/examples-section-preview" element={<ExamplesSectionPreviewPage />} />
+          <Route path="/services-section-preview" element={<ServicesSectionPreviewPage />} />
+          <Route path="/problem-section-preview" element={<ProblemSectionPreviewPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/voorwaarden" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />
