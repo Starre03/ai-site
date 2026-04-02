@@ -47,22 +47,9 @@ const serviceCards = [
   },
 ];
 
-const exampleTabs = ["AI Audit", "AI Integraties", "AI Agents"];
+const exampleTabs = ["AI Integraties", "AI Agents"];
 
 const exampleItems = [
-  {
-    title: "AI audit voor bedrijven die eerst helder willen krijgen waar AI rendeert",
-    prompt: "Ik analyseer het proces van intake tot opvolging en laat zien waar AI direct tijd kan terugwinnen.",
-    answer:
-      "Analyse afgerond. Grootste winst zit in intake, documentverwerking en support-triage. Advies: start met een AI audit voor prioritering, daarna een gerichte implementatie voor documentanalyse. Verwachte besparing: 11 tot 16 uur per week.",
-    label: "Audit-output",
-    answerLabel: "AUDIT-OUTPUT",
-    approvalMessage: "",
-    followUp: "",
-    autoDetected: true,
-    summary: "Wij analyseren waar de meeste winst zit, welke bottlenecks eerst aandacht vragen en welke implementatievolgorde logisch is.",
-    miniTitle: "Van losse ideeën naar prioriteit",
-  },
   {
     title: "AI implementatie voor support, documenten en kennisprocessen",
     prompt: "Vat deze klantmail samen, haal actiepunten eruit en controleer de relevante documentatie voordat je een antwoord voorbereidt.",
@@ -73,8 +60,8 @@ const exampleItems = [
     approvalMessage: "",
     followUp: "",
     autoDetected: false,
-    summary: "Wij koppelen AI aan bestaand werk, zodat support, documenten en kennisprocessen direct slimmer en sneller gaan lopen.",
-    miniTitle: "Van AI-tool naar werkende integratie",
+    summary: "Wij koppelen AI aan bestaand werk, zodat support, documentwerk en kennisprocessen sneller, consistenter en betrouwbaarder verlopen.",
+    miniTitle: "Van handmatig werk naar slimme ondersteuning",
   },
   {
     title: "OpenClaw agents voor inbox, intake en opvolging",
@@ -86,8 +73,8 @@ const exampleItems = [
     approvalMessage: "Akkoord. Verstuur de intake en maak de taak voor sales aan.",
     followUp: "Akkoord ontvangen. Intake verstuurd, sales-taak aangemaakt en leadstatus bijgewerkt naar 'opvolging actief'.",
     autoDetected: true,
-    summary: "Wij richten agentflows zo in dat inbox, intake en opvolging niet meer blijven hangen in handmatige tussenstappen.",
-    miniTitle: "Van assistent naar agentflow",
+    summary: "Wij zetten agents in die signalen herkennen, context ophalen en vervolgstappen automatisch of na akkoord uitvoeren.",
+    miniTitle: "Van handmatig opvolgen naar automatische uitvoering",
   },
 ];
 
@@ -516,7 +503,7 @@ function ExamplesSection() {
               fontFamily: BODY,
             }}
           >
-            Geen losse demo's, maar concrete voorbeelden van hoe audit, implementatie en agents werk slimmer laten lopen.
+            Concrete voorbeelden van hoe AI processen efficiënter maakt.
           </p>
         </Reveal>
         <Reveal delay={0.2}>
