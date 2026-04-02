@@ -31,7 +31,7 @@ export default function StickyButton() {
   const intakeVisible = useIntakeVisible();
   const location = useLocation();
   const navigate = useNavigate();
-  const hiddenPreviewRoute = ["/brand-preview", "/problem-section-preview", "/services-section-preview", "/examples-section-preview", "/home-flow-preview"].includes(location.pathname);
+  const hiddenPreviewRoute = ["/brand-preview", "/problem-section-preview", "/services-section-preview", "/examples-section-preview", "/home-flow-preview", "/why-now-preview", "/why-now-icons-preview"].includes(location.pathname);
 
   const handleClick = () => {
     if (location.pathname !== "/") {
