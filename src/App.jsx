@@ -20,6 +20,7 @@ import ProblemSectionPreviewPage from "./pages/ProblemSectionPreview";
 import TermsPage from "./pages/Terms";
 import WhyNowPreviewPage from "./pages/WhyNowPreview";
 import WhyNowIconsPreviewPage from "./pages/WhyNowIconsPreview";
+import IntakeCtaPreviewPage from "./pages/IntakeCtaPreview";
 import WorkshopPage from "./pages/Workshop";
 
 function ScrollManager() {
@@ -70,6 +71,7 @@ export default function App() {
           <Route path="/problem-section-preview" element={<ProblemSectionPreviewPage />} />
           <Route path="/why-now-preview" element={<WhyNowPreviewPage />} />
           <Route path="/why-now-icons-preview" element={<WhyNowIconsPreviewPage />} />
+          <Route path="/intake-cta-preview" element={<IntakeCtaPreviewPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/voorwaarden" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />
