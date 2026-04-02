@@ -6,6 +6,7 @@ import { homeFaq } from "../content/siteContent";
 import { BODY, C, shell } from "../lib/theme";
 import {
   GlowCard,
+  PageSection,
   PrimaryButton,
   Reveal,
   SectionHeading,
@@ -646,7 +647,7 @@ function SolidGlyphIcon({ kind }) {
 
 function WhyNowSection() {
   return (
-    <SmoothSection bg={C.lightBg} zIndex={4} minH="110vh" center>
+    <PageSection bg={C.lightBg} pad="6rem clamp(1.5rem, 5vw, 5rem) 1.4rem">
       <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.04}>
           <Tag>Waarom nu</Tag>
@@ -687,7 +688,7 @@ function WhyNowSection() {
           ))}
         </div>
       </div>
-    </SmoothSection>
+    </PageSection>
   );
 }
 
