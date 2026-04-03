@@ -10,11 +10,12 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
     cursor: "pointer",
     fontFamily: BODY,
     fontSize: "0.77rem",
-    border: `1px solid ${isSelected ? `${C.primary}40` : C.border}`,
-    background: isSelected ? C.primaryDim : "transparent",
-    color: isSelected ? C.primaryLight : C.textMuted,
+    border: `1px solid ${isSelected ? `${C.primary}55` : C.border}`,
+    background: isSelected ? C.primary : "transparent",
+    color: isSelected ? C.bg : C.textMuted,
     fontWeight: isSelected ? 600 : 400,
     transition: "all 0.3s cubic-bezier(.22,1,.36,1)",
+    boxShadow: isSelected ? `0 0 0 1px ${C.primary} inset, 0 10px 30px ${C.primary}22` : "none",
   });
 
   if (field.type === "chips") {
@@ -89,7 +90,15 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
   );
 }
 
-export default function IntakeForm({ id = "intake", preferredRoute, title, text }) {
+export default function IntakeForm({
+  id = "intake",
+  preferredRoute,
+  title,
+  text,
+  centered = false,
+  trustPoints = [],
+  steps = intakeSteps,
+}) {
   const [step, setStep] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [done, setDone] = useState(false);
@@ -97,11 +106,12 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
   const [errors, setErrors] = useState({});
   const [data, setData] = useState(() => (preferredRoute ? { route: preferredRoute } : {}));
 
-  const current = intakeSteps[step];
+  const current = steps[step];
+  const isSingleStep = steps.length === 1;
 
   const progressLabel = useMemo(
-    () => `Stap ${step + 1} van ${intakeSteps.length}: ${current.title}`,
-    [current.title, step],
+    () => `Stap ${step + 1} van ${steps.length}: ${current.title}`,
+    [current.title, step, steps.length],
   );
 
   const update = (idValue, nextValue) => {
@@ -117,7 +127,40 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
     );
   };
 
+  const fieldIsEmpty = (field) => {
+    const value = data[field.id];
+
+    if (field.type === "multi") return !Array.isArray(value) || value.length === 0;
+    if (field.type === "chips") return !value;
+    return !String(value || "").trim();
+  };
+
+  const validateCurrentStep = () => {
+    const nextErrors = {};
+
+    current.fields.forEach((field) => {
+      if (!field.required) return;
+
+      if (field.type === "email") {
+        const value = String(data[field.id] || "").trim();
+        if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          nextErrors[field.id] = "Vul een geldig e-mailadres in";
+        }
+        return;
+      }
+
+      if (fieldIsEmpty(field)) {
+        nextErrors[field.id] = `${field.label} is nodig`;
+      }
+    });
+
+    setErrors((currentErrors) => ({ ...currentErrors, ...nextErrors }));
+    return Object.keys(nextErrors).length === 0;
+  };
+
   const jump = (direction) => {
+    if (direction > 0 && !validateCurrentStep()) return;
+
     setAnimating(true);
     setTimeout(() => {
       setStep((currentStep) => currentStep + direction);
@@ -126,16 +169,7 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
   };
 
   const validate = () => {
-    const nextErrors = {};
-
-    if (!data.name?.trim()) nextErrors.name = "Naam is nodig";
-    if (!data.company?.trim()) nextErrors.company = "Bedrijf is nodig";
-    if (!data.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      nextErrors.email = "Vul een geldig e-mailadres in";
-    }
-
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+    return validateCurrentStep();
   };
 
   const submit = async () => {
@@ -196,49 +230,158 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
     <section id={id} style={{ padding: "6rem clamp(1.5rem, 5vw, 5rem)", background: C.bg, position: "relative" }}>
       <div className="ambient ambient-right" />
       <div style={{ maxWidth: 780, margin: "0 auto" }}>
-        <SectionHeading
-          tag="Intake"
-          title={
-            title || (
-              <>
-                Eerst duidelijk krijgen wat nodig is,
-                <em style={{ color: C.primary, fontStyle: "italic" }}> daarna pas bouwen</em>
-              </>
-            )
-          }
-          text={
-            text ||
-            "Deze premium intake helpt StarLeo snel bepalen welke dienst past: AI audit, AI integraties of OpenClaw AI agents. Zo wordt het eerste gesprek direct concreet."
-          }
-        />
-        <Reveal delay={0.18}>
-          <GlowCard style={{ background: C.bg2, marginTop: 24 }}>
-            <div style={{ padding: "clamp(1.2rem, 3vw, 2rem)" }}>
-              <div style={{ marginBottom: 18 }}>
+        {centered ? (
+          <>
+            <Reveal>
+              <div style={{ textAlign: "center" }}>
                 <div
                   style={{
-                    display: "flex",
-                    gap: 4,
+                    fontSize: "0.68rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    color: C.primary,
+                    fontWeight: 600,
+                    marginBottom: 12,
+                    fontFamily: BODY,
                   }}
                 >
-                  {intakeSteps.map((_, index) => (
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: 20,
+                      height: 1,
+                      background: C.primary,
+                      marginRight: 10,
+                      verticalAlign: "middle",
+                      opacity: 0.5,
+                    }}
+                  />
+                  Intake
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h2
+                style={{
+                  fontFamily: BODY,
+                  fontSize: "clamp(2rem, 4.4vw, 3.25rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.08,
+                  letterSpacing: "-0.03em",
+                  color: C.text,
+                  textAlign: "center",
+                  maxWidth: 760,
+                  margin: "0 auto",
+                }}
+              >
+                {title || (
+                  <>
+                    Plan uw AI intake.
+                    <em style={{ color: C.primary, fontStyle: "italic", display: "block" }}>Dan spreken we direct concreet.</em>
+                  </>
+                )}
+              </h2>
+            </Reveal>
+            {text ? (
+              <Reveal delay={0.12}>
+                <p
+                  style={{
+                    color: C.textSoft,
+                    lineHeight: 1.78,
+                    fontSize: "0.94rem",
+                    fontFamily: BODY,
+                    maxWidth: 660,
+                    margin: "14px auto 0",
+                    textAlign: "center",
+                  }}
+                >
+                  {text}
+                </p>
+              </Reveal>
+            ) : null}
+            {trustPoints.length ? (
+              <Reveal delay={0.16}>
+                <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginTop: 22 }}>
+                  {trustPoints.map((point) => (
                     <div
-                      key={index}
+                      key={point}
                       style={{
-                        flex: 1,
-                        height: 2,
-                        borderRadius: 2,
-                        background: index <= step ? C.primary : C.surface,
-                        transition: "background 0.5s cubic-bezier(.22,1,.36,1)",
-                        boxShadow: index <= step ? `0 0 6px ${C.primary}30` : "none",
+                        padding: "9px 14px",
+                        borderRadius: 999,
+                        border: `1px solid ${C.border}`,
+                        background: C.bg2,
+                        color: C.textSoft,
+                        fontSize: "0.8rem",
+                        fontFamily: BODY,
                       }}
-                    />
+                    >
+                      {point}
+                    </div>
                   ))}
                 </div>
-                <div style={{ fontSize: "0.65rem", color: C.textMuted, fontFamily: BODY, marginTop: 6 }}>{progressLabel}</div>
-                <div style={{ fontSize: "0.75rem", color: C.textSoft, fontFamily: BODY, marginTop: 10, lineHeight: 1.6 }}>
-                  {current.description}
-                </div>
+              </Reveal>
+            ) : null}
+          </>
+        ) : (
+          <SectionHeading
+            tag="Intake"
+            title={
+              title || (
+                <>
+                  Eerst duidelijk krijgen wat nodig is,
+                  <em style={{ color: C.primary, fontStyle: "italic" }}> daarna pas bouwen</em>
+                </>
+              )
+            }
+            text={
+              text ||
+              "Deze premium intake helpt StarLeo snel bepalen welke dienst past: AI audit, AI integraties of OpenClaw AI agents. Zo wordt het eerste gesprek direct concreet."
+            }
+          />
+        )}
+        <Reveal delay={0.18}>
+          <GlowCard style={{ background: C.bg2, marginTop: centered ? 28 : 24 }}>
+            <div style={{ padding: "clamp(1.2rem, 3vw, 2rem)" }}>
+              <div style={{ marginBottom: 18 }}>
+                {!isSingleStep ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    {steps.map((_, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          flex: 1,
+                          height: 2,
+                          borderRadius: 2,
+                          background: index <= step ? C.primary : C.surface,
+                          transition: "background 0.5s cubic-bezier(.22,1,.36,1)",
+                          boxShadow: index <= step ? `0 0 6px ${C.primary}30` : "none",
+                        }}
+                      />
+                    ))}
+                  </div>
+                ) : null}
+                {!isSingleStep ? (
+                  <div style={{ fontSize: "0.65rem", color: C.textMuted, fontFamily: BODY, marginTop: 6 }}>{progressLabel}</div>
+                ) : null}
+                {current.description ? (
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: C.textSoft,
+                      fontFamily: BODY,
+                      marginTop: 10,
+                      lineHeight: 1.6,
+                      textAlign: centered ? "center" : "left",
+                    }}
+                  >
+                    {current.description}
+                  </div>
+                ) : null}
               </div>
               <div
                 style={{
@@ -281,27 +424,37 @@ export default function IntakeForm({ id = "intake", preferredRoute, title, text 
                   </div>
                 ))}
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-                <button
-                  type="button"
-                  onClick={() => jump(-1)}
-                  disabled={step === 0}
-                  style={{
-                    padding: "10px 18px",
-                    borderRadius: 8,
-                    border: `1px solid ${C.border}`,
-                    background: "transparent",
-                    color: step === 0 ? C.textMuted : C.text,
-                    cursor: step === 0 ? "default" : "pointer",
-                    fontSize: "0.82rem",
-                    fontFamily: BODY,
-                    opacity: step === 0 ? 0.35 : 1,
-                  }}
-                >
-                  ← Terug
-                </button>
-                <PrimaryButton onClick={() => (step < intakeSteps.length - 1 ? jump(1) : submit())}>
-                  {submitting ? "Versturen..." : step < intakeSteps.length - 1 ? "Volgende stap →" : "Verstuur intake →"}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: isSingleStep ? "center" : "space-between",
+                  gap: 12,
+                  marginTop: 24,
+                  flexWrap: "wrap",
+                }}
+              >
+                {!isSingleStep ? (
+                  <button
+                    type="button"
+                    onClick={() => jump(-1)}
+                    disabled={step === 0}
+                    style={{
+                      padding: "10px 18px",
+                      borderRadius: 8,
+                      border: `1px solid ${C.border}`,
+                      background: "transparent",
+                      color: step === 0 ? C.textMuted : C.text,
+                      cursor: step === 0 ? "default" : "pointer",
+                      fontSize: "0.82rem",
+                      fontFamily: BODY,
+                      opacity: step === 0 ? 0.35 : 1,
+                    }}
+                  >
+                    ← Terug
+                  </button>
+                ) : null}
+                <PrimaryButton onClick={() => (step < steps.length - 1 ? jump(1) : submit())}>
+                  {submitting ? "Versturen..." : step < steps.length - 1 ? "Volgende stap →" : "Verstuur intake →"}
                 </PrimaryButton>
               </div>
             </div>

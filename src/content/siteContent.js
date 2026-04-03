@@ -237,3 +237,49 @@ export const intakeSteps = [
     ],
   },
 ];
+
+export const homeIntakeSteps = [
+  {
+    title: "Intake",
+    description: "",
+    fields: [
+      { id: "name", label: "Naam", type: "text", placeholder: "Uw naam", required: true },
+      { id: "company", label: "Bedrijf", type: "text", placeholder: "Naam van uw bedrijf", required: true },
+      { id: "email", label: "E-mail", type: "email", placeholder: "naam@bedrijf.nl", required: true },
+      { id: "phone", label: "Telefoon (optioneel)", type: "text", placeholder: "+31 6 ..." },
+      {
+        id: "interest",
+        label: "Waar ligt uw interesse?",
+        type: "multi",
+        required: true,
+        options: [
+          "AI Audit",
+          "AI Implementatie",
+          "OpenClaw Agents",
+          "AI Workshop",
+          "Weet ik nog niet",
+        ],
+      },
+      {
+        id: "focus",
+        label: "Welke mogelijkheden wilt u verkennen?",
+        type: "multi",
+        required: true,
+        options: [
+          "Support slimmer",
+          "Documentwerk sneller",
+          "Inbox & intake",
+          "Leadopvolging",
+          "Interne kennis",
+          "AI verkennen",
+        ],
+      },
+      {
+        id: "notes",
+        label: "Korte toelichting (optioneel)",
+        type: "textarea",
+        placeholder: "Licht kort toe waar uw interesse ligt of wat u graag wilt verkennen.",
+      },
+    ],
+  },
+];

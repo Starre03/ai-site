@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Faq from "../components/Faq";
 import IntakeForm from "../components/IntakeForm";
-import { homeFaq } from "../content/siteContent";
+import { homeIntakeSteps } from "../content/siteContent";
 import { BODY, C, shell } from "../lib/theme";
 import {
   GlowCard,
@@ -911,22 +910,18 @@ export default function Home() {
       <WhyNowSection />
       <IntakeCtaSection />
       <HowWeWorkSection />
-      <section style={{ padding: "6rem clamp(1.5rem, 5vw, 5rem)", background: C.lightBg }}>
-        <div style={{ ...shell.content, maxWidth: 880 }}>
-          <Faq
-            light
-            items={homeFaq}
-            title={
-              <>
-                Veelgestelde vragen over
-                <em style={{ color: C.primary, fontStyle: "italic" }}> AI audit, AI integraties en OpenClaw AI agents</em>
-              </>
-            }
-            text="Heldere antwoorden voor bedrijven die zoeken op AI audit, AI implementatie, Claude integratie, ChatGPT integratie, OpenClaw setup of AI agents voor bedrijven."
-          />
-        </div>
-      </section>
-      <IntakeForm />
+      <IntakeForm
+        centered
+        title={
+          <>
+            Benieuwd wat AI voor uw bedrijf kan opleveren?
+            <em style={{ color: C.primary, fontStyle: "italic", display: "block" }}>Kom in contact.</em>
+          </>
+        }
+        text=""
+        trustPoints={[]}
+        steps={homeIntakeSteps}
+      />
     </>
   );
 }

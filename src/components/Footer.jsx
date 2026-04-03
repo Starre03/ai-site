@@ -51,6 +51,12 @@ export default function Footer() {
           Over
         </Link>
         <Link
+          to="/faq"
+          style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", fontFamily: BODY }}
+        >
+          FAQ
+        </Link>
+        <Link
           to="/voorwaarden"
           style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", fontFamily: BODY }}
         >

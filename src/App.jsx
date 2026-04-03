@@ -9,6 +9,7 @@ import AboutPage from "./pages/About";
 import AuditPage from "./pages/Audit";
 import BrandPreviewPage from "./pages/BrandPreview";
 import ExamplesSectionPreviewPage from "./pages/ExamplesSectionPreview";
+import FaqPage from "./pages/FaqPage";
 import Home from "./pages/Home";
 import HomeFlowPreviewPage from "./pages/HomeFlowPreview";
 import HowWeWorkPreviewPage from "./pages/HowWeWorkPreview";
@@ -21,6 +22,7 @@ import TermsPage from "./pages/Terms";
 import WhyNowPreviewPage from "./pages/WhyNowPreview";
 import WhyNowIconsPreviewPage from "./pages/WhyNowIconsPreview";
 import IntakeCtaPreviewPage from "./pages/IntakeCtaPreview";
+import IntakeFormPreviewPage from "./pages/IntakeFormPreview";
 import WorkshopPage from "./pages/Workshop";
 
 function ScrollManager() {
@@ -71,11 +73,13 @@ export default function App() {
           <Route path="/over" element={<AboutPage />} />
           <Route path="/brand-preview" element={<BrandPreviewPage />} />
           <Route path="/examples-section-preview" element={<ExamplesSectionPreviewPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/services-section-preview" element={<ServicesSectionPreviewPage />} />
           <Route path="/problem-section-preview" element={<ProblemSectionPreviewPage />} />
           <Route path="/why-now-preview" element={<WhyNowPreviewPage />} />
           <Route path="/why-now-icons-preview" element={<WhyNowIconsPreviewPage />} />
           <Route path="/intake-cta-preview" element={<IntakeCtaPreviewPage />} />
+          <Route path="/intake-form-preview" element={<IntakeFormPreviewPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/voorwaarden" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />
