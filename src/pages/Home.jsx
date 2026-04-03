@@ -46,7 +46,7 @@ const serviceCards = [
   },
 ];
 
-const exampleTabs = ["AI Integraties", "AI Agents"];
+const exampleTabs = ["AI Implementatie", "AI Agents"];
 
 const whyNowCards = [
   {
@@ -99,14 +99,6 @@ const processCards = [
 ];
 
 const promiseCards = [
-  {
-    title: "Duidelijke keuzes in plaats van AI-ruis",
-    bullets: [
-      "U krijgt helder waar AI nu echt waarde toevoegt.",
-      "Wij maken ook duidelijk wat nog niet logisch is om te bouwen.",
-      "Daardoor hoeft u niet te gokken tussen losse tools en ideeën.",
-    ],
-  },
   {
     title: "Werkende processen in plaats van losse demo's",
     bullets: [
@@ -253,7 +245,7 @@ function Hero() {
 function HowWeWorkSection() {
   const [activeTab, setActiveTab] = useState("werkwijze");
   const isProcess = activeTab === "werkwijze";
-  const cards = (isProcess ? processCards : promiseCards).slice(0, 3);
+  const cards = isProcess ? processCards : promiseCards;
 
   return (
     <PageSection bg={C.lightBg} pad="3.6rem clamp(1.5rem, 5vw, 5rem) 7rem">

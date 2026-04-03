@@ -31,14 +31,6 @@ const steps = [
 
 const promises = [
   {
-    title: "Duidelijke keuzes in plaats van AI-ruis",
-    bullets: [
-      "U krijgt helder waar AI nu echt waarde toevoegt.",
-      "We maken ook duidelijk wat nog niet logisch is om te bouwen.",
-      "Daardoor hoeft u niet te gokken tussen losse tools en ideeën.",
-    ],
-  },
-  {
     title: "Werkende processen in plaats van losse demo's",
     bullets: [
       "We vertalen AI naar processen die dagelijks terugkomen.",
@@ -222,25 +214,13 @@ export default function HowWeWorkPreviewPage() {
             marginTop: 28,
           }}
         >
-          {(isProcess ? steps : promises).slice(0, 3).map((item, index) => (
+          {(isProcess ? steps : promises).map((item, index) => (
             <Reveal key={item.title} delay={0.28 + index * 0.05} fill>
               <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%" }}>
                 <div style={{ padding: "1.5rem", textAlign: "left", height: "100%" }}>
-                  <div
-                    style={{
-                      color: C.primary,
-                      fontFamily: BODY,
-                      fontSize: "0.82rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {isProcess ? `Stap ${index + 1}` : `Punt ${index + 1}`}
-                  </div>
                   <h3
                     style={{
-                      margin: "14px 0 0",
+                      margin: 0,
                       color: C.lightText,
                       fontFamily: BODY,
                       fontSize: "1.02rem",
