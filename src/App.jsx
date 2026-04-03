@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
 import Intro from "./components/Intro";
 import Nav from "./components/Nav";
-import StickyButton from "./components/StickyButton";
 import { C, shell } from "./lib/theme";
 import AgentsPage from "./pages/Agents";
 import AboutPage from "./pages/About";
@@ -12,6 +11,7 @@ import BrandPreviewPage from "./pages/BrandPreview";
 import ExamplesSectionPreviewPage from "./pages/ExamplesSectionPreview";
 import Home from "./pages/Home";
 import HomeFlowPreviewPage from "./pages/HomeFlowPreview";
+import HowWeWorkPreviewPage from "./pages/HowWeWorkPreview";
 import IntegrationsPage from "./pages/Integrations";
 import NotFoundPage from "./pages/NotFound";
 import PrivacyPage from "./pages/Privacy";
@@ -40,7 +40,10 @@ function ScrollManager() {
 }
 
 export default function App() {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  });
 
   return (
     <div style={shell.page}>
@@ -60,6 +63,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home-flow-preview" element={<HomeFlowPreviewPage />} />
+          <Route path="/how-we-work-preview" element={<HowWeWorkPreviewPage />} />
           <Route path="/ai-audit" element={<AuditPage />} />
           <Route path="/ai-integraties" element={<IntegrationsPage />} />
           <Route path="/ai-agents" element={<AgentsPage />} />
@@ -78,7 +82,6 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-      <StickyButton />
     </div>
   );
 }

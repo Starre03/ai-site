@@ -72,6 +72,68 @@ const whyNowCards = [
   },
 ];
 
+const processCards = [
+  {
+    title: "Inzicht",
+    bullets: [
+      "Wij brengen in kaart waar tijd, capaciteit of kwaliteit het meeste te winnen heeft.",
+      "Wij kijken waar processen vastlopen en waar AI direct waarde kan toevoegen.",
+      "Wij maken zichtbaar welk proces als eerste de meeste winst oplevert.",
+    ],
+  },
+  {
+    title: "Keuze",
+    bullets: [
+      "Samen bepalen we of audit, implementatie of een agentflow nu de logische stap is.",
+      "U kiest wat past bij het team, het proces en de gewenste uitkomst.",
+      "Wij houden de eerste stap klein genoeg om beheersbaar te blijven, maar groot genoeg om waarde te leveren.",
+    ],
+  },
+  {
+    title: "Uitvoering",
+    bullets: [
+      "Wij bouwen alleen wat echt nodig is en in bestaand werk past.",
+      "AI wordt ingebouwd in support, documentwerk, intake of opvolging.",
+      "Het doel is altijd een oplossing die betrouwbaar werkt en praktisch blijft voor het team.",
+    ],
+  },
+];
+
+const promiseCards = [
+  {
+    title: "Duidelijke keuzes in plaats van AI-ruis",
+    bullets: [
+      "U krijgt helder waar AI nu echt waarde toevoegt.",
+      "Wij maken ook duidelijk wat nog niet logisch is om te bouwen.",
+      "Daardoor hoeft u niet te gokken tussen losse tools en ideeën.",
+    ],
+  },
+  {
+    title: "Werkende processen in plaats van losse demo's",
+    bullets: [
+      "Wij vertalen AI naar processen die dagelijks terugkomen.",
+      "Niet iets naast het werk, maar iets dat echt ín het werk landt.",
+      "Zo wordt AI bruikbaar voor support, documenten, intake en opvolging.",
+    ],
+  },
+  {
+    title: "Tastbare voortgang zonder groot voortraject",
+    bullets: [
+      "U hoeft niet eerst een groot AI-programma te starten.",
+      "Een eerste stap kan al direct tijd, capaciteit of kwaliteit opleveren.",
+      "Zo blijft de route overzichtelijk en de investering beheersbaar.",
+    ],
+  },
+  {
+    title: "Direct contact en korte lijnen",
+    bullets: [
+      "Geen lagen ertussen, maar direct schakelen over keuzes en uitwerking.",
+      "Daardoor kunnen wij sneller bijsturen op wat wel en niet werkt.",
+      "Dat maakt het proces overzichtelijker en betrouwbaarder.",
+    ],
+  },
+];
+
 const exampleItems = [
   {
     title: "AI implementatie voor support, documenten en kennisprocessen",
@@ -189,54 +251,129 @@ function Hero() {
   );
 }
 
-function ProblemSection() {
-  const items = [
-    {
-      title: "Er is wel interesse, maar geen route",
-      desc: "Bedrijven hebben tools gezien en demo's gehad, maar missen overzicht: waar levert AI nu echt iets op en wat is ruis?",
-    },
-    {
-      title: "Teams zitten vast in losse experimenten",
-      desc: "Een paar prompts, een paar proefaccounts en verder weinig structurele impact. Daardoor blijft AI iets naast het werk in plaats van ín het werk.",
-    },
-    {
-      title: "Bottlenecks blijven handmatig",
-      desc: "Support, intake, documentwerk en interne kennisvragen kosten nog steeds te veel tijd omdat processen niet slim zijn ingericht.",
-    },
-    {
-      title: "Niemand wil eerst een groot AI-programma",
-      desc: "De beste start is meestal kleiner en concreter: audit, één integratie of één agentflow die tastbaar waarde levert.",
-    },
-  ];
+function HowWeWorkSection() {
+  const [activeTab, setActiveTab] = useState("werkwijze");
+  const isProcess = activeTab === "werkwijze";
+  const cards = (isProcess ? processCards : promiseCards).slice(0, 3);
 
   return (
-    <SmoothSection bg={C.lightBg} zIndex={2} minH="120vh">
-      <SectionHeading
-        tag="Waarom bedrijven vastlopen"
-        light
-        title={
-          <>
-            Bedrijven weten dat AI bestaat,
-            <em style={{ color: C.primary, fontStyle: "italic" }}> maar weten niet wat ze nu moeten implementeren.</em>
-          </>
-        }
-        text="AI voor bedrijven is inmiddels overal zichtbaar. Toch blijven veel teams steken tussen losse demo's, proefaccounts en inspiratie. Het echte probleem is niet gebrek aan tools, maar gebrek aan duidelijkheid over welke AI implementatie nu direct waarde oplevert."
-      />
-      <div className="card-grid-two" style={{ marginTop: 40 }}>
-        {items.map((item, index) => (
-          <Reveal key={item.title} delay={0.14 + index * 0.06} fill>
-            <GlowCard light style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ padding: "1.8rem", height: "100%" }}>
-                <h3 style={{ fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, color: C.lightText }}>{item.title}</h3>
-                <p style={{ color: C.lightTextSoft, fontSize: "0.88rem", lineHeight: 1.75, marginTop: 10, fontFamily: BODY }}>
-                  {item.desc}
-                </p>
-              </div>
-            </GlowCard>
-          </Reveal>
-        ))}
+    <PageSection bg={C.lightBg} pad="3.6rem clamp(1.5rem, 5vw, 5rem) 7rem">
+      <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
+        <Reveal delay={0.04}>
+          <Tag>Zo werken wij</Tag>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2
+            style={{
+              fontFamily: BODY,
+              fontSize: "clamp(2.15rem, 4.8vw, 4.15rem)",
+              lineHeight: 1.06,
+              fontWeight: 700,
+              margin: "0 auto",
+              letterSpacing: "-0.03em",
+              color: C.lightText,
+              maxWidth: 920,
+            }}
+          >
+            Duidelijk in keuze.
+            <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>Concreet in uitvoering.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.16}>
+          <p
+            style={{
+              color: C.lightTextSoft,
+              fontSize: "0.98rem",
+              lineHeight: 1.8,
+              maxWidth: 820,
+              margin: "22px auto 0",
+              fontFamily: BODY,
+            }}
+          >
+            Zo houden wij AI overzichtelijk: eerst helder krijgen waar AI waarde toevoegt, daarna samen kiezen en gericht uitvoeren.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.22}>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 30 }}>
+            {[
+              { id: "werkwijze", label: "Werkwijze" },
+              { id: "beloftes", label: "Beloftes" },
+            ].map((tab) => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    borderRadius: 18,
+                    padding: "0.95rem 1.35rem",
+                    border: `1px solid ${active ? C.primary : C.lightBorder}`,
+                    background: active ? C.primary : C.lightCard,
+                    color: active ? "#ffffff" : C.lightTextSoft,
+                    fontFamily: BODY,
+                    fontSize: "1rem",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    transition: "all 180ms ease",
+                    boxShadow: active ? `0 10px 24px ${C.primary}26, inset 0 0 0 1px ${C.primary}` : "none",
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </Reveal>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: 18,
+            marginTop: 28,
+          }}
+        >
+          {cards.map((item, index) => (
+            <Reveal key={item.title} delay={0.28 + index * 0.05} fill>
+              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%" }}>
+                <div style={{ padding: "1.5rem", textAlign: "left", height: "100%" }}>
+                  <h3
+                    style={{
+                      margin: 0,
+                      color: C.lightText,
+                      fontFamily: BODY,
+                      fontSize: "1.02rem",
+                      fontWeight: 700,
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+                  <div style={{ display: "grid", gap: 8, marginTop: 12 }}>
+                    {item.bullets.slice(0, 2).map((bullet) => (
+                      <p
+                        key={bullet}
+                        style={{
+                          margin: 0,
+                          color: C.lightTextSoft,
+                          fontFamily: BODY,
+                          fontSize: "0.88rem",
+                          lineHeight: 1.72,
+                        }}
+                      >
+                        {bullet}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </GlowCard>
+            </Reveal>
+          ))}
+        </div>
       </div>
-    </SmoothSection>
+    </PageSection>
   );
 }
 
@@ -647,7 +784,7 @@ function SolidGlyphIcon({ kind }) {
 
 function WhyNowSection() {
   return (
-    <PageSection bg={C.lightBg} pad="6rem clamp(1.5rem, 5vw, 5rem) 1.4rem">
+    <PageSection bg={C.lightBg} pad="6rem clamp(1.5rem, 5vw, 5rem) 3.8rem">
       <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.04}>
           <Tag>Waarom nu</Tag>
@@ -697,21 +834,21 @@ function IntakeCtaSection() {
     <section
       style={{
         background: C.lightBg,
-        padding: "1.4rem clamp(1.5rem, 5vw, 5rem) 1.8rem",
+        padding: "4rem clamp(1.5rem, 5vw, 5rem) 4.1rem",
       }}
     >
-      <div style={{ maxWidth: 1120, margin: "0 auto", width: "100%" }}>
+      <div style={{ maxWidth: 980, margin: "0 auto", width: "100%" }}>
         <Reveal delay={0.06}>
           <GlowCard
             style={{
               background:
                 `radial-gradient(circle at 18% 22%, ${C.primary}18, transparent 30%), radial-gradient(circle at 82% 78%, ${C.primary}10, transparent 28%), linear-gradient(135deg, ${C.bg2} 0%, ${C.bg} 100%)`,
-              boxShadow: `0 20px 56px rgba(2, 8, 23, 0.18)`,
+              boxShadow: `0 18px 44px rgba(2, 8, 23, 0.14)`,
             }}
           >
             <div
               style={{
-                padding: "clamp(1.45rem, 2.4vw, 2rem)",
+                padding: "clamp(1.25rem, 1.9vw, 1.7rem) clamp(1.2rem, 1.8vw, 1.8rem)",
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
@@ -726,13 +863,13 @@ function IntakeCtaSection() {
                 <h2
                   style={{
                     fontFamily: BODY,
-                    fontSize: "clamp(1.45rem, 3vw, 2.5rem)",
+                    fontSize: "clamp(1.3rem, 2.5vw, 2.15rem)",
                     lineHeight: 1.12,
                     fontWeight: 700,
                     margin: "0 auto",
                     letterSpacing: "-0.03em",
                     color: C.text,
-                    maxWidth: 700,
+                    maxWidth: 620,
                   }}
                 >
                   Klaar om te zien waar <span style={{ color: C.primary }}>AI</span> voor uw bedrijf het meeste oplevert?
@@ -773,7 +910,7 @@ export default function Home() {
       <ExamplesSection />
       <WhyNowSection />
       <IntakeCtaSection />
-      <ProblemSection />
+      <HowWeWorkSection />
       <section style={{ padding: "6rem clamp(1.5rem, 5vw, 5rem)", background: C.lightBg }}>
         <div style={{ ...shell.content, maxWidth: 880 }}>
           <Faq
