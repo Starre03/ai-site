@@ -48,6 +48,12 @@ const serviceCards = [
   },
 ];
 
+const trustedBrands = [
+  { name: "CareUp" },
+  { name: "ShirtPrintShop" },
+  { name: "Mizo" },
+];
+
 const exampleTabs = ["AI Implementatie", "AI Agents"];
 
 const whyNowCards = [
@@ -241,6 +247,125 @@ function Hero() {
         </Reveal>
       </div>
     </SmoothSection>
+  );
+}
+
+function TrustedBannerSection() {
+  const brands = [...trustedBrands, ...trustedBrands, ...trustedBrands, ...trustedBrands];
+
+  return (
+    <section
+      style={{
+        background: `linear-gradient(180deg, ${C.bg} 0%, ${C.bg} 43%, ${C.lightBg} 43%, ${C.lightBg} 100%)`,
+        padding: "0 0 3.15rem",
+        position: "relative",
+        zIndex: 2,
+      }}
+    >
+      <div style={{ maxWidth: 1280, margin: "0 auto", textAlign: "center", padding: "0 clamp(1.5rem, 5vw, 5rem)" }}>
+        <Reveal delay={0.06}>
+          <div style={{ paddingTop: 2 }}>
+            <div
+              style={{
+                fontSize: "0.74rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                color: "rgba(232,238,248,0.72)",
+                fontFamily: BODY,
+                fontWeight: 700,
+              }}
+            >
+              Vertrouwd door innovatieve bedrijven
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.12}>
+          <div
+            style={{
+              position: "relative",
+              marginTop: 16,
+              overflow: "hidden",
+              border: `1px solid ${C.lightBorder}`,
+              borderRadius: 28,
+              background: "linear-gradient(180deg, #FFFFFF 0%, #FBFDFE 100%)",
+              boxShadow: "0 10px 24px rgba(2, 8, 23, 0.06)",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: "0 auto 0 0",
+                width: 140,
+                background: `linear-gradient(90deg, ${C.lightBg} 0%, rgba(244,248,252,0) 100%)`,
+                zIndex: 2,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: "0 0 0 auto",
+                width: 140,
+                background: `linear-gradient(270deg, ${C.lightBg} 0%, rgba(244,248,252,0) 100%)`,
+                zIndex: 2,
+              }}
+            />
+            <style>{`
+              .trusted-marquee {
+                display: flex;
+                align-items: center;
+                gap: 0;
+                width: max-content;
+                min-width: 100%;
+                padding: 1.35rem 0;
+                animation: trusted-marquee 26s linear infinite;
+              }
+
+              @keyframes trusted-marquee {
+                from {
+                  transform: translateX(0);
+                }
+                to {
+                  transform: translateX(-25%);
+                }
+              }
+            `}</style>
+            <div className="trusted-marquee">
+              {brands.map((brand, index) => (
+                <div
+                  key={`${brand.name}-${index}`}
+                  style={{
+                    minWidth: brand.name.length > 12 ? 280 : 220,
+                    padding: "0 1.8rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 12,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "#4E6784",
+                      fontFamily: BODY,
+                      fontWeight: 800,
+                      fontSize:
+                        brand.name.length > 16
+                          ? "clamp(0.96rem, 1.5vw, 1.24rem)"
+                          : "clamp(1rem, 1.75vw, 1.34rem)",
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1,
+                    }}
+                  >
+                    {brand.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
   );
 }
 
@@ -899,6 +1024,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <TrustedBannerSection />
       <ServicesOverview />
       <ExamplesSection />
       <WhyNowSection />
