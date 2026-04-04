@@ -95,9 +95,13 @@ export default function IntakeForm({
   preferredRoute,
   title,
   text,
+  tagLabel = "Intake",
   centered = false,
   trustPoints = [],
   steps = intakeSteps,
+  submitLabel,
+  doneTitle,
+  doneText,
 }) {
   const [step, setStep] = useState(0);
   const [animating, setAnimating] = useState(false);
@@ -213,11 +217,11 @@ export default function IntakeForm({
                 ✓
               </div>
               <h2 style={{ fontFamily: BODY, fontSize: "1.6rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
-                Je intake voor StarLeo is binnen
+                {doneTitle || "Je intake voor StarLeo is binnen"}
               </h2>
               <p style={{ color: C.textSoft, marginTop: 12, lineHeight: 1.7, fontFamily: BODY }}>
-                We gebruiken je antwoorden om direct inhoudelijk te spreken over AI audit, AI integraties of OpenClaw
-                AI agents. Zo verlies je geen tijd aan een generiek eerste gesprek.
+                {doneText ||
+                  "We gebruiken je antwoorden om direct inhoudelijk te spreken over AI audit, AI integraties of OpenClaw AI agents. Zo verlies je geen tijd aan een generiek eerste gesprek."}
               </p>
             </div>
           </GlowCard>
@@ -256,7 +260,7 @@ export default function IntakeForm({
                       opacity: 0.5,
                     }}
                   />
-                  Intake
+                  {tagLabel}
                 </div>
               </div>
             </Reveal>
@@ -454,7 +458,7 @@ export default function IntakeForm({
                   </button>
                 ) : null}
                 <PrimaryButton onClick={() => (step < steps.length - 1 ? jump(1) : submit())}>
-                  {submitting ? "Versturen..." : step < steps.length - 1 ? "Volgende stap →" : "Verstuur intake →"}
+                  {submitting ? "Versturen..." : step < steps.length - 1 ? "Volgende stap →" : submitLabel || "Verstuur intake →"}
                 </PrimaryButton>
               </div>
             </div>

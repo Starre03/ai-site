@@ -283,3 +283,23 @@ export const homeIntakeSteps = [
     ],
   },
 ];
+
+export const contactSteps = [
+  {
+    title: "Contact",
+    description: "",
+    fields: [
+      { id: "name", label: "Naam", type: "text", placeholder: "Uw naam", required: true },
+      { id: "company", label: "Bedrijf", type: "text", placeholder: "Naam van uw bedrijf", required: true },
+      { id: "email", label: "E-mail", type: "email", placeholder: "naam@bedrijf.nl", required: true },
+      { id: "phone", label: "Telefoon (optioneel)", type: "text", placeholder: "+31 6 ..." },
+      {
+        id: "message",
+        label: "Waar kunnen wij u mee helpen?",
+        type: "textarea",
+        required: true,
+        placeholder: "Licht kort toe waar u hulp bij zoekt of waar u vragen over heeft.",
+      },
+    ],
+  },
+];

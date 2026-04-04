@@ -16,6 +16,7 @@ import HowWeWorkPreviewPage from "./pages/HowWeWorkPreview";
 import IntegrationsPage from "./pages/Integrations";
 import NotFoundPage from "./pages/NotFound";
 import PrivacyPage from "./pages/Privacy";
+import QuickscanPage from "./pages/QuickscanPage";
 import ServicesSectionPreviewPage from "./pages/ServicesSectionPreview";
 import ProblemSectionPreviewPage from "./pages/ProblemSectionPreview";
 import TermsPage from "./pages/Terms";
@@ -83,6 +84,7 @@ export default function App() {
           <Route path="/intake-cta-preview" element={<IntakeCtaPreviewPage />} />
           <Route path="/intake-form-preview" element={<IntakeFormPreviewPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/quickscan" element={<QuickscanPage />} />
           <Route path="/voorwaarden" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

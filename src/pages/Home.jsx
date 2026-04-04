@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import IntakeForm from "../components/IntakeForm";
-import { homeIntakeSteps } from "../content/siteContent";
+import { contactSteps } from "../content/siteContent";
 import { BODY, C, shell } from "../lib/theme";
 import {
   GlowCard,
@@ -230,19 +230,23 @@ function Hero() {
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginTop: 30 }}>
-            <PrimaryButton href="#intake" onClick={(event) => {
-              event.preventDefault();
-              document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}>
-              Plan AI intake →
-            </PrimaryButton>
-            <PrimaryButton secondary href="#diensten" onClick={(event) => {
-              event.preventDefault();
-              document.getElementById("diensten")?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}>
-              Bekijk mogelijkheden
-            </PrimaryButton>
+          <p
+            style={{
+              color: C.text,
+              fontSize: "1.04rem",
+              fontWeight: 500,
+              lineHeight: 1.78,
+              maxWidth: 700,
+              margin: "20px auto 0",
+              fontFamily: BODY,
+            }}
+          >
+            Benieuwd hoe AI in uw bedrijf tijd en kosten kan besparen?
+          </p>
+        </Reveal>
+        <Reveal delay={0.22}>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginTop: 22 }}>
+            <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
           </div>
         </Reveal>
       </div>
@@ -975,7 +979,7 @@ function IntakeCtaSection() {
               }}
             >
               <Reveal delay={0.14}>
-                <Tag>Plan een intake</Tag>
+                <Tag>Gratis quickscan</Tag>
               </Reveal>
               <Reveal delay={0.2}>
                 <h2
@@ -987,23 +991,15 @@ function IntakeCtaSection() {
                     margin: "0 auto",
                     letterSpacing: "-0.03em",
                     color: C.text,
-                    maxWidth: 620,
-                  }}
+                  maxWidth: 620,
+                }}
                 >
-                  Klaar om te zien waar <span style={{ color: C.primary }}>AI</span> voor uw bedrijf het meeste oplevert?
+                  Benieuwd waar <span style={{ color: C.primary }}>AI</span> uw bedrijf tijd en kosten kan besparen?
                 </h2>
               </Reveal>
               <Reveal delay={0.34}>
                 <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
-                  <PrimaryButton
-                    href="#intake"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }}
-                  >
-                    Plan AI intake →
-                  </PrimaryButton>
+                  <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
                 </div>
               </Reveal>
             </div>
@@ -1031,16 +1027,21 @@ export default function Home() {
       <IntakeCtaSection />
       <HowWeWorkSection />
       <IntakeForm
+        id="contact"
         centered
+        tagLabel="Contact"
         title={
           <>
-            Benieuwd wat AI voor uw bedrijf kan opleveren?
-            <em style={{ color: C.primary, fontStyle: "italic", display: "block" }}>Kom in contact.</em>
+            Neem contact op.
+            <em style={{ color: C.primary, fontStyle: "italic", display: "block" }}>Dan denken wij met u mee.</em>
           </>
         }
         text=""
         trustPoints={[]}
-        steps={homeIntakeSteps}
+        steps={contactSteps}
+        submitLabel="Verstuur bericht →"
+        doneTitle="Uw bericht is verstuurd"
+        doneText="We nemen contact op om uw vraag of situatie verder te bespreken."
       />
     </>
   );

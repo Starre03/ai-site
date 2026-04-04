@@ -30,19 +30,24 @@ export default function Nav() {
     setDesktopMenu(null);
   }, [location.pathname]);
 
-  const goToIntake = () => {
+  const goToSection = (id) => {
     if (location.pathname !== "/") {
-      navigate("/#intake");
+      navigate(`/#${id}`);
       setTimeout(() => {
-        document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 50);
       return;
     }
 
-    document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const groupIsActive = (items) => items.some((item) => item.to === location.pathname);
+
+  const aboutMenu = [
+    { label: "Over ons", to: "/over", description: "Lees meer over StarLeo, onze achtergrond en waar wij voor staan." },
+    { label: "Contact", to: "/#contact", description: "Neem direct contact op voor vragen of een eerste gesprek." },
+  ];
 
   return (
     <nav
@@ -71,7 +76,7 @@ export default function Nav() {
         <BrandMark />
       </Link>
       <div className="desktop-nav" style={{ display: "flex", gap: 24, alignItems: "center", position: "relative" }}>
-        {menus.map((group) => {
+        {[...menus, { label: "Over", items: aboutMenu }].map((group) => {
           const active = groupIsActive(group.items);
           const isOpen = desktopMenu === group.label;
 
@@ -107,9 +112,13 @@ export default function Nav() {
                   style={{
                     position: "absolute",
                     top: 34,
-                    left: -20,
-                    width: 440,
-                    padding: 14,
+                    left: 0,
+                    right: "auto",
+                    transform: "none",
+                    width: "fit-content",
+                    minWidth: group.label === "Over" ? 150 : 190,
+                    maxWidth: group.label === "Over" ? 180 : 230,
+                    padding: 10,
                     borderRadius: 20,
                     background: "rgba(10,16,28,0.94)",
                     border: `1px solid ${C.border}`,
@@ -117,49 +126,58 @@ export default function Nav() {
                     WebkitBackdropFilter: "blur(24px) saturate(1.2)",
                     boxShadow: "0 18px 60px rgba(0,0,0,0.34)",
                     display: "grid",
-                    gap: 8,
+                    gap: 4,
                   }}
                 >
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.to + item.label}
-                      to={item.to}
-                      style={{
-                        textDecoration: "none",
-                        color: "inherit",
-                        borderRadius: 14,
-                        padding: "12px 14px",
-                        background: item.to === location.pathname ? "rgba(14,165,233,0.08)" : "transparent",
-                        transition: "background 0.25s ease",
-                      }}
-                    >
-                      <div style={{ color: C.text, fontFamily: BODY, fontWeight: 600, fontSize: "0.84rem" }}>{item.label}</div>
-                      <div style={{ color: C.textSoft, fontFamily: BODY, fontSize: "0.76rem", lineHeight: 1.65, marginTop: 5 }}>
-                        {item.description}
-                      </div>
-                    </Link>
-                  ))}
+                  {group.items.map((item) =>
+                    item.to === "/#contact" ? (
+                      <button
+                        key={item.to + item.label}
+                        type="button"
+                        onClick={() => {
+                          setDesktopMenu(null);
+                          goToSection("contact");
+                        }}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                          borderRadius: 14,
+                          padding: "12px 14px",
+                          background: "transparent",
+                          transition: "background 0.25s ease",
+                          border: "none",
+                          textAlign: "left",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <div style={{ color: C.text, fontFamily: BODY, fontWeight: 600, fontSize: "0.84rem", whiteSpace: "nowrap" }}>{item.label}</div>
+                      </button>
+                    ) : (
+                      <Link
+                        key={item.to + item.label}
+                        to={item.to}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                          borderRadius: 14,
+                          padding: "12px 14px",
+                          background: item.to === location.pathname ? "rgba(14,165,233,0.08)" : "transparent",
+                          transition: "background 0.25s ease",
+                        }}
+                      >
+                        <div style={{ color: C.text, fontFamily: BODY, fontWeight: 600, fontSize: "0.84rem", whiteSpace: "nowrap" }}>{item.label}</div>
+                      </Link>
+                    ),
+                  )}
                 </div>
               ) : null}
             </div>
           );
         })}
-        <NavLink
-          to="/over"
-          style={({ isActive }) => ({
-            color: isActive ? C.text : C.textMuted,
-            textDecoration: "none",
-            fontSize: "0.78rem",
-            fontWeight: isActive ? 600 : 500,
-            transition: "color 0.3s",
-            fontFamily: BODY,
-          })}
-        >
-          Over
-        </NavLink>
-        <button
-          onClick={goToIntake}
+        <Link
+          to="/quickscan"
           style={{
+            textDecoration: "none",
             background: C.primary,
             color: "#fff",
             padding: "7px 18px",
@@ -171,8 +189,8 @@ export default function Nav() {
             fontFamily: BODY,
           }}
         >
-          Plan AI intake
-        </button>
+          Start quickscan
+        </Link>
       </div>
       <button
         className="mobile-nav"
@@ -207,7 +225,7 @@ export default function Nav() {
             gap: 14,
           }}
         >
-          {menus.map((group) => (
+          {[...menus, { label: "Over", items: aboutMenu }].map((group) => (
             <div key={group.label} style={{ display: "grid", gap: 10 }}>
               <div
                 style={{
@@ -220,37 +238,52 @@ export default function Nav() {
               >
                 {group.label}
               </div>
-              {group.items.map((item) => (
-                <NavLink
-                  key={item.to + item.label}
-                  to={item.to}
-                  style={({ isActive }) => ({
-                    color: isActive ? C.text : C.textSoft,
-                    textDecoration: "none",
-                    fontFamily: BODY,
-                    fontSize: "0.9rem",
-                    lineHeight: 1.4,
-                  })}
-                >
-                  {item.label}
-                </NavLink>
-              ))}
+              {group.items.map((item) =>
+                item.to === "/#contact" ? (
+                  <button
+                    key={item.to + item.label}
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      goToSection("contact");
+                    }}
+                    style={{
+                      color: C.textSoft,
+                      textDecoration: "none",
+                      fontFamily: BODY,
+                      fontSize: "0.9rem",
+                      lineHeight: 1.4,
+                      background: "none",
+                      border: "none",
+                      padding: 0,
+                      textAlign: "left",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <NavLink
+                    key={item.to + item.label}
+                    to={item.to}
+                    style={({ isActive }) => ({
+                      color: isActive ? C.text : C.textSoft,
+                      textDecoration: "none",
+                      fontFamily: BODY,
+                      fontSize: "0.9rem",
+                      lineHeight: 1.4,
+                    })}
+                  >
+                    {item.label}
+                  </NavLink>
+                ),
+              )}
             </div>
           ))}
-          <NavLink
-            to="/over"
-            style={({ isActive }) => ({
-              color: isActive ? C.text : C.textSoft,
-              textDecoration: "none",
-              fontFamily: BODY,
-              fontSize: "0.9rem",
-            })}
-          >
-            Over
-          </NavLink>
-          <button
-            onClick={goToIntake}
+          <Link
+            to="/quickscan"
             style={{
+              textDecoration: "none",
               background: C.primary,
               color: "#fff",
               padding: "10px 18px",
@@ -264,8 +297,8 @@ export default function Nav() {
               marginTop: 4,
             }}
           >
-            Plan AI intake
-          </button>
+            Start quickscan
+          </Link>
         </div>
       ) : null}
     </nav>
