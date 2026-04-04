@@ -21,6 +21,8 @@ const heroLines = [
   "voor contracten die AI direct op risico's controleert",
   "voor kwartaalcijfers die AI automatisch analyseert en samenvat",
   "voor leadopvolging die volledig automatisch verloopt",
+  "voor social content die automatisch wordt gemaakt en geplaatst",
+  "voor marketingcampagnes die automatisch draaien",
 ];
 
 const serviceCards = [
