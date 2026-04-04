@@ -19,6 +19,7 @@ import PrivacyPage from "./pages/Privacy";
 import ServicesSectionPreviewPage from "./pages/ServicesSectionPreview";
 import ProblemSectionPreviewPage from "./pages/ProblemSectionPreview";
 import TermsPage from "./pages/Terms";
+import TrustedBannerPreviewPage from "./pages/TrustedBannerPreview";
 import WhyNowPreviewPage from "./pages/WhyNowPreview";
 import WhyNowIconsPreviewPage from "./pages/WhyNowIconsPreview";
 import IntakeCtaPreviewPage from "./pages/IntakeCtaPreview";
@@ -75,6 +76,7 @@ export default function App() {
           <Route path="/examples-section-preview" element={<ExamplesSectionPreviewPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/services-section-preview" element={<ServicesSectionPreviewPage />} />
+          <Route path="/trusted-banner-preview" element={<TrustedBannerPreviewPage />} />
           <Route path="/problem-section-preview" element={<ProblemSectionPreviewPage />} />
           <Route path="/why-now-preview" element={<WhyNowPreviewPage />} />
           <Route path="/why-now-icons-preview" element={<WhyNowIconsPreviewPage />} />
