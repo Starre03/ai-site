@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { BODY, C } from "../../lib/theme";
-import { OPT_IN_TEXT } from "../../lib/quickscan/config.js";
+import { OPT_IN_TEXT, PAIN_POINT_LABELS } from "../../lib/quickscan/config.js";
 import {
   getPrimaryButtonStyle,
   getSecondaryButtonStyle,
@@ -19,7 +19,10 @@ const fieldStyle = {
   fontSize: "0.96rem",
 };
 
-export default function GateForm({ contact, errors, onChange, onToggleOptIn, onBack, onSubmit }) {
+export default function GateForm({ contact, errors, assessment, onChange, onToggleOptIn, onBack, onSubmit }) {
+  const teaserLabel = PAIN_POINT_LABELS[assessment?.answers?.painPoint] || "Meerdere dingen tegelijk";
+  const teaserDegrees = Math.max(24, ((assessment?.score?.total || 20) / 100) * 360);
+
   return (
     <section
       style={{
@@ -53,6 +56,46 @@ export default function GateForm({ contact, errors, onChange, onToggleOptIn, onB
           >
             Je ziet direct je score, besparingspotentieel en passende vervolgstap.
           </p>
+        </div>
+
+        <div
+          style={{
+            maxWidth: 680,
+            margin: "0 auto",
+            width: "100%",
+            borderRadius: 18,
+            padding: "10px 14px",
+            background: "linear-gradient(180deg, rgba(14,165,233,0.08), rgba(255,255,255,0.03))",
+            border: "1px solid rgba(56,189,248,0.18)",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          <div
+            style={{
+              width: 54,
+              height: 54,
+              minWidth: 54,
+              borderRadius: "50%",
+              background: `conic-gradient(#38BDF8 ${teaserDegrees}deg, rgba(255,255,255,0.08) 0deg)`,
+              display: "grid",
+              placeItems: "center",
+            }}
+          >
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                background: "rgba(8,14,28,0.96)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+            />
+          </div>
+          <div style={{ color: C.text, fontFamily: BODY, fontSize: "0.96rem", fontWeight: 600, lineHeight: 1.4 }}>
+            Je grootste tijdlek: <span style={{ color: "#EAF6FF" }}>{teaserLabel}</span>
+          </div>
         </div>
 
         <form

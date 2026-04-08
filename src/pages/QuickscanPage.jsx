@@ -257,7 +257,7 @@ export default function QuickscanPage() {
                   maxWidth: 1320,
                 }}
               >
-                <span style={{ display: "block" }}>Zie in 3 minuten</span>
+                <span style={{ display: "block" }}>Zie in 2 minuten</span>
                 <span style={{ display: "block" }}>waar je bedrijf</span>
                 <span style={{ display: "block" }}>tijd en geld laat liggen.</span>
               </h1>
@@ -344,6 +344,7 @@ export default function QuickscanPage() {
           <GateForm
             contact={contact}
             errors={errors}
+            assessment={assessment}
             onChange={handleContactChange}
             onToggleOptIn={handleOptInToggle}
             onBack={handleBack}
