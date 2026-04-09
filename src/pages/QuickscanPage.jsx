@@ -210,8 +210,8 @@ export default function QuickscanPage() {
     });
   }
 
-  const progressIndex = Math.min(screenIndex, QUESTIONS.length + 1);
-  const showProgress = screenIndex > 0 && screenIndex < STEP_IDS.length - 1;
+  const progressIndex = currentQuestion ? QUESTIONS.findIndex((question) => question.stepId === currentStepId) + 1 : 0;
+  const showProgress = Boolean(currentQuestion);
 
   const pageStyle = {
     minHeight: "100vh",
@@ -232,7 +232,7 @@ export default function QuickscanPage() {
   return (
     <div style={pageStyle}>
       <div style={frameStyle}>
-        {showProgress ? <ProgressBar currentIndex={progressIndex} totalSteps={QUESTIONS.length + 1} /> : null}
+        {showProgress ? <ProgressBar currentIndex={progressIndex} totalSteps={QUESTIONS.length} /> : null}
 
         {currentStepId === "intro" ? (
           <section

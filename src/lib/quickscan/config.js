@@ -18,7 +18,7 @@ export const QUESTIONS = [
     id: "sector",
     stepId: "v1-sector",
     kind: "single",
-    title: "In welke branche of sector is je bedrijf actief?",
+    title: "In welke sector is je bedrijf actief?",
     options: [
       { value: "zakelijke-dienstverlening", label: "Zakelijke dienstverlening" },
       { value: "financieel-administratief", label: "Financieel en administratief" },

@@ -16,7 +16,7 @@ export default function ProgressBar({ currentIndex, totalSteps, label = "Quicksc
       >
         <span>{label}</span>
         <span>
-          Stap {activeStep} / {totalSteps}
+          Vraag {activeStep} / {totalSteps}
         </span>
       </div>
       <div
