@@ -4,13 +4,13 @@ export default function ProgressBar({ currentIndex, totalSteps, label = "Quicksc
   const activeStep = Math.max(0, Math.min(currentIndex, totalSteps));
 
   return (
-    <div style={{ display: "grid", gap: 10 }}>
+    <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)" }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           color: C.textSoft,
-          fontSize: "0.82rem",
+          fontSize: "clamp(0.78rem, min(1.2vw, 1.7vh), 0.82rem)",
           fontFamily: BODY,
         }}
       >
@@ -21,7 +21,7 @@ export default function ProgressBar({ currentIndex, totalSteps, label = "Quicksc
       </div>
       <div
         style={{
-          height: 8,
+          height: "clamp(6px, 0.9vh, 8px)",
           borderRadius: 999,
           background: "rgba(255,255,255,0.08)",
           overflow: "hidden",

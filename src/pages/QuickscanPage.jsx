@@ -219,14 +219,14 @@ export default function QuickscanPage() {
       "radial-gradient(circle at top left, rgba(14,165,233,0.16), transparent 26%), radial-gradient(circle at bottom right, rgba(34,197,94,0.1), transparent 22%), linear-gradient(180deg, #07111F 0%, #0B1120 42%, #08111D 100%)",
     color: C.text,
     fontFamily: BODY,
-    padding: "96px 24px 56px",
+    padding: "clamp(72px, 10vh, 96px) clamp(16px, 3vw, 24px) clamp(40px, 6vh, 56px)",
   };
 
   const frameStyle = {
     width: "min(1120px, 100%)",
     margin: "0 auto",
     display: "grid",
-    gap: 24,
+    gap: "clamp(16px, 2.4vh, 24px)",
   };
 
   return (
@@ -235,7 +235,17 @@ export default function QuickscanPage() {
         {showProgress ? <ProgressBar currentIndex={progressIndex} totalSteps={QUESTIONS.length + 1} /> : null}
 
         {currentStepId === "intro" ? (
-          <section style={{ ...pageCardStyle, display: "grid", gap: 28, overflow: "hidden", position: "relative" }}>
+          <section
+            style={{
+              ...pageCardStyle,
+              display: "grid",
+              gap: "clamp(18px, 2.8vh, 28px)",
+              overflow: "hidden",
+              position: "relative",
+              minHeight: "min(76vh, 760px)",
+              alignContent: "center",
+            }}
+          >
             <div
               style={{
                 position: "absolute",
@@ -247,26 +257,45 @@ export default function QuickscanPage() {
                 pointerEvents: "none",
               }}
             />
-            <div style={{ display: "grid", gap: 16, maxWidth: 1280, margin: "0 auto", textAlign: "center", justifyItems: "center" }}>
+            <div
+              style={{
+                display: "grid",
+                gap: "clamp(12px, 1.8vh, 16px)",
+                maxWidth: 1280,
+                margin: "0 auto",
+                textAlign: "center",
+                justifyItems: "center",
+              }}
+            >
               <h1
                 style={{
-                  fontSize: "clamp(2.3rem, 6vw, 4.6rem)",
+                  fontSize: "clamp(2.15rem, min(6vw, 10.5vh), 4.6rem)",
                   lineHeight: 0.96,
                   letterSpacing: "-0.04em",
                   margin: 0,
                   maxWidth: 1320,
                 }}
               >
-                <span style={{ display: "block" }}>Zie in 2 minuten</span>
+                <span style={{ display: "block" }}>
+                  Zie in <span style={{ color: "#38BDF8" }}>2</span> minuten
+                </span>
                 <span style={{ display: "block" }}>waar je bedrijf</span>
                 <span style={{ display: "block" }}>tijd en geld laat liggen.</span>
               </h1>
-              <p style={{ color: C.textSoft, fontSize: "1rem", lineHeight: 1.7, margin: 0, maxWidth: 620 }}>
-                Ontdek welke processen je vandaag efficiënter kunt inrichten met AI.
+              <p
+                style={{
+                  color: C.textSoft,
+                  fontSize: "clamp(0.96rem, min(1.6vw, 2.4vh), 1rem)",
+                  lineHeight: 1.7,
+                  margin: 0,
+                  maxWidth: 620,
+                }}
+              >
+                Je krijgt direct een score, een besparingsindicatie en een concrete vervolgstap.
               </p>
             </div>
 
-            <div style={{ display: "grid", gap: 10, justifyItems: "center" }}>
+            <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)", justifyItems: "center" }}>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
                 <button type="button" onClick={handleStart} style={getPrimaryButtonStyle(false)}>
                   Start quickscan
@@ -278,7 +307,7 @@ export default function QuickscanPage() {
 	              style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                gap: 14,
+                gap: "clamp(10px, 1.8vh, 14px)",
                 width: "min(580px, 100%)",
                 margin: "0 auto",
               }}
@@ -294,9 +323,9 @@ export default function QuickscanPage() {
                     display: "grid",
                     justifyItems: "center",
                     alignContent: "start",
-                    gap: 10,
+                    gap: "clamp(8px, 1.2vh, 10px)",
                     color: C.textSoft,
-                    fontSize: "0.98rem",
+                    fontSize: "clamp(0.92rem, min(1.5vw, 2.2vh), 0.98rem)",
                     textAlign: "center",
                   }}
                 >
@@ -305,8 +334,8 @@ export default function QuickscanPage() {
                       display: "inline-flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      width: 86,
-                      height: 66,
+                      width: "clamp(74px, min(7vw, 9vh), 86px)",
+                      height: "clamp(56px, min(5.8vw, 7vh), 66px)",
                     }}
                   >
                     <img
@@ -353,13 +382,13 @@ export default function QuickscanPage() {
         ) : null}
 
         {currentStepId === "resultaat" && submittedContact && submissionPayload ? (
-          <section style={{ display: "grid", gap: 18 }}>
+          <section style={{ display: "grid", gap: "clamp(14px, 2vh, 18px)" }}>
             <ScoreHero result={assessment} recommendations={assessment.recommendations} onCtaClick={handleCtaClick} />
             <SavingsCard savings={assessment.savings} onScenarioChange={handleScenarioChange} />
             <DimensionBreakdown items={assessment.dimensionInterpretations} />
 
-            <section style={{ ...pageCardStyle, display: "grid", gap: 12 }}>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <section style={{ ...pageCardStyle, display: "grid", gap: "clamp(10px, 1.5vh, 12px)" }}>
+              <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap" }}>
                 <button type="button" style={{ ...getPrimaryButtonStyle(false), background: "rgba(255,255,255,0.08)", boxShadow: "none" }} onClick={handleReset}>
                   Opnieuw doorlopen
                 </button>
@@ -380,7 +409,7 @@ export default function QuickscanPage() {
                   Gegevens aanpassen
                 </button>
               </div>
-              <div style={{ color: C.textSoft, lineHeight: 1.7 }}>
+              <div style={{ color: C.textSoft, lineHeight: 1.7, fontSize: "clamp(0.92rem, min(1.45vw, 2vh), 1rem)" }}>
                 Analyse gekoppeld aan {submissionPayload.contact.email}. De live koppeling voor rapport, CRM of opvolging kan later op deze payload worden aangesloten.
               </div>
             </section>

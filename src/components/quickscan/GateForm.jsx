@@ -10,13 +10,13 @@ import {
 
 const fieldStyle = {
   width: "100%",
-  padding: "12px 15px",
+  padding: "clamp(11px, 1.5vh, 12px) clamp(14px, 1.8vw, 15px)",
   borderRadius: 14,
   border: "1px solid rgba(255,255,255,0.14)",
   background: "rgba(10,16,31,0.8)",
   color: C.text,
   fontFamily: BODY,
-  fontSize: "0.96rem",
+  fontSize: "clamp(0.92rem, min(1.5vw, 2vh), 0.96rem)",
 };
 
 export default function GateForm({ contact, errors, assessment, onChange, onToggleOptIn, onBack, onSubmit }) {
@@ -28,17 +28,19 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
       style={{
         ...pageCardStyle,
         display: "grid",
-        gap: 22,
+        gap: "clamp(16px, 2.2vh, 22px)",
         maxWidth: 760,
         margin: "0 auto",
+        minHeight: "min(72vh, 760px)",
+        alignContent: "center",
       }}
     >
-      <div style={{ display: "grid", gap: 18 }}>
-        <div style={{ display: "grid", gap: 8, justifyItems: "center", textAlign: "center" }}>
+      <div style={{ display: "grid", gap: "clamp(14px, 2vh, 18px)" }}>
+        <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 8px)", justifyItems: "center", textAlign: "center" }}>
           <h2
             style={{
               ...sectionTitleStyle,
-              fontSize: "clamp(2.1rem, 5vw, 3.3rem)",
+              fontSize: "clamp(1.9rem, min(4.8vw, 6.2vh), 3.3rem)",
               textAlign: "center",
             }}
           >
@@ -48,7 +50,7 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
             style={{
               color: C.textSoft,
               fontFamily: BODY,
-              fontSize: "0.98rem",
+              fontSize: "clamp(0.93rem, min(1.5vw, 2vh), 0.98rem)",
               lineHeight: 1.65,
               margin: 0,
               maxWidth: 620,
@@ -64,19 +66,19 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
             margin: "0 auto",
             width: "100%",
             borderRadius: 18,
-            padding: "10px 14px",
+            padding: "clamp(8px, 1.2vh, 10px) clamp(12px, 1.8vw, 14px)",
             background: "linear-gradient(180deg, rgba(14,165,233,0.08), rgba(255,255,255,0.03))",
             border: "1px solid rgba(56,189,248,0.18)",
             display: "flex",
             alignItems: "center",
-            gap: 12,
+            gap: "clamp(10px, 1.4vh, 12px)",
           }}
         >
           <div
             style={{
-              width: 54,
-              height: 54,
-              minWidth: 54,
+              width: "clamp(44px, min(4.5vw, 5.6vh), 54px)",
+              height: "clamp(44px, min(4.5vw, 5.6vh), 54px)",
+              minWidth: "clamp(44px, min(4.5vw, 5.6vh), 54px)",
               borderRadius: "50%",
               background: `conic-gradient(#38BDF8 ${teaserDegrees}deg, rgba(255,255,255,0.08) 0deg)`,
               display: "grid",
@@ -85,15 +87,23 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
           >
             <div
               style={{
-                width: 40,
-                height: 40,
+                width: "clamp(32px, min(3.2vw, 4.1vh), 40px)",
+                height: "clamp(32px, min(3.2vw, 4.1vh), 40px)",
                 borderRadius: "50%",
                 background: "rgba(8,14,28,0.96)",
                 border: "1px solid rgba(255,255,255,0.08)",
               }}
             />
           </div>
-          <div style={{ color: C.text, fontFamily: BODY, fontSize: "0.96rem", fontWeight: 600, lineHeight: 1.4 }}>
+          <div
+            style={{
+              color: C.text,
+              fontFamily: BODY,
+              fontSize: "clamp(0.9rem, min(1.4vw, 1.95vh), 0.96rem)",
+              fontWeight: 600,
+              lineHeight: 1.4,
+            }}
+          >
             Je grootste tijdlek: <span style={{ color: "#EAF6FF" }}>{teaserLabel}</span>
           </div>
         </div>
@@ -102,15 +112,15 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
           onSubmit={onSubmit}
           style={{
             display: "grid",
-            gap: 12,
+            gap: "clamp(10px, 1.4vh, 12px)",
             width: "100%",
             maxWidth: 680,
             margin: "0 auto",
             textAlign: "left",
           }}
         >
-          <div style={{ display: "grid", gap: 8 }}>
-            <label htmlFor="quickscan-name" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "0.88rem" }}>
+          <div style={{ display: "grid", gap: "clamp(6px, 0.9vh, 8px)" }}>
+            <label htmlFor="quickscan-name" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.88rem)" }}>
               Naam
             </label>
             <input
@@ -124,8 +134,8 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
             {errors.name ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.name}</span> : null}
           </div>
 
-          <div style={{ display: "grid", gap: 8 }}>
-            <label htmlFor="quickscan-email" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "0.88rem" }}>
+          <div style={{ display: "grid", gap: "clamp(6px, 0.9vh, 8px)" }}>
+            <label htmlFor="quickscan-email" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.88rem)" }}>
               E-mailadres
             </label>
             <input
@@ -142,23 +152,23 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
           <label
             style={{
               display: "flex",
-              gap: 10,
+              gap: "clamp(8px, 1.2vh, 10px)",
               alignItems: "flex-start",
-              padding: "10px 12px",
+              padding: "clamp(8px, 1.2vh, 10px) clamp(10px, 1.4vw, 12px)",
               borderRadius: 16,
               border: "1px solid rgba(255,255,255,0.08)",
               background: "rgba(255,255,255,0.02)",
               lineHeight: 1.5,
               color: C.textSoft,
               fontFamily: BODY,
-              fontSize: "0.9rem",
+              fontSize: "clamp(0.86rem, min(1.3vw, 1.8vh), 0.9rem)",
             }}
           >
             <input type="checkbox" checked={contact.marketingOptIn} onChange={onToggleOptIn} style={{ marginTop: 4 }} />
             <span>{OPT_IN_TEXT}</span>
           </label>
 
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+          <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap", justifyContent: "center" }}>
             <button type="button" style={getSecondaryButtonStyle()} onClick={onBack}>
               Vorige
             </button>
@@ -172,7 +182,7 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
           style={{
             color: C.textMuted,
             fontFamily: BODY,
-            fontSize: "0.82rem",
+            fontSize: "clamp(0.78rem, min(1.15vw, 1.6vh), 0.82rem)",
             lineHeight: 1.5,
             margin: 0,
             textAlign: "center",
