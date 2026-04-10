@@ -18,7 +18,7 @@ export default function QuestionStep({
 }) {
   const isMulti = question.kind === "multi";
   const selectedTools = answers.tools || [];
-  const toolCount = selectedTools.filter((tool) => tool !== "geen").length;
+  const toolCount = selectedTools.filter((tool) => tool !== "anders-geen").length;
   const singleGrid = "repeat(auto-fit, minmax(min(100%, 220px), 1fr))";
   const multiGrid = "repeat(auto-fit, minmax(min(100%, 180px), 1fr))";
 
@@ -71,14 +71,12 @@ export default function QuestionStep({
             >
               {question.options.map((option) => {
                 const active = selectedTools.includes(option.value);
-                const disabled = !active && option.value !== "geen" && toolCount >= 6 && !selectedTools.includes("geen");
 
                 return (
                   <button
                     key={option.value}
                     type="button"
-                    style={getChipStyle({ active, disabled })}
-                    disabled={disabled}
+                    style={getChipStyle({ active })}
                     onClick={() => onToolToggle(option.value)}
                   >
                     {option.label}
@@ -89,8 +87,7 @@ export default function QuestionStep({
 
             <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap", alignItems: "center" }}>
               <div style={{ color: C.textSoft, fontSize: "clamp(0.88rem, min(1.4vw, 1.9vh), 0.92rem)", fontFamily: BODY }}>
-                Geselecteerd: {selectedTools.includes("geen") ? "Geen van deze" : toolCount}
-                {!selectedTools.includes("geen") ? " / 6" : ""}
+                Geselecteerd: {selectedTools.includes("anders-geen") ? "Anders / geen vaste tools" : toolCount}
               </div>
               <button type="button" style={getSecondaryButtonStyle()} onClick={onClearTools}>
                 Wis selectie

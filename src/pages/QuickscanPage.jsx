@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import DimensionBreakdown from "../components/quickscan/DimensionBreakdown.jsx";
 import GateForm from "../components/quickscan/GateForm.jsx";
 import ProgressBar from "../components/quickscan/ProgressBar.jsx";
 import QuestionStep from "../components/quickscan/QuestionStep.jsx";
@@ -11,18 +10,24 @@ import iconCost from "../assets/quickscan-icon-cost.png";
 import iconEfficiency from "../assets/quickscan-icon-efficiency.png";
 import iconTime from "../assets/quickscan-icon-time.png";
 import { BODY, C } from "../lib/theme";
-import { QUESTIONS, QUICKSCAN_VERSION, STEP_IDS } from "../lib/quickscan/config.js";
+import {
+  getPainPointOptions,
+  getPainPointQuestionTitle,
+  getToolOptions,
+  QUESTIONS,
+  QUICKSCAN_VERSION,
+  STEP_IDS,
+} from "../lib/quickscan/config.js";
 import { buildSubmissionPayload, createQuickscanResult, quickscanLog } from "../lib/quickscan/index.js";
 
 function createInitialAnswers() {
   return {
-    sector: "",
-    teamSize: "",
-    workFocus: "",
+    processType: "",
+    painPoint: "",
     weeklyHours: "",
     tools: [],
     aiUsage: "",
-    painPoint: "",
+    urgency: "",
   };
 }
 
@@ -31,10 +36,35 @@ async function submitQuickscanPreview(payload) {
   return payload;
 }
 
+function getDynamicQuestion(stepId, answers) {
+  const baseQuestion = QUESTIONS.find((question) => question.stepId === stepId) || null;
+
+  if (!baseQuestion) {
+    return baseQuestion;
+  }
+
+  if (baseQuestion.id === "tools") {
+    return {
+      ...baseQuestion,
+      options: getToolOptions(answers.processType),
+    };
+  }
+
+  if (baseQuestion.id !== "painPoint") {
+    return baseQuestion;
+  }
+
+  return {
+    ...baseQuestion,
+    title: getPainPointQuestionTitle(answers.processType),
+    options: getPainPointOptions(answers.processType),
+  };
+}
+
 export default function QuickscanPage() {
   usePageSeo({
     title: "STARRE.AI | Quickscan",
-    description: "Quickscan voor een eerste indicatie van AI-volwassenheid, procesfrictie en mogelijke vervolgstappen.",
+    description: "Quickscan voor een eerste indicatie van tijdlekken, proceskansen en mogelijke vervolgstappen.",
   });
 
   const [screenIndex, setScreenIndex] = useState(0);
@@ -50,7 +80,7 @@ export default function QuickscanPage() {
   const lastStepRef = useRef(null);
 
   const currentStepId = STEP_IDS[screenIndex];
-  const currentQuestion = QUESTIONS.find((question) => question.stepId === currentStepId) || null;
+  const currentQuestion = useMemo(() => getDynamicQuestion(currentStepId, answers), [currentStepId, answers]);
   const assessment = useMemo(() => createQuickscanResult(answers, scenario), [answers, scenario]);
   const submissionPayload = useMemo(
     () => (submittedContact ? buildSubmissionPayload(assessment, submittedContact) : null),
@@ -82,10 +112,19 @@ export default function QuickscanPage() {
   }
 
   function handleSingleSelect(key, value) {
-    setAnswers((current) => ({
-      ...current,
-      [key]: value,
-    }));
+    setAnswers((current) => {
+      const nextAnswers = {
+        ...current,
+        [key]: value,
+      };
+
+      if (key === "processType") {
+        nextAnswers.painPoint = "";
+        nextAnswers.tools = [];
+      }
+
+      return nextAnswers;
+    });
     setErrors({});
     setScreenIndex((current) => Math.min(STEP_IDS.length - 1, current + 1));
   }
@@ -94,24 +133,20 @@ export default function QuickscanPage() {
     setAnswers((current) => {
       const currentTools = current.tools || [];
 
-      if (value === "geen") {
+      if (value === "anders-geen") {
         return {
           ...current,
-          tools: currentTools.includes("geen") ? [] : ["geen"],
+          tools: currentTools.includes("anders-geen") ? [] : ["anders-geen"],
         };
       }
 
-      const withoutNone = currentTools.filter((tool) => tool !== "geen");
+      const withoutNone = currentTools.filter((tool) => tool !== "anders-geen");
 
       if (withoutNone.includes(value)) {
         return {
           ...current,
           tools: withoutNone.filter((tool) => tool !== value),
         };
-      }
-
-      if (withoutNone.length >= 6) {
-        return current;
       }
 
       return {
@@ -291,7 +326,7 @@ export default function QuickscanPage() {
                   maxWidth: 620,
                 }}
               >
-                Je krijgt direct een score, een besparingsindicatie en een concrete vervolgstap.
+                Je krijgt direct inzicht in tijdlekken, besparingsindicatie en een concrete vervolgstap.
               </p>
             </div>
 
@@ -303,20 +338,20 @@ export default function QuickscanPage() {
               </div>
             </div>
 
-	            <div
-	              style={{
+            <div
+              style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
                 gap: "clamp(10px, 1.8vh, 14px)",
                 width: "min(580px, 100%)",
                 margin: "0 auto",
               }}
-	            >
-	              {[
+            >
+              {[
                 { key: "time", label: "Tijd besparen", icon: iconTime },
                 { key: "efficiency", label: "Efficiënter werken", icon: iconEfficiency },
                 { key: "cost", label: "Kosten verlagen", icon: iconCost },
-	              ].map((item) => (
+              ].map((item) => (
                 <div
                   key={item.key}
                   style={{
@@ -358,15 +393,15 @@ export default function QuickscanPage() {
         ) : null}
 
         {currentQuestion ? (
-            <QuestionStep
-              question={currentQuestion}
-              answers={answers}
+          <QuestionStep
+            question={currentQuestion}
+            answers={answers}
             onSingleSelect={handleSingleSelect}
             onToolToggle={handleToolToggle}
             onClearTools={() => setAnswers((current) => ({ ...current, tools: [] }))}
-              onBack={handleBack}
-              onNext={handleNext}
-            />
+            onBack={handleBack}
+            onNext={handleNext}
+          />
         ) : null}
 
         {currentStepId === "gate" ? (
@@ -385,7 +420,6 @@ export default function QuickscanPage() {
           <section style={{ display: "grid", gap: "clamp(14px, 2vh, 18px)" }}>
             <ScoreHero result={assessment} recommendations={assessment.recommendations} onCtaClick={handleCtaClick} />
             <SavingsCard savings={assessment.savings} onScenarioChange={handleScenarioChange} />
-            <DimensionBreakdown items={assessment.dimensionInterpretations} />
 
             <section style={{ ...pageCardStyle, display: "grid", gap: "clamp(10px, 1.5vh, 12px)" }}>
               <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap" }}>

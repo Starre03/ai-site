@@ -1,27 +1,275 @@
 import {
-  AI_SCORES,
-  DIMENSION_LEAK_LIBRARY,
-  DIMENSION_META,
+  AI_USAGE_LABELS,
   DISCLAIMER_TEXT,
   HOUR_MAP,
-  LEAK_LIBRARY,
   LIMITATIONS_TEXT,
   PAIN_POINT_LABELS,
+  PROCESS_LABELS,
   QUICKSCAN_VERSION,
   SAVINGS_SCENARIOS,
-  SCORE_COPY,
   SERVICE_LABELS,
-  SERVICE_SUMMARIES,
-  TEAM_SCORES,
-  TIME_SCORES,
-  WORK_FOCUS_SCORES,
+  TOOL_LABELS,
+  URGENCY_LABELS,
 } from "./config.js";
 
-const HOURLY_RATE = 55;
+const MONTH_FACTOR = 4.33;
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
+const PROCESS_HOURLY_RATES = {
+  klantcontact: 45,
+  administratie: 40,
+  content: 55,
+  offertes: 55,
+  planning: 50,
+  data: 60,
+};
+
+const AI_FACTORS = {
+  "nog-niet": 1,
+  "af-en-toe": 0.85,
+  regelmatig: 0.65,
+  "vast-onderdeel": 0.4,
+};
+
+const CTA_BY_URGENCY = {
+  laag: {
+    ctaType: "soft",
+    label: "Bekijk hoe dit traject werkt",
+  },
+  interessant: {
+    ctaType: "exploratory",
+    label: "Plan een verkennend gesprek",
+  },
+  verbeteren: {
+    ctaType: "intake",
+    label: "Plan een intake",
+  },
+  "snel-beter": {
+    ctaType: "direct",
+    label: "Bespreek dit direct",
+  },
+};
+
+const PRIMARY_CONCLUSIONS = {
+  klantcontact: "Je grootste winst zit nu in klantcontact en opvolging.",
+  administratie: "Je grootste winst zit nu in administratie en invoer.",
+  content: "Je grootste winst zit nu in content en marketing.",
+  offertes: "Je grootste winst zit nu in offertes en documentwerk.",
+  planning: "Je grootste winst zit nu in planning en interne afstemming.",
+  data: "Je grootste winst zit nu in data en rapportages.",
+};
+
+const PAIN_POINT_SUMMARIES = {
+  "losse-vragen-berichten":
+    "Losse vragen en berichten maken opvolging minder strak. Daardoor gaat tijd verloren aan zoeken, beoordelen en opnieuw afstemmen.",
+  "leads-niet-opgevolgd":
+    "Leadopvolging vraagt nu te veel handmatige aandacht. Daardoor blijven kansen langer liggen dan nodig.",
+  "informatie-verspreid":
+    "Informatie staat te verspreid om snel te handelen. Dat kost overzicht, opvolging en snelheid.",
+  "handmatig-antwoorden":
+    "Terugkerende antwoorden kosten nu veel handwerk. Juist daar zit directe ruimte voor versnelling.",
+  "overdracht-kost-tijd":
+    "Overdracht kost nu te veel losse afstemming. Dat maakt klantcontact afhankelijker van handmatige opvolging.",
+  "invoer-controles":
+    "Invoer en controles vragen nu veel repeterend werk. Dat maakt het proces traag en foutgevoelig.",
+  "gegevens-overzetten":
+    "Veel tijd gaat verloren aan overzetten, controleren en corrigeren. Dat maakt dit proces traag en foutgevoelig.",
+  "documenten-facturen":
+    "Documenten en facturen vragen nu te veel handmatige verwerking. Daardoor blijft administratief werk onnodig hangen.",
+  "overzichten-maken":
+    "Overzichten kosten nu te veel handmatig uitzoekwerk. Daardoor komt inzicht later beschikbaar dan nodig.",
+  "fouten-herstellen":
+    "Fouten herstellen kost vaak meer tijd dan het werk direct goed inrichten. Hier zit ruimte voor standaardisatie en controle.",
+  "briefings-input":
+    "Voorbereiding, afstemming en uitwerking kosten nu onnodig veel handwerk. Juist daar zit directe ruimte voor versnelling.",
+  "content-handwerk":
+    "Content maken vraagt nu te veel losse handmatige stappen. Daardoor stokt de uitvoering sneller dan nodig.",
+  "feedback-afstemming":
+    "Feedback en afstemming vertragen de uitvoering. Meer structuur kan de doorlooptijd duidelijk verkorten.",
+  "publicatie-planning":
+    "Publicatie en planning kosten nu te veel handwerk. Juist de vertaalslag naar kanalen kan slimmer worden ingericht.",
+  "campagnes-doorvertalen":
+    "Campagnes doorvertalen vraagt nu te veel herhaalwerk. Varianten, formats en kanaalversies kunnen strakker worden opgebouwd.",
+  "offertes-opstellen":
+    "Offertes opstellen kost nu te veel handmatige opbouw. Vaste onderdelen en klantinformatie kunnen slimmer samenkomen.",
+  "documenten-aanpassen":
+    "Documenten aanpassen blijft te veel handwerk. Daardoor kost elke klantvariant opnieuw tijd.",
+  "versies-feedback":
+    "Versiebeheer, aanpassingen en afstemming vertragen de doorlooptijd. Daardoor blijft werk onnodig lang liggen.",
+  "dossiers-opbouwen":
+    "Dossiers opbouwen kost nu te veel verzamelwerk. Informatie kan consistenter en sneller worden samengebracht.",
+  "informatie-opnieuw-invullen":
+    "Informatie wordt te vaak opnieuw ingevuld. Dat vergroot de kans op fouten en onnodig dubbel werk.",
+  "planning-handwerk":
+    "Planning vraagt nu te veel handmatige afstemming. Dat kost tijd en maakt opvolging kwetsbaar.",
+  "overdracht-onduidelijk":
+    "Overdracht tussen mensen is niet scherp genoeg. Daardoor blijven acties en verantwoordelijkheden sneller liggen.",
+  "taken-versnipperd":
+    "Werk en communicatie lopen via te veel losse lijnen. Dat kost overzicht, opvolging en snelheid.",
+  "losse-berichten":
+    "Losse berichten maken interne afstemming rommelig. Daardoor moeten afspraken en acties steeds opnieuw worden teruggezocht.",
+  "opvolging-niet-strak":
+    "Opvolging loopt niet strak genoeg mee met het werk. Dat maakt het proces afhankelijk van handmatige reminders.",
+  "data-verzamelen":
+    "Data verzamelen kost nu te veel tijd. De grootste winst zit in bronnen sneller bundelen en voorbereiden.",
+  "rapportages-langzaam":
+    "Rapportages maken duurt te lang. Terugkerende opbouw en samenvatting kunnen strakker worden ingericht.",
+  "te-veel-bronnen":
+    "Informatie komt uit te veel bronnen. Daardoor gaat tijd verloren aan samenvoegen, controleren en interpreteren.",
+  "controle-opschoning":
+    "Controle en opschoning kosten veel werk. Hier zit ruimte om fouten en afwijkingen eerder zichtbaar te maken.",
+  "inzicht-te-laat":
+    "Inzicht komt te laat beschikbaar om snel te sturen. Snellere rapportage en signalering kunnen direct waarde toevoegen.",
+};
+
+const OPPORTUNITY_TITLES = {
+  klantcontact: {
+    default: "Klantopvolging versnellen",
+    "leads-niet-opgevolgd": "Leads strakker opvolgen",
+    "handmatig-antwoorden": "Reacties en opvolging structureren",
+    "informatie-verspreid": "Contactinformatie centraliseren",
+  },
+  administratie: {
+    default: "Administratie en invoer versnellen",
+    "gegevens-overzetten": "Handmatige invoer verminderen",
+    "invoer-controles": "Controles en verwerking stroomlijnen",
+    "fouten-herstellen": "Foutgevoelig werk verminderen",
+  },
+  content: {
+    default: "Content en marketing versnellen",
+    "campagnes-doorvertalen": "Campagne-uitvoer stroomlijnen",
+    "content-handwerk": "Contentproductie structureren",
+    "publicatie-planning": "Publicatie en planning stroomlijnen",
+  },
+  offertes: {
+    default: "Documentwerk versnellen",
+    "offertes-opstellen": "Offerteproces stroomlijnen",
+    "documenten-aanpassen": "Documentcreatie standaardiseren",
+    "versies-feedback": "Feedbackrondes verkorten",
+  },
+  planning: {
+    default: "Planning en overdracht verbeteren",
+    "taken-versnipperd": "Taken en afspraken centraliseren",
+    "losse-berichten": "Interne afstemming stroomlijnen",
+    "opvolging-niet-strak": "Opvolging en planning aanscherpen",
+  },
+  data: {
+    default: "Rapportages versnellen",
+    "inzicht-te-laat": "Inzicht sneller beschikbaar maken",
+    "te-veel-bronnen": "Dataverwerking stroomlijnen",
+    "controle-opschoning": "Controlewerk verminderen",
+  },
+};
+
+const BULLET_LIBRARY = {
+  klantcontact: [
+    { title: "Veelgestelde vragen sneller afhandelen", tools: ["supporttool", "email", "whatsapp"] },
+    { title: "Leads strakker opvolgen", tools: ["crm", "agenda-planning"] },
+    { title: "Reacties en overdracht stroomlijnen", tools: ["email", "whatsapp", "supporttool"] },
+    { title: "Informatie centraler beschikbaar maken", tools: ["crm"] },
+    { title: "Klantcontact minder handmatig maken", tools: ["email", "whatsapp"] },
+  ],
+  administratie: [
+    { title: "Invoer en controles versnellen", tools: ["excel-sheets", "boekhouding", "erp-administratiepakket"] },
+    { title: "Gegevens minder vaak overzetten", tools: ["excel-sheets", "erp-administratiepakket"] },
+    { title: "Verwerking standaardiseren", tools: ["boekhouding", "microsoft-365", "documentopslag"] },
+    { title: "Foutgevoelig werk verminderen", tools: ["boekhouding", "excel-sheets"] },
+    { title: "Overzichten sneller opbouwen", tools: ["excel-sheets", "erp-administratiepakket"] },
+  ],
+  content: [
+    { title: "Briefings sneller uitwerken", tools: ["google-docs-drive", "contentplanning-notion"] },
+    { title: "Contentproductie versnellen", tools: ["canva-design", "google-docs-drive"] },
+    { title: "Publicatie en planning stroomlijnen", tools: ["social-media", "contentplanning-notion"] },
+    { title: "Campagnes sneller doorvertalen", tools: ["meta-google-ads", "emailmarketing"] },
+    { title: "Design- en copywerk versnellen", tools: ["canva-design", "social-media"] },
+  ],
+  offertes: [
+    { title: "Offertes sneller opstellen", tools: ["microsoft-365-word-excel", "google-docs-drive", "crm"] },
+    { title: "Documenten standaardiseren", tools: ["microsoft-365-word-excel", "pdf-documenttools"] },
+    { title: "Feedbackrondes verkorten", tools: ["google-docs-drive", "esigning-akkoordtools"] },
+    { title: "Versiebeheer stroomlijnen", tools: ["documentopslag", "google-docs-drive"] },
+    { title: "Informatie minder vaak invullen", tools: ["crm", "microsoft-365-word-excel"] },
+  ],
+  planning: [
+    { title: "Planning overzichtelijker maken", tools: ["agenda-planning"] },
+    { title: "Overdracht tussen mensen verbeteren", tools: ["projectmanagement", "microsoft-google-docs"] },
+    { title: "Taken en afspraken centraliseren", tools: ["projectmanagement"] },
+    { title: "Interne afstemming versnellen", tools: ["whatsapp-chat", "email"] },
+    { title: "Opvolging strakker organiseren", tools: ["agenda-planning", "projectmanagement"] },
+  ],
+  data: [
+    { title: "Data sneller verzamelen", tools: ["excel-sheets", "crm", "erp-administratiepakket"] },
+    { title: "Rapportages sneller opbouwen", tools: ["dashboards-bi", "excel-sheets"] },
+    { title: "Informatie beter bundelen", tools: ["crm", "erp-administratiepakket", "microsoft-google-docs"] },
+    { title: "Inzicht eerder beschikbaar maken", tools: ["dashboards-bi"] },
+    { title: "Controlewerk verminderen", tools: ["excel-sheets", "erp-administratiepakket"] },
+  ],
+};
+
+const PAIN_POINT_BULLET_PRIORITY = {
+  "losse-vragen-berichten": "Veelgestelde vragen sneller afhandelen",
+  "leads-niet-opgevolgd": "Leads strakker opvolgen",
+  "informatie-verspreid": "Informatie centraler beschikbaar maken",
+  "handmatig-antwoorden": "Klantcontact minder handmatig maken",
+  "overdracht-kost-tijd": "Reacties en overdracht stroomlijnen",
+  "invoer-controles": "Invoer en controles versnellen",
+  "gegevens-overzetten": "Gegevens minder vaak overzetten",
+  "documenten-facturen": "Verwerking standaardiseren",
+  "overzichten-maken": "Overzichten sneller opbouwen",
+  "fouten-herstellen": "Foutgevoelig werk verminderen",
+  "briefings-input": "Briefings sneller uitwerken",
+  "content-handwerk": "Contentproductie versnellen",
+  "feedback-afstemming": "Publicatie en planning stroomlijnen",
+  "publicatie-planning": "Publicatie en planning stroomlijnen",
+  "campagnes-doorvertalen": "Campagnes sneller doorvertalen",
+  "offertes-opstellen": "Offertes sneller opstellen",
+  "documenten-aanpassen": "Documenten standaardiseren",
+  "versies-feedback": "Feedbackrondes verkorten",
+  "dossiers-opbouwen": "Informatie minder vaak invullen",
+  "informatie-opnieuw-invullen": "Informatie minder vaak invullen",
+  "planning-handwerk": "Planning overzichtelijker maken",
+  "overdracht-onduidelijk": "Overdracht tussen mensen verbeteren",
+  "taken-versnipperd": "Taken en afspraken centraliseren",
+  "losse-berichten": "Interne afstemming versnellen",
+  "opvolging-niet-strak": "Opvolging strakker organiseren",
+  "data-verzamelen": "Data sneller verzamelen",
+  "rapportages-langzaam": "Rapportages sneller opbouwen",
+  "te-veel-bronnen": "Informatie beter bundelen",
+  "controle-opschoning": "Controlewerk verminderen",
+  "inzicht-te-laat": "Inzicht eerder beschikbaar maken",
+};
+
+const RECOMMENDATION_EXPLANATIONS = {
+  "Veelgestelde vragen sneller afhandelen": "Terugkerende vragen kunnen sneller worden herkend, voorbereid en afgehandeld.",
+  "Leads strakker opvolgen": "Nieuwe aanvragen kunnen sneller worden geprioriteerd en klaargezet voor opvolging.",
+  "Reacties en overdracht stroomlijnen": "Reacties, samenvattingen en overdracht kunnen consistenter worden voorbereid.",
+  "Informatie centraler beschikbaar maken": "Belangrijke klantinformatie hoeft minder vaak handmatig te worden gezocht.",
+  "Klantcontact minder handmatig maken": "Herhaalwerk in contactmomenten kan beter worden voorbereid en vastgelegd.",
+  "Invoer en controles versnellen": "Terugkerende invoer en checks kunnen sneller en consistenter worden uitgevoerd.",
+  "Gegevens minder vaak overzetten": "Informatie hoeft minder vaak handmatig tussen bestanden of systemen te worden verplaatst.",
+  "Verwerking standaardiseren": "Vaste stappen kunnen voorspelbaarder worden ingericht en gecontroleerd.",
+  "Foutgevoelig werk verminderen": "Afwijkingen en ontbrekende gegevens kunnen eerder zichtbaar worden.",
+  "Overzichten sneller opbouwen": "Terugkerende overzichten kunnen sneller worden voorbereid uit bestaande input.",
+  "Briefings sneller uitwerken": "Losse input kan sneller worden vertaald naar een bruikbare briefing of opzet.",
+  "Contentproductie versnellen": "Eerste concepten, varianten en formats kunnen sneller klaarliggen.",
+  "Publicatie en planning stroomlijnen": "Kanaalversies en planning kunnen minder handmatig worden voorbereid.",
+  "Campagnes sneller doorvertalen": "Campagnevarianten kunnen sneller worden aangepast per kanaal of doelgroep.",
+  "Design- en copywerk versnellen": "Design-input en copy kunnen sneller naar bruikbare content worden vertaald.",
+  "Offertes sneller opstellen": "Vaste onderdelen en klantinformatie kunnen sneller worden samengebracht.",
+  "Documenten standaardiseren": "Documenten kunnen consistenter worden opgebouwd vanuit vaste formats.",
+  "Feedbackrondes verkorten": "Aanpassingen en goedkeuringen kunnen overzichtelijker worden voorbereid.",
+  "Versiebeheer stroomlijnen": "Versies, opmerkingen en status kunnen minder snel door elkaar lopen.",
+  "Informatie minder vaak invullen": "Klant- en projectgegevens kunnen vaker hergebruikt worden.",
+  "Planning overzichtelijker maken": "Afspraken en beschikbaarheid kunnen sneller worden verwerkt.",
+  "Overdracht tussen mensen verbeteren": "Acties, status en eigenaar kunnen duidelijker worden vastgelegd.",
+  "Taken en afspraken centraliseren": "Losse taken en afspraken komen sneller in één werkbaar overzicht.",
+  "Interne afstemming versnellen": "Losse berichten kunnen sneller worden omgezet naar duidelijke acties.",
+  "Opvolging strakker organiseren": "Vervolgacties kunnen minder afhankelijk worden van handmatige reminders.",
+  "Data sneller verzamelen": "Bronnen kunnen sneller worden samengebracht voor analyse of rapportage.",
+  "Rapportages sneller opbouwen": "Terugkerende rapportages kunnen sneller worden voorbereid.",
+  "Informatie beter bundelen": "Data uit meerdere plekken kan sneller tot één overzicht komen.",
+  "Inzicht eerder beschikbaar maken": "Belangrijke signalen en uitzonderingen kunnen sneller zichtbaar worden.",
+  "Controlewerk verminderen": "Checks en opschoning kunnen consistenter worden voorbereid.",
+};
 
 function roundToTens(value) {
   return Math.round(value / 10) * 10;
@@ -43,16 +291,54 @@ function formatImpactRange(low, high) {
   return `~${formatHoursNumber(low)}-${formatHoursNumber(high)} uur/week`;
 }
 
-function getLevelFromValue(value) {
-  if (value <= 8) {
-    return "Low";
+function formatCurrency(value) {
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function getAiFactor(aiUsage) {
+  return AI_FACTORS[aiUsage] ?? 1;
+}
+
+function getSelectedTools(answers) {
+  return Array.isArray(answers.tools) ? answers.tools : [];
+}
+
+function getToolsCount(answers) {
+  return getSelectedTools(answers).filter((tool) => tool !== "anders-geen").length;
+}
+
+function getToolsFactor(answers) {
+  const toolsCount = getToolsCount(answers);
+
+  if (toolsCount === 0) {
+    return 1;
   }
 
-  if (value <= 16) {
-    return "Mid";
+  if (toolsCount <= 2) {
+    return 0.85;
   }
 
-  return "High";
+  if (toolsCount <= 4) {
+    return 0.7;
+  }
+
+  return 0.55;
+}
+
+function hasMultipleTools(answers) {
+  return getToolsCount(answers) >= 2;
+}
+
+function hasAnyTool(answers, tools) {
+  return getSelectedTools(answers).some((tool) => tools.includes(tool));
+}
+
+function getHourlyRate(processType) {
+  return PROCESS_HOURLY_RATES[processType] || 50;
 }
 
 export function quickscanLog(event, payload = {}) {
@@ -64,382 +350,234 @@ export function quickscanLog(event, payload = {}) {
   );
 }
 
-export function calculateDimensions(answers) {
-  let D1 = 0;
-  let D2 = 0;
-  let D3 = 0;
-  let D4 = 0;
-
-  const teamScore = TEAM_SCORES[answers.teamSize] || {};
-  D1 += teamScore.d1 || 0;
-  D4 += teamScore.d4 || 0;
-
-  D1 += TIME_SCORES[answers.weeklyHours] || 0;
-
-  const selectedTools = Array.isArray(answers.tools) ? answers.tools : [];
-  const toolCount = selectedTools.filter((tool) => tool !== "geen").length;
-  D2 += Math.min(toolCount * 3, 18);
-
-  if (selectedTools.includes("crm")) {
-    D2 += 2;
-  }
-
-  if (selectedTools.includes("boekhouden")) {
-    D2 += 2;
-  }
-
-  if (selectedTools.length === 0 || selectedTools.includes("geen")) {
-    D2 += 1;
-  }
-
-  D2 = Math.min(D2, 25);
-
-  D3 += AI_SCORES[answers.aiUsage] || 0;
-
-  const workFocusScore = WORK_FOCUS_SCORES[answers.workFocus] || {};
-  D4 += workFocusScore.d4 || 0;
-
-  D4 += 3;
+export function getTimeOpportunity(answers) {
+  const weeklyHours = HOUR_MAP[answers.weeklyHours] || 0;
+  const potentialWeeklyHours = weeklyHours * getToolsFactor(answers) * getAiFactor(answers.aiUsage);
+  const low = roundToHalf(potentialWeeklyHours * 0.8);
+  const high = roundToHalf(potentialWeeklyHours);
 
   return {
-    D1: Math.min(D1, 25),
-    D2: Math.min(D2, 25),
-    D3: Math.min(D3, 25),
-    D4: Math.min(D4, 25),
+    weeklyHours,
+    toolsCount: getToolsCount(answers),
+    toolsFactor: getToolsFactor(answers),
+    aiFactor: getAiFactor(answers.aiUsage),
+    potentialWeeklyHours,
+    low,
+    high,
+    label: formatImpactRange(low, high),
   };
 }
 
-export function calculateTotalScore(dimensions) {
-  return clamp(dimensions.D1 + dimensions.D2 + dimensions.D3 + dimensions.D4, 20, 85);
-}
-
-export function getTier(total) {
-  if (total <= 30) {
-    return { key: "startfase", label: "Startfase" };
-  }
-
-  if (total <= 55) {
-    return { key: "bewust", label: "Bewust" };
-  }
-
-  if (total <= 75) {
-    return { key: "klaar", label: "Klaar voor actie" };
-  }
-
-  return { key: "voorloper", label: "Voorloper" };
-}
-
-export function getDimensionInterpretations(dimensions) {
-  return Object.entries(dimensions).map(([key, value]) => {
-    const level = getLevelFromValue(value);
-    const copyKey = level === "Low" ? "low" : level === "Mid" ? "mid" : "high";
-
-    return {
-      key,
-      value,
-      level,
-      label: DIMENSION_META[key].label,
-      interpretation: DIMENSION_META[key][copyKey],
-    };
-  });
-}
-
-export function getSavingsRange(answers, scenarioKey) {
+export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
+  const timeOpportunity = getTimeOpportunity(answers);
   const scenario = SAVINGS_SCENARIOS[scenarioKey] || SAVINGS_SCENARIOS.gemiddeld;
-  const weeklyHours = HOUR_MAP[answers.weeklyHours] || 0;
-  const weeklyLow = roundToHalf(weeklyHours * scenario.low);
-  const weeklyHigh = roundToHalf(weeklyHours * scenario.high);
-  const monthlyLow = roundToTens(weeklyHours * HOURLY_RATE * scenario.low * 4.33);
-  const monthlyHigh = roundToTens(weeklyHours * HOURLY_RATE * scenario.high * 4.33);
-  const formulaText = `Berekening: ~${formatHoursNumber(weeklyHours)} uur/week × €55/u × ${Math.round(
-    scenario.low * 100,
-  )}-${Math.round(scenario.high * 100)}% × 4,33`;
+  const hourlyRate = getHourlyRate(answers.processType);
+  const scenarioLow = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.low);
+  const scenarioHigh = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.high);
+  const monthlyLow = roundToTens(scenarioLow * hourlyRate * MONTH_FACTOR);
+  const monthlyHigh = roundToTens(scenarioHigh * hourlyRate * MONTH_FACTOR);
+  const yearlyLow = monthlyLow * 12;
+  const yearlyHigh = monthlyHigh * 12;
+  const formulaText = `Berekening: ~${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × €${hourlyRate}/u × 4,33`;
 
   return {
     scenario: scenarioKey,
     scenarioLabel: scenario.label,
-    percentage: scenario.percentage,
-    weeklyHours,
-    weeklyLow,
-    weeklyHigh,
-    weeklySavingsLabel: formatImpactRange(weeklyLow, weeklyHigh),
-    hourlyRate: HOURLY_RATE,
+    weeklyHours: timeOpportunity.weeklyHours,
+    weeklyLow: scenarioLow,
+    weeklyHigh: scenarioHigh,
+    weeklySavingsLabel: formatImpactRange(scenarioLow, scenarioHigh),
+    hourlyRate,
     monthlyLow,
     monthlyHigh,
+    monthlyLabel: `${formatCurrency(monthlyLow)} - ${formatCurrency(monthlyHigh)} p/m`,
+    yearlyLow,
+    yearlyHigh,
+    yearlyLabel: `${formatCurrency(yearlyLow)} - ${formatCurrency(yearlyHigh)} per jaar`,
     formulaText,
     limitationsText: LIMITATIONS_TEXT,
     disclaimerText: DISCLAIMER_TEXT,
   };
 }
 
-function isAgentWorkflow(result) {
-  const toolCount = (result.answers.tools || []).filter((tool) => tool !== "geen").length;
-  const agentPainPoint = ["losse-emails", "leads-opvolging", "planning-vast"].includes(result.answers.painPoint);
-  const agentWorkFocus = result.answers.workFocus === "intake-planning-opvolging";
+export function getMainAiOpportunity(result) {
+  const processOptions = OPPORTUNITY_TITLES[result.answers.processType] || OPPORTUNITY_TITLES.klantcontact;
+  const painPointTitle = processOptions[result.answers.painPoint] || processOptions.default;
 
+  if (result.answers.processType === "content") {
+    if (hasAnyTool(result.answers, ["meta-google-ads", "emailmarketing"])) {
+      return "Campagne-uitvoer stroomlijnen";
+    }
+
+    if (hasAnyTool(result.answers, ["canva-design"])) {
+      return "Contentproductie structureren";
+    }
+  }
+
+  if (result.answers.processType === "data" && hasAnyTool(result.answers, ["dashboards-bi"])) {
+    return "Inzicht sneller beschikbaar maken";
+  }
+
+  return painPointTitle;
+}
+
+export function getOpportunityBullets(result) {
+  const selectedTools = getSelectedTools(result.answers);
+  const library = BULLET_LIBRARY[result.answers.processType] || BULLET_LIBRARY.klantcontact;
+  const priorityTitle = PAIN_POINT_BULLET_PRIORITY[result.answers.painPoint];
+
+  const ranked = library
+    .map((item, index) => ({
+      ...item,
+      index,
+      toolMatchCount: item.tools.filter((tool) => selectedTools.includes(tool)).length,
+      painPointMatch: item.title === priorityTitle ? 1 : 0,
+    }))
+    .sort((a, b) => b.painPointMatch - a.painPointMatch || b.toolMatchCount - a.toolMatchCount || a.index - b.index);
+
+  return ranked.slice(0, 3).map((item) => item.title);
+}
+
+export function getPrimaryConclusion(result) {
+  return PRIMARY_CONCLUSIONS[result.answers.processType] || "Je grootste winst zit nu in het gekozen proces.";
+}
+
+function getConclusionSummary(result) {
   return (
-    result.score.total >= 68 &&
-    result.score.D2 >= 12 &&
-    result.score.D3 >= 12 &&
-    result.score.D4 >= 12 &&
-    toolCount >= 3 &&
-    (agentPainPoint || agentWorkFocus)
+    PAIN_POINT_SUMMARIES[result.answers.painPoint] ||
+    "De gekozen stap vraagt nu waarschijnlijk te veel handwerk of afstemming. Daar zit ruimte om het proces slimmer in te richten."
   );
 }
 
-function shouldAuditOverride(result) {
-  return (
-    result.score.total < 60 ||
-    result.answers.painPoint === "meerdere-dingen" ||
-    result.score.D2 <= 8 ||
-    result.score.D3 <= 8
-  );
-}
+export function getRecommendedNextStep(result) {
+  const { answers } = result;
+  const selectedToolCount = getToolsCount(answers);
 
-export function getPrimaryService(result) {
-  if (shouldAuditOverride(result)) {
+  if (selectedToolCount >= 5 && answers.aiUsage === "vast-onderdeel") {
+    return "optimization";
+  }
+
+  if ((selectedToolCount === 0 || answers.tools.includes("anders-geen")) && ["nog-niet", "af-en-toe"].includes(answers.aiUsage)) {
     return "audit";
   }
 
-  if (isAgentWorkflow(result)) {
+  if (
+    ["planning", "klantcontact"].includes(answers.processType) &&
+    hasAnyTool(answers, ["crm", "whatsapp", "whatsapp-chat", "agenda-planning", "projectmanagement"]) &&
+    ["verbeteren", "snel-beter"].includes(answers.urgency)
+  ) {
     return "agents";
+  }
+
+  if (
+    answers.processType === "content" &&
+    hasAnyTool(answers, ["social-media", "canva-design", "emailmarketing", "meta-google-ads"])
+  ) {
+    return selectedToolCount <= 1 && answers.aiUsage === "nog-niet" ? "audit" : "integrations";
+  }
+
+  if (hasMultipleTools(answers)) {
+    return "integrations";
+  }
+
+  if (answers.tools.includes("anders-geen")) {
+    return "audit";
   }
 
   return "integrations";
 }
 
+export function getPrimaryService(result) {
+  return getRecommendedNextStep(result);
+}
+
 export function getSecondaryService(result) {
   const primaryService = getPrimaryService(result);
-  const toolCount = (result.answers.tools || []).filter((tool) => tool !== "geen").length;
-  const workflowHeavyPainPoint = ["losse-emails", "leads-opvolging", "planning-vast"].includes(result.answers.painPoint);
 
-  if (primaryService === "audit") {
-    if (workflowHeavyPainPoint && toolCount >= 2) {
-      return "agents";
-    }
+  if (primaryService === "audit" && hasMultipleTools(result.answers)) {
+    return "integrations";
+  }
 
-    if (result.answers.painPoint !== "meerdere-dingen") {
-      return "integrations";
-    }
-
-    return null;
+  if (primaryService === "integrations" && ["planning", "klantcontact"].includes(result.answers.processType)) {
+    return "agents";
   }
 
   if (primaryService === "agents") {
     return "integrations";
   }
 
-  if (toolCount >= 4 && workflowHeavyPainPoint) {
-    return "agents";
-  }
-
-  return "audit";
+  return null;
 }
 
 export function getOpportunityLabel(result) {
-  switch (result.answers.painPoint) {
-    case "losse-emails":
-      return "Inboxverwerking verbeteren";
-    case "handmatige-admin":
-      return "Administratie stroomlijnen";
-    case "data-rapportage":
-      return "Rapportage versnellen";
-    case "content-blijft-liggen":
-      return "Contentproces versnellen";
-    case "leads-opvolging":
-      return "Leadopvolging verbeteren";
-    case "campagnes-tijd":
-      return "Campagnes slimmer uitvoeren";
-    case "documenten-dossiers":
-      return "Documentverwerking versnellen";
-    case "planning-vast":
-      return "Planning stroomlijnen";
-    default:
-      return "Proces eerst scherpstellen";
-  }
+  return getMainAiOpportunity(result);
+}
+
+function getRecommendationExplanation(title) {
+  return RECOMMENDATION_EXPLANATIONS[title] || "Deze stap kan het proces sneller, consistenter en minder handmatig maken.";
+}
+
+export function getRecommendations(result) {
+  const timeOpportunity = getTimeOpportunity(result.answers);
+  const impactRanges = [
+    [Math.max(0.5, roundToHalf(timeOpportunity.low * 0.34)), Math.max(0.5, roundToHalf(timeOpportunity.high * 0.44))],
+    [Math.max(0.5, roundToHalf(timeOpportunity.low * 0.24)), Math.max(0.5, roundToHalf(timeOpportunity.high * 0.34))],
+    [Math.max(0.5, roundToHalf(timeOpportunity.low * 0.18)), Math.max(0.5, roundToHalf(timeOpportunity.high * 0.28))],
+  ];
+
+  return getOpportunityBullets(result).map((title, index) => {
+    const [low, high] = impactRanges[index];
+
+    return {
+      title,
+      why: getRecommendationExplanation(title),
+      implementationType: SERVICE_LABELS[result.routing.primaryService],
+      complexity: result.routing.primaryService === "audit" ? "Laag" : result.routing.primaryService === "agents" ? "Hoog" : "Middel",
+      service: result.routing.primaryService,
+      serviceLabel: SERVICE_LABELS[result.routing.primaryService],
+      impactHoursLow: low,
+      impactHoursHigh: high,
+      impactLabel: formatImpactRange(low, high),
+    };
+  });
 }
 
 export function getCTA(result) {
   const primaryService = getPrimaryService(result);
   const secondaryService = getSecondaryService(result);
-  const auditOverride = shouldAuditOverride(result);
-  const recommendedPlanType =
-    primaryService === "audit"
-      ? "analyse-en-prioritering"
-      : primaryService === "agents"
-        ? "agentflow-ontwerp"
-        : "gerichte-implementatie";
+  const urgencyCta = CTA_BY_URGENCY[result.answers.urgency] || CTA_BY_URGENCY.verbeteren;
 
   return {
     primaryService,
     secondaryService,
-    auditOverride,
-    recommendedCTA: "quickscan-contact",
-    recommendedPlanType,
-    buttonLabel: "Neem contact met ons op",
+    auditOverride: primaryService === "audit",
+    recommendedCTA: urgencyCta.ctaType,
+    recommendedPlanType:
+      primaryService === "audit"
+        ? "analyse-en-prioritering"
+        : primaryService === "agents"
+          ? "agentflow-ontwerp"
+          : primaryService === "optimization" || primaryService === "advice"
+            ? "gerichte-optimalisatie"
+            : "gerichte-implementatie",
+    buttonLabel: urgencyCta.label,
+    primaryButtonLabel: urgencyCta.label,
     href: "#quickscan-contact",
     body:
       primaryService === "audit"
-        ? "Een eerste contactgesprek helpt bepalen welk proces eerst moet worden uitgewerkt en of een AI Audit nu de juiste stap is."
+        ? "Een eerste contactgesprek helpt scherp krijgen waar de meeste tijd weglekt en welke quick wins realistisch zijn."
         : primaryService === "agents"
-          ? "Een eerste contactgesprek helpt toetsen of een agentflow met AI Agents / OpenClaw past bij de huidige systemen en het proces."
-          : "Een eerste contactgesprek helpt bepalen welk proces het meest geschikt is voor een gerichte AI-integratie.",
-    auditPrompt:
-      "Als je eerst meer scherpte, onderbouwing of prioritering wilt, is een AI Audit de logische vervolgstap.",
-    microcopy:
-      "Eerste contactgesprek · Online of op locatie · Rustige verkenning van scope, proces en passende vervolgstap",
-  };
-}
-
-export function getTopLeaks(result) {
-  const weeklyHours = HOUR_MAP[result.answers.weeklyHours] || 0;
-  const baseLeak = LEAK_LIBRARY[result.answers.painPoint] || LEAK_LIBRARY["meerdere-dingen"];
-  const lowestDimensions = Object.entries(result.dimensions)
-    .sort((a, b) => a[1] - b[1])
-    .slice(0, 2)
-    .map(([key]) => key);
-
-  const impactRanges = [
-    [Math.max(0.5, roundToHalf(weeklyHours * 0.28)), Math.max(1, roundToHalf(weeklyHours * 0.42))],
-    [Math.max(0.5, roundToHalf(weeklyHours * 0.18)), Math.max(1, roundToHalf(weeklyHours * 0.28))],
-    [Math.max(0.5, roundToHalf(weeklyHours * 0.12)), Math.max(1, roundToHalf(weeklyHours * 0.2))],
-  ];
-
-  const items = [
-    {
-      key: result.answers.painPoint,
-      title: baseLeak.title,
-      problem: baseLeak.problem,
-      why: baseLeak.why,
-    },
-    ...lowestDimensions.map((dimension) => ({
-      key: dimension,
-      title: DIMENSION_LEAK_LIBRARY[dimension].title,
-      problem: DIMENSION_LEAK_LIBRARY[dimension].problem,
-      why: DIMENSION_LEAK_LIBRARY[dimension].why,
-    })),
-  ];
-
-  return items.map((item, index) => {
-    const [low, high] = impactRanges[index];
-
-    return {
-      ...item,
-      impactHoursLow: low,
-      impactHoursHigh: high,
-      impactLabel: formatImpactRange(low, high),
-    };
-  });
-}
-
-function getRecommendationTemplates(primaryService, painPoint) {
-  const baseService = primaryService === "audit" ? "audit" : primaryService === "agents" ? "agents" : "integrations";
-  const baseType =
-    primaryService === "audit"
-      ? "AI Audit"
-      : primaryService === "agents"
-        ? "AI Agents / OpenClaw"
-        : "AI Integratie";
-
-  const processRecommendations = {
-    "losse-emails": [
-      ["Inbox prioriteren", "AI kan berichten sneller ordenen op urgentie, onderwerp en vervolgstap."],
-      ["Antwoorden voorbereiden", "Conceptreacties besparen tijd op terugkerende vragen en standaardreacties."],
-      ["Doorzetten en labelen", "Berichten kunnen direct naar de juiste persoon of status worden gezet."],
-    ],
-    "handmatige-admin": [
-      ["Gegevens overnemen", "Terugkerende invoer kan sneller uit documenten, mails of formulieren worden gehaald."],
-      ["Controles versnellen", "AI kan afwijkingen of ontbrekende velden eerder signaleren."],
-      ["Status bijwerken", "Terugkerende updates in systemen kosten minder handmatig werk."],
-    ],
-    "data-rapportage": [
-      ["Data samenbrengen", "Bronnen kunnen sneller worden gecombineerd tot één werkbaar overzicht."],
-      ["Rapporten voorbereiden", "Terugkerende samenvattingen en eerste analyses zijn sneller beschikbaar."],
-      ["Afwijkingen signaleren", "AI kan sneller patronen, uitzonderingen en open acties markeren."],
-    ],
-    "content-blijft-liggen": [
-      ["Briefing uitwerken", "Van input naar een duidelijke contentopzet kost minder handmatig uitzoekwerk."],
-      ["Concepten opstellen", "Eerste versies voor posts, mails of pagina's zijn sneller klaar."],
-      ["Publicatie voorbereiden", "Varianten, aanpassingen en kanaalspecifieke versies kosten minder tijd."],
-    ],
-    "leads-opvolging": [
-      ["Leads prioriteren", "AI kan sneller bepalen welke aanvragen eerst aandacht nodig hebben."],
-      ["Opvolging voorbereiden", "Conceptmails, samenvattingen en next steps kunnen direct klaarstaan."],
-      ["CRM bijwerken", "Gegevens en contactmomenten kunnen consistenter worden vastgelegd."],
-    ],
-    "campagnes-tijd": [
-      ["Campagnes opzetten", "Briefings, formats en eerste varianten zijn sneller voorbereid."],
-      ["Varianten maken", "Aanpassingen per doelgroep of kanaal kosten minder handmatig werk."],
-      ["Resultaten samenvatten", "AI kan prestaties sneller vertalen naar een eerste overzicht."],
-    ],
-    "documenten-dossiers": [
-      ["Documenten uitlezen", "Belangrijke gegevens zijn sneller uit offertes, pdf's of dossiers gehaald."],
-      ["Samenvatten", "Lange documenten kunnen direct worden teruggebracht tot de kern."],
-      ["Aanvullen en controleren", "Terugkerende controles en vergelijkingen kosten minder tijd."],
-    ],
-    "planning-vast": [
-      ["Afspraken plannen", "Beschikbaarheid en voorstellen kunnen sneller worden verwerkt."],
-      ["Wijzigingen verwerken", "Verzetten, bevestigen en afstemmen kost minder handmatig schakelen."],
-      ["Terugkoppeling versturen", "Updates naar klanten of collega's kunnen direct worden voorbereid."],
-    ],
-    "meerdere-dingen": [
-      ["Proces in kaart", "Eerst scherp krijgen waar de meeste tijd en fouten nu echt ontstaan."],
-      ["Focus aanbrengen", "Een eerste use case kiezen voorkomt versnippering in de aanpak."],
-      ["Prioriteit bepalen", "Beter eerst één route kiezen dan op meerdere plekken tegelijk starten."],
-    ],
-  };
-
-  return (processRecommendations[painPoint] || processRecommendations["meerdere-dingen"]).map(([title, why]) => ({
-    title,
-    why,
-    implementationType: baseType,
-    complexity: primaryService === "agents" ? "Hoog" : primaryService === "audit" ? "Laag" : "Middel",
-    service: baseService,
-  }));
-}
-
-export function getRecommendations(result) {
-  const primaryService = getPrimaryService(result);
-  const weeklyHours = HOUR_MAP[result.answers.weeklyHours] || 0;
-  const impactRanges = [
-    [Math.max(0.5, roundToHalf(weeklyHours * 0.18)), Math.max(1, roundToHalf(weeklyHours * 0.28))],
-    [Math.max(0.5, roundToHalf(weeklyHours * 0.12)), Math.max(1, roundToHalf(weeklyHours * 0.22))],
-    [Math.max(0.5, roundToHalf(weeklyHours * 0.08)), Math.max(1, roundToHalf(weeklyHours * 0.16))],
-  ];
-
-  return getRecommendationTemplates(primaryService, result.answers.painPoint).map((item, index) => {
-    const [low, high] = impactRanges[index];
-
-    return {
-      ...item,
-      impactHoursLow: low,
-      impactHoursHigh: high,
-      impactLabel: formatImpactRange(low, high),
-      serviceLabel: SERVICE_LABELS[item.service],
-    };
-  });
-}
-
-function getHeroCopy(result) {
-  const tierCopy = SCORE_COPY[result.score.tier.key];
-  const routeKey = result.routing.primaryService;
-
-  return {
-    headline: tierCopy.headline[routeKey],
-    summary: tierCopy.summary,
+          ? "Een eerste contactgesprek helpt toetsen of een agentflow past bij de huidige tools, opvolging en overdracht."
+          : primaryService === "optimization" || primaryService === "advice"
+            ? "Een eerste contactgesprek helpt bepalen waar optimalisatie nog zinvol is zonder het bestaande proces onnodig te verstoren."
+            : "Een eerste contactgesprek helpt bepalen welke koppeling of automatisering het meest logisch is.",
+    auditPrompt: "Als je eerst meer scherpte of prioritering wilt, is een AI Audit de logische vervolgstap.",
+    microcopy: "Eerste contactgesprek · Online of op locatie · Rustige verkenning van scope, proces en passende vervolgstap",
   };
 }
 
 function getReadinessLabel(result) {
-  if (result.routing.primaryService === "audit") {
-    return "Analyse eerst";
-  }
-
-  if (result.routing.primaryService === "agents") {
-    return "Workflow-ready";
-  }
-
-  return "Implementatie-ready";
+  return SERVICE_LABELS[result.routing.primaryService] || "Vervolgstap bepalen";
 }
 
 export function buildSubmissionPayload(result, contact) {
@@ -447,18 +585,20 @@ export function buildSubmissionPayload(result, contact) {
 
   return {
     answers: result.answers,
-    score: {
-      total: result.score.total,
-      D1: result.score.D1,
-      D2: result.score.D2,
-      D3: result.score.D3,
-      D4: result.score.D4,
-      tier: result.score.tier.key,
-      tierLabel: result.score.tier.label,
-    },
+    primaryConclusion: result.primaryConclusion,
+    timeOpportunity: result.timeOpportunity,
+    moneyOpportunity: result.moneyOpportunity,
+    mainAiOpportunity: result.mainAiOpportunity,
+    opportunityBullets: result.opportunityBullets,
+    recommendedNextStep: result.recommendedNextStep,
+    ctaType: result.ctaType,
     savings: result.savings,
     diagnosis: {
-      topLeaks: result.diagnosis.topLeaks,
+      processLabel: PROCESS_LABELS[result.answers.processType] || "",
+      painPointLabel: PAIN_POINT_LABELS[result.answers.painPoint] || "",
+      aiUsageLabel: AI_USAGE_LABELS[result.answers.aiUsage] || "",
+      urgencyLabel: URGENCY_LABELS[result.answers.urgency] || "",
+      toolLabels: result.answers.tools.map((tool) => TOOL_LABELS[tool] || tool),
       summary: result.diagnosis.summary,
       readinessLabel: result.diagnosis.readinessLabel,
       opportunityLabel: result.opportunityLabel,
@@ -480,51 +620,56 @@ export function buildSubmissionPayload(result, contact) {
 
 export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
   const normalizedAnswers = {
-    sector: answers.sector || "",
-    teamSize: answers.teamSize || "",
-    workFocus: answers.workFocus || "",
+    processType: answers.processType || "",
+    painPoint: answers.painPoint || "",
     weeklyHours: answers.weeklyHours || "",
     tools: Array.isArray(answers.tools) ? answers.tools : [],
     aiUsage: answers.aiUsage || "",
-    painPoint: answers.painPoint || "meerdere-dingen",
-  };
-
-  const dimensions = calculateDimensions(normalizedAnswers);
-  const total = calculateTotalScore(dimensions);
-  const tier = getTier(total);
-  const score = {
-    total,
-    ...dimensions,
-    tier,
+    urgency: answers.urgency || "",
   };
 
   const baseResult = {
     answers: normalizedAnswers,
-    dimensions,
-    score,
   };
-
   const routing = getCTA(baseResult);
-  const opportunityLabel = getOpportunityLabel({ ...baseResult, routing });
+  const resultContext = { ...baseResult, routing };
+  const timeOpportunity = getTimeOpportunity(normalizedAnswers);
   const savings = getSavingsRange(normalizedAnswers, scenarioKey);
-  const diagnosis = {
-    topLeaks: getTopLeaks({ ...baseResult, routing }),
-    summary: SERVICE_SUMMARIES[routing.primaryService],
-    readinessLabel: getReadinessLabel({ ...baseResult, routing }),
+  const moneyOpportunity = {
+    monthlyLow: savings.monthlyLow,
+    monthlyHigh: savings.monthlyHigh,
+    monthlyLabel: savings.monthlyLabel,
+    yearlyLow: savings.yearlyLow,
+    yearlyHigh: savings.yearlyHigh,
+    yearlyLabel: savings.yearlyLabel,
+    hourlyRate: savings.hourlyRate,
   };
-  const recommendations = getRecommendations({ ...baseResult, routing });
-  const hero = getHeroCopy({ ...baseResult, routing });
-  const dimensionInterpretations = getDimensionInterpretations(dimensions);
+  const mainAiOpportunity = getMainAiOpportunity(resultContext);
+  const opportunityBullets = getOpportunityBullets(resultContext);
+  const primaryConclusion = getPrimaryConclusion(resultContext);
+  const diagnosis = {
+    summary: getConclusionSummary(resultContext),
+    readinessLabel: getReadinessLabel(resultContext),
+  };
+  const recommendations = getRecommendations(resultContext);
 
   return {
     answers: normalizedAnswers,
-    score,
+    primaryConclusion,
+    timeOpportunity,
+    moneyOpportunity,
+    mainAiOpportunity,
+    opportunityBullets,
+    recommendedNextStep: routing.primaryService,
+    ctaType: routing.recommendedCTA,
     savings,
     diagnosis,
     recommendations,
     routing,
-    opportunityLabel,
-    hero,
-    dimensionInterpretations,
+    opportunityLabel: mainAiOpportunity,
+    hero: {
+      headline: primaryConclusion,
+      summary: diagnosis.summary,
+    },
   };
 }
