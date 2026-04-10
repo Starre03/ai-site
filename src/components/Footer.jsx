@@ -22,6 +22,9 @@ export default function Footer() {
         <span style={{ color: C.textMuted, fontSize: "0.68rem", fontFamily: BODY, display: "block", marginTop: 8 }}>
           © 2026 · StarLeo
         </span>
+        <span style={{ color: C.textMuted, fontSize: "0.68rem", fontFamily: BODY, display: "block", marginTop: 4 }}>
+          KvK: 42033972
+        </span>
       </div>
       <div style={{ display: "flex", gap: 20 }}>
         <a

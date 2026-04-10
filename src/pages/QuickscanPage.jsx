@@ -326,7 +326,7 @@ export default function QuickscanPage() {
                   maxWidth: 620,
                 }}
               >
-                Je krijgt direct inzicht in tijdlekken, besparingsindicatie en een concrete vervolgstap.
+                Je ziet waar tijd en geld te winnen valt, welke kansen er liggen en welke stap nu logisch is.
               </p>
             </div>
 
