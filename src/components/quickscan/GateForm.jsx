@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { BODY, C } from "../../lib/theme";
-import { OPT_IN_TEXT, PAIN_POINT_LABELS } from "../../lib/quickscan/config.js";
+import { PAIN_POINT_LABELS, PROCESS_LABELS } from "../../lib/quickscan/config.js";
 import {
   getPrimaryButtonStyle,
   getSecondaryButtonStyle,
@@ -21,7 +21,16 @@ const fieldStyle = {
 
 export default function GateForm({ contact, errors, assessment, onChange, onToggleOptIn, onBack, onSubmit }) {
   const teaserLabel = PAIN_POINT_LABELS[assessment?.answers?.painPoint] || "Meerdere dingen tegelijk";
-  const teaserDegrees = Math.max(24, ((assessment?.score?.total || 20) / 100) * 360);
+  const name = assessment?.answers?.name || "je";
+  const companyName = assessment?.answers?.companyName || "je bedrijf";
+  const optInProcessLabel = PROCESS_LABELS[assessment?.answers?.processType]?.toLowerCase() || "dit proces";
+  const urgencyDegrees = {
+    laag: 110,
+    interessant: 160,
+    verbeteren: 230,
+    "snel-beter": 300,
+  };
+  const teaserDegrees = urgencyDegrees[assessment?.answers?.urgency] || 200;
 
   return (
     <section
@@ -44,7 +53,7 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
               textAlign: "center",
             }}
           >
-            Ontvang je analyse
+            Bijna klaar, {name}. We berekenen nu jouw analyse voor {companyName}.
           </h2>
           <p
             style={{
@@ -56,7 +65,7 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
               maxWidth: 620,
             }}
           >
-            Je ziet direct je score, besparingspotentieel en passende vervolgstap.
+            We genereren je rapport op basis van je antwoorden.
           </p>
         </div>
 
@@ -120,21 +129,6 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
           }}
         >
           <div style={{ display: "grid", gap: "clamp(6px, 0.9vh, 8px)" }}>
-            <label htmlFor="quickscan-name" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.88rem)" }}>
-              Naam
-            </label>
-            <input
-              id="quickscan-name"
-              type="text"
-              placeholder="Je naam"
-              value={contact.name}
-              onChange={(event) => onChange("name", event.target.value)}
-              style={fieldStyle}
-            />
-            {errors.name ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.name}</span> : null}
-          </div>
-
-          <div style={{ display: "grid", gap: "clamp(6px, 0.9vh, 8px)" }}>
             <label htmlFor="quickscan-email" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.88rem)" }}>
               E-mailadres
             </label>
@@ -156,8 +150,8 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
               alignItems: "flex-start",
               padding: "clamp(8px, 1.2vh, 10px) clamp(10px, 1.4vw, 12px)",
               borderRadius: 16,
-              border: "1px solid rgba(255,255,255,0.08)",
-              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(56,189,248,0.2)",
+              background: "rgba(14,165,233,0.04)",
               lineHeight: 1.5,
               color: C.textSoft,
               fontFamily: BODY,
@@ -165,7 +159,7 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
             }}
           >
             <input type="checkbox" checked={contact.marketingOptIn} onChange={onToggleOptIn} style={{ marginTop: 4 }} />
-            <span>{OPT_IN_TEXT}</span>
+            <span>Ja, stuur me ook tips en updates over AI voor {optInProcessLabel}.</span>
           </label>
 
           <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap", justifyContent: "center" }}>
@@ -188,7 +182,7 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
             textAlign: "center",
           }}
         >
-          Je score wordt automatisch berekend op basis van je antwoorden. Lees voor meer informatie ons{" "}
+          Je analyse wordt automatisch opgebouwd op basis van je antwoorden. Lees voor meer informatie ons{" "}
           <Link to="/privacy" style={{ color: "rgba(125, 211, 252, 0.9)", fontFamily: BODY }}>
             Privacybeleid
           </Link>

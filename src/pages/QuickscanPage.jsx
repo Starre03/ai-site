@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import GateForm from "../components/quickscan/GateForm.jsx";
 import ProgressBar from "../components/quickscan/ProgressBar.jsx";
 import QuestionStep from "../components/quickscan/QuestionStep.jsx";
-import SavingsCard from "../components/quickscan/SavingsCard.jsx";
 import ScoreHero from "../components/quickscan/ScoreHero.jsx";
 import { getPrimaryButtonStyle, pageCardStyle } from "../components/quickscan/styles.js";
 import { usePageSeo } from "../components/ui";
@@ -11,6 +10,8 @@ import iconEfficiency from "../assets/quickscan-icon-efficiency.png";
 import iconTime from "../assets/quickscan-icon-time.png";
 import { BODY, C } from "../lib/theme";
 import {
+  getAiFollowupQuestionTitle,
+  getAiUsageQuestionTitle,
   getPainPointOptions,
   getPainPointQuestionTitle,
   getToolOptions,
@@ -22,11 +23,14 @@ import { buildSubmissionPayload, createQuickscanResult, quickscanLog } from "../
 
 function createInitialAnswers() {
   return {
+    name: "",
+    companyName: "",
     processType: "",
     painPoint: "",
     weeklyHours: "",
     tools: [],
     aiUsage: "",
+    aiIssue: "",
     urgency: "",
   };
 }
@@ -50,6 +54,20 @@ function getDynamicQuestion(stepId, answers) {
     };
   }
 
+  if (baseQuestion.id === "aiUsage") {
+    return {
+      ...baseQuestion,
+      title: getAiUsageQuestionTitle(answers.painPoint),
+    };
+  }
+
+  if (baseQuestion.id === "aiIssue") {
+    return {
+      ...baseQuestion,
+      title: getAiFollowupQuestionTitle(answers.painPoint),
+    };
+  }
+
   if (baseQuestion.id !== "painPoint") {
     return baseQuestion;
   }
@@ -61,6 +79,12 @@ function getDynamicQuestion(stepId, answers) {
   };
 }
 
+function getFlowStepIds(answers) {
+  const shouldAskAiFollowup = ["regelmatig", "vast-onderdeel"].includes(answers.aiUsage);
+
+  return STEP_IDS.filter((stepId) => shouldAskAiFollowup || stepId !== "v5-ai-frictie");
+}
+
 export default function QuickscanPage() {
   usePageSeo({
     title: "STARRE.AI | Quickscan",
@@ -68,10 +92,8 @@ export default function QuickscanPage() {
   });
 
   const [screenIndex, setScreenIndex] = useState(0);
-  const [scenario, setScenario] = useState("gemiddeld");
   const [answers, setAnswers] = useState(createInitialAnswers);
   const [contact, setContact] = useState({
-    name: "",
     email: "",
     marketingOptIn: false,
   });
@@ -79,9 +101,10 @@ export default function QuickscanPage() {
   const [submittedContact, setSubmittedContact] = useState(null);
   const lastStepRef = useRef(null);
 
-  const currentStepId = STEP_IDS[screenIndex];
+  const flowStepIds = useMemo(() => getFlowStepIds(answers), [answers]);
+  const currentStepId = flowStepIds[Math.min(screenIndex, flowStepIds.length - 1)];
   const currentQuestion = useMemo(() => getDynamicQuestion(currentStepId, answers), [currentStepId, answers]);
-  const assessment = useMemo(() => createQuickscanResult(answers, scenario), [answers, scenario]);
+  const assessment = useMemo(() => createQuickscanResult(answers), [answers]);
   const submissionPayload = useMemo(
     () => (submittedContact ? buildSubmissionPayload(assessment, submittedContact) : null),
     [assessment, submittedContact],
@@ -107,8 +130,47 @@ export default function QuickscanPage() {
   }
 
   function handleNext() {
+    if (currentQuestion?.kind === "profile") {
+      const nextErrors = {};
+
+      if (!answers.name.trim()) {
+        nextErrors.name = "Vul je naam in.";
+      }
+
+      if (!answers.companyName.trim()) {
+        nextErrors.companyName = "Vul je bedrijfsnaam in.";
+      }
+
+      if (Object.keys(nextErrors).length > 0) {
+        setErrors(nextErrors);
+        return;
+      }
+    }
+
+    if (currentQuestion?.kind === "multi") {
+      const selectedValues = Array.isArray(answers[currentQuestion.id]) ? answers[currentQuestion.id] : [];
+
+      if (selectedValues.length === 0) {
+        setErrors({
+          [currentQuestion.id]: "Kies minimaal één optie.",
+        });
+        return;
+      }
+    }
+
     setErrors({});
-    setScreenIndex((current) => Math.min(STEP_IDS.length - 1, current + 1));
+    setScreenIndex((current) => Math.min(flowStepIds.length - 1, current + 1));
+  }
+
+  function handleProfileChange(key, value) {
+    setAnswers((current) => ({
+      ...current,
+      [key]: value,
+    }));
+    setErrors((current) => ({
+      ...current,
+      [key]: "",
+    }));
   }
 
   function handleSingleSelect(key, value) {
@@ -123,46 +185,45 @@ export default function QuickscanPage() {
         nextAnswers.tools = [];
       }
 
+      if (key === "aiUsage" && !["regelmatig", "vast-onderdeel"].includes(value)) {
+        nextAnswers.aiIssue = "";
+      }
+
       return nextAnswers;
     });
     setErrors({});
-    setScreenIndex((current) => Math.min(STEP_IDS.length - 1, current + 1));
+    setScreenIndex((current) => Math.min(getFlowStepIds({ ...answers, [key]: value }).length - 1, current + 1));
   }
 
-  function handleToolToggle(value) {
+  function handleMultiToggle(key, value) {
     setAnswers((current) => {
-      const currentTools = current.tools || [];
+      const currentValues = Array.isArray(current[key]) ? current[key] : [];
 
       if (value === "anders-geen") {
         return {
           ...current,
-          tools: currentTools.includes("anders-geen") ? [] : ["anders-geen"],
+          [key]: currentValues.includes("anders-geen") ? [] : ["anders-geen"],
         };
       }
 
-      const withoutNone = currentTools.filter((tool) => tool !== "anders-geen");
+      const withoutNone = currentValues.filter((tool) => tool !== "anders-geen");
 
       if (withoutNone.includes(value)) {
         return {
           ...current,
-          tools: withoutNone.filter((tool) => tool !== value),
+          [key]: withoutNone.filter((tool) => tool !== value),
         };
       }
 
       return {
         ...current,
-        tools: [...withoutNone, value],
+        [key]: [...withoutNone, value],
       };
     });
-  }
-
-  function handleScenarioChange(nextScenario) {
-    setScenario(nextScenario);
-    quickscanLog("scenario_change", {
-      scenario: nextScenario,
-      monthlyLow: createQuickscanResult(answers, nextScenario).savings.monthlyLow,
-      monthlyHigh: createQuickscanResult(answers, nextScenario).savings.monthlyHigh,
-    });
+    setErrors((current) => ({
+      ...current,
+      [key]: "",
+    }));
   }
 
   function handleContactChange(key, value) {
@@ -193,10 +254,6 @@ export default function QuickscanPage() {
 
     const nextErrors = {};
 
-    if (!contact.name.trim()) {
-      nextErrors.name = "Vul je naam in.";
-    }
-
     if (!contact.email.trim()) {
       nextErrors.email = "Vul je e-mailadres in.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim())) {
@@ -209,7 +266,8 @@ export default function QuickscanPage() {
     }
 
     const nextContact = {
-      name: contact.name.trim(),
+      name: answers.name.trim(),
+      companyName: answers.companyName.trim(),
       email: contact.email.trim(),
       marketingOptIn: contact.marketingOptIn,
     };
@@ -217,24 +275,22 @@ export default function QuickscanPage() {
 
     await submitQuickscanPreview(payload);
     setSubmittedContact(nextContact);
-    setScreenIndex(STEP_IDS.length - 1);
+    setScreenIndex(flowStepIds.length - 1);
   }
 
   function handleReset() {
     setAnswers(createInitialAnswers());
     setContact({
-      name: "",
       email: "",
       marketingOptIn: false,
     });
     setSubmittedContact(null);
-    setScenario("gemiddeld");
     setErrors({});
     setScreenIndex(1);
   }
 
   function handleEditGate() {
-    setScreenIndex(STEP_IDS.length - 2);
+    setScreenIndex(flowStepIds.length - 2);
   }
 
   function handleCtaClick(ctaType = assessment.routing.recommendedCTA) {
@@ -246,6 +302,8 @@ export default function QuickscanPage() {
   }
 
   const progressIndex = currentQuestion ? QUESTIONS.findIndex((question) => question.stepId === currentStepId) + 1 : 0;
+  const progressQuestionStepIds = flowStepIds.filter((stepId) => QUESTIONS.some((question) => question.stepId === stepId));
+  const dynamicProgressIndex = currentQuestion ? progressQuestionStepIds.indexOf(currentStepId) + 1 : 0;
   const showProgress = Boolean(currentQuestion);
 
   const pageStyle = {
@@ -267,7 +325,7 @@ export default function QuickscanPage() {
   return (
     <div style={pageStyle}>
       <div style={frameStyle}>
-        {showProgress ? <ProgressBar currentIndex={progressIndex} totalSteps={QUESTIONS.length} /> : null}
+        {showProgress ? <ProgressBar currentIndex={dynamicProgressIndex || progressIndex} totalSteps={progressQuestionStepIds.length} /> : null}
 
         {currentStepId === "intro" ? (
           <section
@@ -396,8 +454,10 @@ export default function QuickscanPage() {
           <QuestionStep
             question={currentQuestion}
             answers={answers}
+            errors={errors}
+            onProfileChange={handleProfileChange}
             onSingleSelect={handleSingleSelect}
-            onToolToggle={handleToolToggle}
+            onToolToggle={handleMultiToggle}
             onClearTools={() => setAnswers((current) => ({ ...current, tools: [] }))}
             onBack={handleBack}
             onNext={handleNext}
@@ -419,7 +479,6 @@ export default function QuickscanPage() {
         {currentStepId === "resultaat" && submittedContact && submissionPayload ? (
           <section style={{ display: "grid", gap: "clamp(14px, 2vh, 18px)" }}>
             <ScoreHero result={assessment} recommendations={assessment.recommendations} onCtaClick={handleCtaClick} />
-            <SavingsCard savings={assessment.savings} onScenarioChange={handleScenarioChange} />
 
             <section style={{ ...pageCardStyle, display: "grid", gap: "clamp(10px, 1.5vh, 12px)" }}>
               <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap" }}>

@@ -1,12 +1,14 @@
-export const QUICKSCAN_VERSION = "quickscan-v4-process-tools-flow-preview";
+export const QUICKSCAN_VERSION = "quickscan-v5-personal-branching-preview";
 
 export const STEP_IDS = [
   "intro",
+  "v0-profiel",
   "v1-proces",
   "v2-knelpunt",
   "v3-uren",
   "v4-tools",
   "v5-ai",
+  "v5-ai-frictie",
   "v6-urgentie",
   "gate",
   "resultaat",
@@ -25,45 +27,45 @@ export const PROCESS_LABELS = Object.fromEntries(PROCESS_OPTIONS.map((option) =>
 
 export const PAIN_POINT_OPTIONS_BY_PROCESS = {
   klantcontact: [
-    { value: "losse-vragen-berichten", label: "Te veel losse vragen en berichten" },
-    { value: "leads-niet-opgevolgd", label: "Leads worden niet goed opgevolgd" },
+    { value: "losse-vragen-berichten", label: "Ik beantwoord steeds dezelfde vragen" },
+    { value: "leads-niet-opgevolgd", label: "Opvolging schiet er bij in" },
+    { value: "leads-buiten-kantooruren", label: "Buiten kantooruren mis ik leads" },
     { value: "informatie-verspreid", label: "Informatie staat verspreid" },
-    { value: "handmatig-antwoorden", label: "Te veel handmatig antwoorden" },
     { value: "overdracht-kost-tijd", label: "Overdracht kost te veel tijd" },
   ],
   administratie: [
-    { value: "invoer-controles", label: "Invoer en controles kosten te veel tijd" },
-    { value: "gegevens-overzetten", label: "Gegevens moeten handmatig worden overgezet" },
-    { value: "documenten-facturen", label: "Documenten en facturen kosten veel werk" },
-    { value: "overzichten-maken", label: "Overzichten maken kost te veel tijd" },
+    { value: "gegevens-overzetten", label: "Ik voer te veel gegevens handmatig in" },
+    { value: "invoer-controles", label: "Controle kost elke week veel tijd" },
+    { value: "documenten-facturen", label: "Facturen en documenten blijven liggen" },
+    { value: "overzichten-maken", label: "Overzichten maken duurt te lang" },
     { value: "fouten-herstellen", label: "Fouten herstellen kost te veel tijd" },
   ],
   content: [
-    { value: "briefings-input", label: "Briefings en input kosten te veel tijd" },
-    { value: "content-handwerk", label: "Content maken kost te veel handwerk" },
-    { value: "feedback-afstemming", label: "Feedback en afstemming vertragen alles" },
-    { value: "publicatie-planning", label: "Publicatie en planning kosten te veel tijd" },
+    { value: "briefings-input", label: "Ik weet niet goed wat ik moet maken" },
+    { value: "content-handwerk", label: "Het kost te veel tijd per stuk content" },
+    { value: "feedback-afstemming", label: "Consistentie lukt niet" },
+    { value: "publicatie-planning", label: "Publiceren en plannen kost te veel tijd" },
     { value: "campagnes-doorvertalen", label: "Campagnes doorvertalen kost te veel werk" },
   ],
   offertes: [
-    { value: "offertes-opstellen", label: "Offertes opstellen kost te veel tijd" },
+    { value: "offertes-opstellen", label: "Offertes maken duurt te lang" },
     { value: "documenten-aanpassen", label: "Documenten aanpassen blijft handwerk" },
-    { value: "versies-feedback", label: "Versies en feedback vertragen het proces" },
-    { value: "dossiers-opbouwen", label: "Dossiers opbouwen kost te veel tijd" },
-    { value: "informatie-opnieuw-invullen", label: "Informatie moet steeds opnieuw worden ingevuld" },
+    { value: "versies-feedback", label: "Feedback en versies lopen door elkaar" },
+    { value: "dossiers-opbouwen", label: "Dossiers opbouwen kost veel tijd" },
+    { value: "informatie-opnieuw-invullen", label: "Gegevens opnieuw invullen kost tijd" },
   ],
   planning: [
-    { value: "planning-handwerk", label: "Planning kost veel handmatig werk" },
-    { value: "overdracht-onduidelijk", label: "Overdracht tussen mensen is onduidelijk" },
-    { value: "taken-versnipperd", label: "Taken en afspraken raken versnipperd" },
-    { value: "losse-berichten", label: "Veel afstemming gaat via losse berichten" },
-    { value: "opvolging-niet-strak", label: "Opvolging loopt niet strak genoeg" },
+    { value: "planning-handwerk", label: "Plannen kost te veel heen-en-weer" },
+    { value: "overdracht-onduidelijk", label: "Overdracht is niet duidelijk genoeg" },
+    { value: "taken-versnipperd", label: "Taken en afspraken raken verspreid" },
+    { value: "losse-berichten", label: "Veel afstemming loopt via losse berichten" },
+    { value: "opvolging-niet-strak", label: "Opvolging schiet er bij in" },
   ],
   data: [
     { value: "data-verzamelen", label: "Data verzamelen kost te veel tijd" },
     { value: "rapportages-langzaam", label: "Rapportages maken duurt te lang" },
-    { value: "te-veel-bronnen", label: "Informatie komt uit te veel bronnen" },
-    { value: "controle-opschoning", label: "Controle en opschoning kost veel werk" },
+    { value: "te-veel-bronnen", label: "Informatie staat in te veel systemen" },
+    { value: "controle-opschoning", label: "Controleren en opschonen kost veel werk" },
     { value: "inzicht-te-laat", label: "Inzicht komt te laat beschikbaar" },
   ],
 };
@@ -122,12 +124,84 @@ export const TOOL_OPTIONS_BY_PROCESS = {
   ],
 };
 
+const AI_USAGE_TITLE_BY_PAIN_POINT = {
+  "losse-vragen-berichten": "Gebruik je al AI bij het beantwoorden van terugkerende vragen?",
+  "leads-niet-opgevolgd": "Gebruik je al AI bij lead- en klantopvolging?",
+  "leads-buiten-kantooruren": "Gebruik je al AI bij het opvangen van leads buiten kantooruren?",
+  "informatie-verspreid": "Gebruik je al AI bij het bundelen van klantinformatie?",
+  "overdracht-kost-tijd": "Gebruik je al AI bij overdracht en opvolging?",
+  "gegevens-overzetten": "Gebruik je al AI bij invoer en verwerking van gegevens?",
+  "invoer-controles": "Gebruik je al AI bij controles en checks?",
+  "documenten-facturen": "Gebruik je al AI bij facturen en documentverwerking?",
+  "overzichten-maken": "Gebruik je al AI bij het maken van overzichten?",
+  "fouten-herstellen": "Gebruik je al AI bij foutcontrole en correcties?",
+  "briefings-input": "Gebruik je al AI bij het bedenken van content?",
+  "content-handwerk": "Gebruik je al AI bij het maken van content?",
+  "feedback-afstemming": "Gebruik je al AI om content consistenter te maken?",
+  "publicatie-planning": "Gebruik je al AI bij publicatie en planning?",
+  "campagnes-doorvertalen": "Gebruik je al AI bij het doorvertalen van campagnes?",
+  "offertes-opstellen": "Gebruik je al AI bij het opstellen van offertes?",
+  "documenten-aanpassen": "Gebruik je al AI bij het aanpassen van documenten?",
+  "versies-feedback": "Gebruik je al AI bij versiebeheer en feedbackverwerking?",
+  "dossiers-opbouwen": "Gebruik je al AI bij het opbouwen van dossiers?",
+  "informatie-opnieuw-invullen": "Gebruik je al AI bij het hergebruiken van gegevens in documenten?",
+  "planning-handwerk": "Gebruik je al AI bij planning en afstemming?",
+  "overdracht-onduidelijk": "Gebruik je al AI bij overdracht tussen mensen?",
+  "taken-versnipperd": "Gebruik je al AI bij het bundelen van taken en afspraken?",
+  "losse-berichten": "Gebruik je al AI bij interne afstemming via berichten?",
+  "opvolging-niet-strak": "Gebruik je al AI bij interne opvolging?",
+  "data-verzamelen": "Gebruik je al AI bij het verzamelen van data?",
+  "rapportages-langzaam": "Gebruik je al AI bij het maken van rapportages?",
+  "te-veel-bronnen": "Gebruik je al AI bij het combineren van informatie uit meerdere systemen?",
+  "controle-opschoning": "Gebruik je al AI bij controle en opschoning van data?",
+  "inzicht-te-laat": "Gebruik je al AI om sneller inzicht uit data te halen?",
+};
+
+const AI_FOLLOWUP_TITLE_BY_PAIN_POINT = {
+  "losse-vragen-berichten": "Wat werkt nog niet goed aan hoe je AI terugkerende vragen laat ondersteunen?",
+  "leads-niet-opgevolgd": "Wat werkt nog niet goed aan hoe je AI voor opvolging inzet?",
+  "leads-buiten-kantooruren": "Wat werkt nog niet goed aan hoe je AI buiten kantooruren inzet?",
+  "informatie-verspreid": "Wat werkt nog niet goed aan hoe je AI informatie laat bundelen?",
+  "overdracht-kost-tijd": "Wat werkt nog niet goed aan hoe je AI bij overdracht inzet?",
+  "gegevens-overzetten": "Wat werkt nog niet goed aan hoe je AI bij invoer inzet?",
+  "invoer-controles": "Wat werkt nog niet goed aan hoe je AI voor controles inzet?",
+  "documenten-facturen": "Wat werkt nog niet goed aan hoe je AI voor documenten en facturen inzet?",
+  "overzichten-maken": "Wat werkt nog niet goed aan hoe je AI voor overzichten inzet?",
+  "fouten-herstellen": "Wat werkt nog niet goed aan hoe je AI voor foutcontrole inzet?",
+  "briefings-input": "Wat werkt nog niet goed aan hoe je AI voor contentideeën inzet?",
+  "content-handwerk": "Wat werkt nog niet goed aan hoe je AI bij content maken inzet?",
+  "feedback-afstemming": "Wat werkt nog niet goed aan hoe je AI voor contentafstemming inzet?",
+  "publicatie-planning": "Wat werkt nog niet goed aan hoe je AI bij publicatie en planning inzet?",
+  "campagnes-doorvertalen": "Wat werkt nog niet goed aan hoe je AI voor campagnes inzet?",
+  "offertes-opstellen": "Wat werkt nog niet goed aan hoe je AI voor offertes inzet?",
+  "documenten-aanpassen": "Wat werkt nog niet goed aan hoe je AI voor documenten inzet?",
+  "versies-feedback": "Wat werkt nog niet goed aan hoe je AI voor versiebeheer inzet?",
+  "dossiers-opbouwen": "Wat werkt nog niet goed aan hoe je AI voor dossiers inzet?",
+  "informatie-opnieuw-invullen": "Wat werkt nog niet goed aan hoe je AI gegevens laat hergebruiken?",
+  "planning-handwerk": "Wat werkt nog niet goed aan hoe je AI voor planning inzet?",
+  "overdracht-onduidelijk": "Wat werkt nog niet goed aan hoe je AI voor overdracht inzet?",
+  "taken-versnipperd": "Wat werkt nog niet goed aan hoe je AI taken en afspraken laat bundelen?",
+  "losse-berichten": "Wat werkt nog niet goed aan hoe je AI bij interne berichten inzet?",
+  "opvolging-niet-strak": "Wat werkt nog niet goed aan hoe je AI voor interne opvolging inzet?",
+  "data-verzamelen": "Wat werkt nog niet goed aan hoe je AI voor dataverzameling inzet?",
+  "rapportages-langzaam": "Wat werkt nog niet goed aan hoe je AI voor rapportages inzet?",
+  "te-veel-bronnen": "Wat werkt nog niet goed aan hoe je AI informatie uit systemen combineert?",
+  "controle-opschoning": "Wat werkt nog niet goed aan hoe je AI voor data-opschoning inzet?",
+  "inzicht-te-laat": "Wat werkt nog niet goed aan hoe je AI sneller inzicht laat geven?",
+};
+
 export const QUESTIONS = [
+  {
+    id: "profile",
+    stepId: "v0-profiel",
+    kind: "profile",
+    title: "Eerst even je gegevens.",
+  },
   {
     id: "processType",
     stepId: "v1-proces",
     kind: "single",
-    title: "Waar gaat binnen je bedrijf nu de meeste tijd naartoe?",
+    title: "Waar verliest je team of bedrijf elke week de meeste tijd aan?",
     options: PROCESS_OPTIONS,
   },
   {
@@ -147,7 +221,8 @@ export const QUESTIONS = [
       { value: "2-5", label: "2-5 uur" },
       { value: "5-10", label: "5-10 uur" },
       { value: "10-20", label: "10-20 uur" },
-      { value: "20+", label: "20 uur of meer" },
+      { value: "20-50", label: "20-50 uur" },
+      { value: "50+", label: "50 uur of meer" },
     ],
   },
   {
@@ -170,29 +245,54 @@ export const QUESTIONS = [
     ],
   },
   {
+    id: "aiIssue",
+    stepId: "v5-ai-frictie",
+    kind: "single",
+    title: "Wat werkt nog niet goed aan hoe je AI nu inzet?",
+    options: [
+      { value: "kwaliteit-wisselvallig", label: "Kwaliteit is wisselvallig" },
+      { value: "handwerk-eromheen", label: "Te veel handmatig werk er omheen" },
+      { value: "team-gebruikt-niet", label: "Mijn team gebruikt het niet" },
+      { value: "verder-automatiseren", label: "Ik wil verder automatiseren" },
+    ],
+  },
+  {
     id: "urgency",
     stepId: "v6-urgentie",
     kind: "single",
     title: "Hoe belangrijk is het om dit binnenkort te verbeteren?",
     options: [
-      { value: "laag", label: "Lage prioriteit" },
-      { value: "interessant", label: "Interessant, maar geen haast" },
-      { value: "verbeteren", label: "Ik wil dit verbeteren" },
-      { value: "snel-beter", label: "Dit moet snel beter" },
+      { value: "laag", label: "Heeft nu weinig prioriteit" },
+      { value: "interessant", label: "Is relevant, maar kan wachten" },
+      { value: "verbeteren", label: "Dit wil ik binnenkort aanpakken" },
+      { value: "snel-beter", label: "Dit wil ik zo snel mogelijk verbeteren" },
     ],
   },
 ];
 
 export const getPainPointOptions = (processType) =>
-  PAIN_POINT_OPTIONS_BY_PROCESS[processType] || PAIN_POINT_OPTIONS_BY_PROCESS.klantcontact;
+  (Array.isArray(processType) ? processType : [processType])
+    .filter(Boolean)
+    .flatMap((type) => PAIN_POINT_OPTIONS_BY_PROCESS[type] || [])
+    .filter((option, index, options) => options.findIndex((item) => item.value === option.value) === index);
 
 export const getToolOptions = (processType) =>
-  TOOL_OPTIONS_BY_PROCESS[processType] || TOOL_OPTIONS_BY_PROCESS.klantcontact;
+  (Array.isArray(processType) ? processType : [processType])
+    .filter(Boolean)
+    .flatMap((type) => TOOL_OPTIONS_BY_PROCESS[type] || [])
+    .filter((option, index, options) => options.findIndex((item) => item.value === option.value) === index);
 
 export const getPainPointQuestionTitle = (processType) => {
-  const label = PROCESS_LABELS[processType]?.toLowerCase();
-  return label ? `Waar loopt ${label} nu het meest vast?` : "Waar loopt dit nu het meest vast?";
+  const selectedTypes = Array.isArray(processType) ? processType.filter(Boolean) : [processType].filter(Boolean);
+  const label = PROCESS_LABELS[selectedTypes[0]]?.toLowerCase();
+  return label ? `Waar verlies je nu de meeste tijd bij ${label}?` : "Waar verlies je nu de meeste tijd bij dit werk?";
 };
+
+export const getAiUsageQuestionTitle = (painPoint) =>
+  AI_USAGE_TITLE_BY_PAIN_POINT[painPoint] || "Gebruik je hier al AI voor?";
+
+export const getAiFollowupQuestionTitle = (painPoint) =>
+  AI_FOLLOWUP_TITLE_BY_PAIN_POINT[painPoint] || "Wat werkt nog niet goed aan hoe je AI nu inzet?";
 
 export const PAIN_POINT_LABELS = Object.fromEntries(
   Object.values(PAIN_POINT_OPTIONS_BY_PROCESS)
@@ -235,11 +335,20 @@ export const AI_USAGE_LABELS = {
   "vast-onderdeel": "Vast onderdeel van dit werk",
 };
 
+export const AI_FOLLOWUP_OPTIONS = [
+  { value: "kwaliteit-wisselvallig", label: "Kwaliteit is wisselvallig" },
+  { value: "handwerk-eromheen", label: "Te veel handmatig werk er omheen" },
+  { value: "team-gebruikt-niet", label: "Mijn team gebruikt het niet" },
+  { value: "verder-automatiseren", label: "Ik wil verder automatiseren" },
+];
+
+export const AI_FOLLOWUP_LABELS = Object.fromEntries(AI_FOLLOWUP_OPTIONS.map((option) => [option.value, option.label]));
+
 export const URGENCY_LABELS = {
-  laag: "Lage prioriteit",
-  interessant: "Interessant, maar geen haast",
-  verbeteren: "Ik wil dit verbeteren",
-  "snel-beter": "Dit moet snel beter",
+  laag: "Heeft nu weinig prioriteit",
+  interessant: "Is relevant, maar kan wachten",
+  verbeteren: "Dit wil ik binnenkort aanpakken",
+  "snel-beter": "Dit wil ik zo snel mogelijk verbeteren",
 };
 
 export const HOUR_MAP = {
@@ -247,7 +356,8 @@ export const HOUR_MAP = {
   "2-5": 3.5,
   "5-10": 7.5,
   "10-20": 15,
-  "20+": 25,
+  "20-50": 35,
+  "50+": 60,
 };
 
 export const SAVINGS_SCENARIOS = {

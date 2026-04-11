@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { BODY, C } from "../../lib/theme";
-import { PAIN_POINT_LABELS, SERVICE_LABELS } from "../../lib/quickscan/config.js";
+import { SERVICE_LABELS } from "../../lib/quickscan/config.js";
 import { getPrimaryButtonStyle, getSecondaryButtonStyle, pageCardStyle } from "./styles.js";
 
 function formatCurrency(value) {
@@ -10,7 +11,9 @@ function formatCurrency(value) {
   }).format(value);
 }
 
-function SummaryCard({ label, value, note, accent = false }) {
+function SummaryCard({ label, value, note, details, accent = false }) {
+  const [showDetails, setShowDetails] = useState(false);
+
   return (
     <div
       style={{
@@ -36,9 +39,74 @@ function SummaryCard({ label, value, note, accent = false }) {
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.08em",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 6,
         }}
       >
         {label}
+        {details ? (
+          <span
+            style={{ position: "relative", display: "inline-flex" }}
+            onMouseEnter={() => setShowDetails(true)}
+            onMouseLeave={() => setShowDetails(false)}
+            onFocus={() => setShowDetails(true)}
+            onBlur={() => setShowDetails(false)}
+          >
+            <button
+              type="button"
+              aria-label={`Toon berekening voor ${label.toLowerCase()}`}
+              title="Toon berekening"
+              onClick={() => setShowDetails((current) => !current)}
+              style={{
+                cursor: "pointer",
+                color: "#8FD8FF",
+                width: 14,
+                height: 14,
+                padding: 0,
+                borderRadius: "50%",
+                border: "1px solid rgba(125,211,252,0.45)",
+                display: "inline-grid",
+                placeItems: "center",
+                fontSize: "0.56rem",
+                lineHeight: 1,
+                letterSpacing: 0,
+                textTransform: "none",
+                background: "rgba(14,165,233,0.08)",
+              }}
+            >
+              i
+            </button>
+            {showDetails ? (
+              <span
+                role="tooltip"
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 8px)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                  width: "min(280px, 72vw)",
+                  padding: "10px 12px",
+                  borderRadius: 12,
+                  border: "1px solid rgba(125,211,252,0.18)",
+                  background: "rgba(7,17,31,0.96)",
+                  boxShadow: "0 16px 34px rgba(0,0,0,0.35)",
+                  color: C.textSoft,
+                  fontFamily: BODY,
+                  fontSize: "0.76rem",
+                  lineHeight: 1.45,
+                  textTransform: "none",
+                  letterSpacing: 0,
+                  fontWeight: 500,
+                }}
+              >
+                {details}
+              </span>
+            ) : null}
+          </span>
+        ) : null}
       </span>
       <strong style={{ color: C.text, fontFamily: BODY, fontSize: "clamp(1.05rem, min(2vw, 2.8vh), 1.28rem)", lineHeight: 1.15 }}>{value}</strong>
       {note ? <span style={{ color: C.textSoft, fontSize: "clamp(0.82rem, min(1.2vw, 1.65vh), 0.88rem)", lineHeight: 1.4 }}>{note}</span> : null}
@@ -102,11 +170,7 @@ function getMicroTitle(title) {
 }
 
 export default function ScoreHero({ result, recommendations, onCtaClick }) {
-  const bottleneckLabel = PAIN_POINT_LABELS[result.answers.painPoint] || "het huidige proces";
-  const titleText =
-    result.answers.painPoint === "meerdere-dingen"
-      ? `Het grootste verlies zit nu in ${result.opportunityLabel.toLowerCase()}.`
-      : `Het grootste verlies zit nu in ${bottleneckLabel.toLowerCase()}.`;
+  const titleText = result.primaryConclusion || result.hero?.headline || `Je grootste winst zit nu in ${result.opportunityLabel.toLowerCase()}.`;
 
   return (
     <section
@@ -131,6 +195,20 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         >
           {titleText}
         </h2>
+        {result.hero?.summary ? (
+          <p
+            style={{
+              color: C.textSoft,
+              fontFamily: BODY,
+              fontSize: "clamp(0.96rem, min(1.65vw, 2.2vh), 1.02rem)",
+              lineHeight: 1.65,
+              margin: 0,
+              maxWidth: 760,
+            }}
+          >
+            {result.hero.summary}
+          </p>
+        ) : null}
       </div>
 
       <div
@@ -141,11 +219,17 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
           width: "min(920px, 100%)",
         }}
       >
-        <SummaryCard label="Tijd" value={result.savings.weeklySavingsLabel} note="Mogelijke ruimte per week" accent />
+        <SummaryCard
+          label="Tijd"
+          value={result.savings.weeklySavingsLabel}
+          note="Mogelijke ruimte per week"
+          accent
+        />
         <SummaryCard
           label="Geld"
           value={`${formatCurrency(result.savings.monthlyLow)} - ${formatCurrency(result.savings.monthlyHigh)} p/m`}
           note="Potentieel per maand"
+          details={result.savings.timeInfoText}
           accent
         />
         <SummaryCard label="Kans" value={result.opportunityLabel} note="Waar de meeste AI-kans zit" accent />
@@ -247,7 +331,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
           </div>
           <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap", justifyContent: "center" }}>
             <a href={result.routing.href} style={getPrimaryButtonStyle(false)} onClick={() => onCtaClick("plan-gesprek")}>
-              Plan een gesprek
+              {result.routing.primaryButtonLabel || "Plan een gesprek"}
             </a>
             <a href={result.routing.href} style={getSecondaryButtonStyle(false)} onClick={() => onCtaClick("neem-contact-op")}>
               Bel ons

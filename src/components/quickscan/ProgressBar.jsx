@@ -4,21 +4,7 @@ export default function ProgressBar({ currentIndex, totalSteps, label = "Quicksc
   const activeStep = Math.max(0, Math.min(currentIndex, totalSteps));
 
   return (
-    <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          color: C.textSoft,
-          fontSize: "clamp(0.78rem, min(1.2vw, 1.7vh), 0.82rem)",
-          fontFamily: BODY,
-        }}
-      >
-        <span>{label}</span>
-        <span>
-          Vraag {activeStep} / {totalSteps}
-        </span>
-      </div>
+    <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)" }} aria-label={`${label} voortgang`}>
       <div
         style={{
           height: "clamp(6px, 0.9vh, 8px)",

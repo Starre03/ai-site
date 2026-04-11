@@ -1,9 +1,11 @@
 import {
+  AI_FOLLOWUP_LABELS,
   AI_USAGE_LABELS,
   DISCLAIMER_TEXT,
   HOUR_MAP,
   LIMITATIONS_TEXT,
   PAIN_POINT_LABELS,
+  PAIN_POINT_OPTIONS_BY_PROCESS,
   PROCESS_LABELS,
   QUICKSCAN_VERSION,
   SAVINGS_SCENARIOS,
@@ -16,11 +18,11 @@ const MONTH_FACTOR = 4.33;
 
 const PROCESS_HOURLY_RATES = {
   klantcontact: 45,
-  administratie: 40,
+  administratie: 45,
   content: 55,
   offertes: 55,
   planning: 50,
-  data: 60,
+  data: 55,
 };
 
 const AI_FACTORS = {
@@ -33,19 +35,27 @@ const AI_FACTORS = {
 const CTA_BY_URGENCY = {
   laag: {
     ctaType: "soft",
-    label: "Bekijk hoe dit traject werkt",
+    label: "Bewaar dit rapport",
+    emailFollowUpAfterDays: 14,
+    showPhone: false,
   },
   interessant: {
     ctaType: "exploratory",
-    label: "Plan een verkennend gesprek",
+    label: "Plan een oriëntatiegesprek",
+    emailFollowUpAfterDays: null,
+    showPhone: false,
   },
   verbeteren: {
     ctaType: "intake",
-    label: "Plan een intake",
+    label: "Plan een gesprek deze week",
+    emailFollowUpAfterDays: null,
+    showPhone: false,
   },
   "snel-beter": {
     ctaType: "direct",
-    label: "Bespreek dit direct",
+    label: "Plan een gesprek deze week",
+    emailFollowUpAfterDays: null,
+    showPhone: false,
   },
 };
 
@@ -63,6 +73,8 @@ const PAIN_POINT_SUMMARIES = {
     "Losse vragen en berichten maken opvolging minder strak. Daardoor gaat tijd verloren aan zoeken, beoordelen en opnieuw afstemmen.",
   "leads-niet-opgevolgd":
     "Leadopvolging vraagt nu te veel handmatige aandacht. Daardoor blijven kansen langer liggen dan nodig.",
+  "leads-buiten-kantooruren":
+    "Aanvragen buiten kantooruren worden niet altijd direct opgepakt. Daardoor kan opvolging later starten dan nodig.",
   "informatie-verspreid":
     "Informatie staat te verspreid om snel te handelen. Dat kost overzicht, opvolging en snelheid.",
   "handmatig-antwoorden":
@@ -299,6 +311,50 @@ function formatCurrency(value) {
   }).format(value);
 }
 
+function getSelectedProcessTypes(answers) {
+  if (Array.isArray(answers.processTypes) && answers.processTypes.length > 0) {
+    return answers.processTypes;
+  }
+
+  return answers.processType ? [answers.processType] : [];
+}
+
+function getPrimaryProcessType(answers) {
+  return getSelectedProcessTypes(answers)[0] || "klantcontact";
+}
+
+function getPainPointProcessType(painPoint) {
+  return (
+    Object.entries(PAIN_POINT_OPTIONS_BY_PROCESS).find(([, options]) =>
+      options.some((option) => option.value === painPoint),
+    )?.[0] || null
+  );
+}
+
+function getFocusProcessType(answers) {
+  return getPainPointProcessType(answers.painPoint) || getPrimaryProcessType(answers);
+}
+
+function hasAnySelectedProcess(answers, processTypes) {
+  return getSelectedProcessTypes(answers).some((processType) => processTypes.includes(processType));
+}
+
+function getProcessLabelList(answers) {
+  return getSelectedProcessTypes(answers)
+    .map((processType) => PROCESS_LABELS[processType])
+    .filter(Boolean);
+}
+
+function formatProcessList(answers) {
+  const labels = getProcessLabelList(answers).map((label) => label.toLowerCase());
+
+  if (labels.length <= 1) {
+    return labels[0] || "het gekozen proces";
+  }
+
+  return `${labels.slice(0, -1).join(", ")} en ${labels[labels.length - 1]}`;
+}
+
 function getAiFactor(aiUsage) {
   return AI_FACTORS[aiUsage] ?? 1;
 }
@@ -337,8 +393,16 @@ function hasAnyTool(answers, tools) {
   return getSelectedTools(answers).some((tool) => tools.includes(tool));
 }
 
-function getHourlyRate(processType) {
-  return PROCESS_HOURLY_RATES[processType] || 50;
+function getHourlyRate(answers) {
+  const rates = getSelectedProcessTypes(answers)
+    .map((processType) => PROCESS_HOURLY_RATES[processType])
+    .filter(Boolean);
+
+  if (rates.length === 0) {
+    return 50;
+  }
+
+  return Math.round(rates.reduce((sum, rate) => sum + rate, 0) / rates.length);
 }
 
 export function quickscanLog(event, payload = {}) {
@@ -371,7 +435,7 @@ export function getTimeOpportunity(answers) {
 export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
   const timeOpportunity = getTimeOpportunity(answers);
   const scenario = SAVINGS_SCENARIOS[scenarioKey] || SAVINGS_SCENARIOS.gemiddeld;
-  const hourlyRate = getHourlyRate(answers.processType);
+  const hourlyRate = getHourlyRate(answers);
   const scenarioLow = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.low);
   const scenarioHigh = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.high);
   const monthlyLow = roundToTens(scenarioLow * hourlyRate * MONTH_FACTOR);
@@ -379,6 +443,7 @@ export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
   const yearlyLow = monthlyLow * 12;
   const yearlyHigh = monthlyHigh * 12;
   const formulaText = `Berekening: ~${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × €${hourlyRate}/u × 4,33`;
+  const timeInfoText = `Berekend op basis van ${formatHoursNumber(timeOpportunity.weeklyHours)} uur/week × gemiddeld uurtarief MKB (€45-55/u) × 4,3 weken`;
 
   return {
     scenario: scenarioKey,
@@ -395,16 +460,18 @@ export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
     yearlyHigh,
     yearlyLabel: `${formatCurrency(yearlyLow)} - ${formatCurrency(yearlyHigh)} per jaar`,
     formulaText,
+    timeInfoText,
     limitationsText: LIMITATIONS_TEXT,
     disclaimerText: DISCLAIMER_TEXT,
   };
 }
 
 export function getMainAiOpportunity(result) {
-  const processOptions = OPPORTUNITY_TITLES[result.answers.processType] || OPPORTUNITY_TITLES.klantcontact;
+  const focusProcessType = getFocusProcessType(result.answers);
+  const processOptions = OPPORTUNITY_TITLES[focusProcessType] || OPPORTUNITY_TITLES.klantcontact;
   const painPointTitle = processOptions[result.answers.painPoint] || processOptions.default;
 
-  if (result.answers.processType === "content") {
+  if (focusProcessType === "content") {
     if (hasAnyTool(result.answers, ["meta-google-ads", "emailmarketing"])) {
       return "Campagne-uitvoer stroomlijnen";
     }
@@ -414,7 +481,7 @@ export function getMainAiOpportunity(result) {
     }
   }
 
-  if (result.answers.processType === "data" && hasAnyTool(result.answers, ["dashboards-bi"])) {
+  if (focusProcessType === "data" && hasAnyTool(result.answers, ["dashboards-bi"])) {
     return "Inzicht sneller beschikbaar maken";
   }
 
@@ -423,7 +490,18 @@ export function getMainAiOpportunity(result) {
 
 export function getOpportunityBullets(result) {
   const selectedTools = getSelectedTools(result.answers);
-  const library = BULLET_LIBRARY[result.answers.processType] || BULLET_LIBRARY.klantcontact;
+  const focusProcessType = getFocusProcessType(result.answers);
+  const selectedProcessTypes = [
+    focusProcessType,
+    ...getSelectedProcessTypes(result.answers).filter((processType) => processType !== focusProcessType),
+  ].filter(Boolean);
+  const library = selectedProcessTypes.flatMap((processType, processIndex) =>
+    (BULLET_LIBRARY[processType] || []).map((item, index) => ({
+      ...item,
+      index,
+      processIndex,
+    })),
+  );
   const priorityTitle = PAIN_POINT_BULLET_PRIORITY[result.answers.painPoint];
 
   const ranked = library
@@ -433,25 +511,56 @@ export function getOpportunityBullets(result) {
       toolMatchCount: item.tools.filter((tool) => selectedTools.includes(tool)).length,
       painPointMatch: item.title === priorityTitle ? 1 : 0,
     }))
-    .sort((a, b) => b.painPointMatch - a.painPointMatch || b.toolMatchCount - a.toolMatchCount || a.index - b.index);
+    .sort(
+      (a, b) =>
+        b.painPointMatch - a.painPointMatch ||
+        b.toolMatchCount - a.toolMatchCount ||
+        a.processIndex - b.processIndex ||
+        a.index - b.index,
+    );
 
   return ranked.slice(0, 3).map((item) => item.title);
 }
 
 export function getPrimaryConclusion(result) {
-  return PRIMARY_CONCLUSIONS[result.answers.processType] || "Je grootste winst zit nu in het gekozen proces.";
+  const companyName = result.answers.companyName || "je bedrijf";
+  const focusLabel = PROCESS_LABELS[getFocusProcessType(result.answers)]?.toLowerCase() || "het gekozen proces";
+
+  return `Het grootste verlies bij ${companyName} zit nu in ${focusLabel}.`;
 }
 
 function getConclusionSummary(result) {
-  return (
+  const summary =
     PAIN_POINT_SUMMARIES[result.answers.painPoint] ||
-    "De gekozen stap vraagt nu waarschijnlijk te veel handwerk of afstemming. Daar zit ruimte om het proces slimmer in te richten."
+    "De gekozen stap vraagt nu waarschijnlijk te veel handwerk of afstemming. Daar zit ruimte om het proces slimmer in te richten.";
+  const secondaryProcessTypes = getSelectedProcessTypes(result.answers).filter(
+    (processType) => processType !== getFocusProcessType(result.answers),
   );
+  const secondaryText = secondaryProcessTypes.length
+    ? ` Ook ${secondaryProcessTypes.map((processType) => PROCESS_LABELS[processType]?.toLowerCase()).filter(Boolean).join(" en ")} telt mee in deze analyse.`
+    : "";
+  const aiIssueText = result.answers.aiIssue
+    ? ` Je gaf ook aan dat ${AI_FOLLOWUP_LABELS[result.answers.aiIssue]?.toLowerCase()} bij AI-gebruik nog niet goed werkt.`
+    : "";
+
+  return `${summary}${secondaryText}${aiIssueText}`;
 }
 
 export function getRecommendedNextStep(result) {
   const { answers } = result;
   const selectedToolCount = getToolsCount(answers);
+
+  if (answers.aiUsage === "vast-onderdeel" && answers.aiIssue === "kwaliteit-wisselvallig") {
+    return "optimization";
+  }
+
+  if (answers.aiIssue === "team-gebruikt-niet") {
+    return "advice";
+  }
+
+  if (answers.aiIssue === "verder-automatiseren" && hasAnySelectedProcess(answers, ["planning", "klantcontact"])) {
+    return "agents";
+  }
 
   if (selectedToolCount >= 5 && answers.aiUsage === "vast-onderdeel") {
     return "optimization";
@@ -462,7 +571,7 @@ export function getRecommendedNextStep(result) {
   }
 
   if (
-    ["planning", "klantcontact"].includes(answers.processType) &&
+    hasAnySelectedProcess(answers, ["planning", "klantcontact"]) &&
     hasAnyTool(answers, ["crm", "whatsapp", "whatsapp-chat", "agenda-planning", "projectmanagement"]) &&
     ["verbeteren", "snel-beter"].includes(answers.urgency)
   ) {
@@ -470,7 +579,7 @@ export function getRecommendedNextStep(result) {
   }
 
   if (
-    answers.processType === "content" &&
+    hasAnySelectedProcess(answers, ["content"]) &&
     hasAnyTool(answers, ["social-media", "canva-design", "emailmarketing", "meta-google-ads"])
   ) {
     return selectedToolCount <= 1 && answers.aiUsage === "nog-niet" ? "audit" : "integrations";
@@ -498,7 +607,7 @@ export function getSecondaryService(result) {
     return "integrations";
   }
 
-  if (primaryService === "integrations" && ["planning", "klantcontact"].includes(result.answers.processType)) {
+  if (primaryService === "integrations" && hasAnySelectedProcess(result.answers, ["planning", "klantcontact"])) {
     return "agents";
   }
 
@@ -562,6 +671,9 @@ export function getCTA(result) {
             : "gerichte-implementatie",
     buttonLabel: urgencyCta.label,
     primaryButtonLabel: urgencyCta.label,
+    emailFollowUpAfterDays: urgencyCta.emailFollowUpAfterDays,
+    showPhone: urgencyCta.showPhone,
+    phonePending: urgencyCta.ctaType === "intake" || urgencyCta.ctaType === "direct",
     href: "#quickscan-contact",
     body:
       primaryService === "audit"
@@ -595,8 +707,10 @@ export function buildSubmissionPayload(result, contact) {
     savings: result.savings,
     diagnosis: {
       processLabel: PROCESS_LABELS[result.answers.processType] || "",
+      processLabels: getProcessLabelList(result.answers),
       painPointLabel: PAIN_POINT_LABELS[result.answers.painPoint] || "",
       aiUsageLabel: AI_USAGE_LABELS[result.answers.aiUsage] || "",
+      aiIssueLabel: AI_FOLLOWUP_LABELS[result.answers.aiIssue] || "",
       urgencyLabel: URGENCY_LABELS[result.answers.urgency] || "",
       toolLabels: result.answers.tools.map((tool) => TOOL_LABELS[tool] || tool),
       summary: result.diagnosis.summary,
@@ -607,6 +721,7 @@ export function buildSubmissionPayload(result, contact) {
     routing: result.routing,
     contact: {
       name: contact.name.trim(),
+      companyName: contact.companyName?.trim() || result.answers.companyName || "",
       email: contact.email.trim(),
       marketingOptIn: contact.marketingOptIn,
     },
@@ -619,12 +734,21 @@ export function buildSubmissionPayload(result, contact) {
 }
 
 export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
+  const normalizedProcessTypes = Array.isArray(answers.processTypes)
+    ? answers.processTypes
+    : answers.processType
+      ? [answers.processType]
+      : [];
   const normalizedAnswers = {
-    processType: answers.processType || "",
+    name: answers.name || "",
+    companyName: answers.companyName || "",
+    processTypes: normalizedProcessTypes,
+    processType: normalizedProcessTypes[0] || "",
     painPoint: answers.painPoint || "",
     weeklyHours: answers.weeklyHours || "",
     tools: Array.isArray(answers.tools) ? answers.tools : [],
     aiUsage: answers.aiUsage || "",
+    aiIssue: answers.aiIssue || "",
     urgency: answers.urgency || "",
   };
 
@@ -667,6 +791,8 @@ export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
     recommendations,
     routing,
     opportunityLabel: mainAiOpportunity,
+    processLabel: PROCESS_LABELS[getFocusProcessType(normalizedAnswers)] || "",
+    processLabels: getProcessLabelList(normalizedAnswers),
     hero: {
       headline: primaryConclusion,
       summary: diagnosis.summary,
