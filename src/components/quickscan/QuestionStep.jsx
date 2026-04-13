@@ -13,6 +13,8 @@ export default function QuestionStep({
   errors = {},
   onProfileChange,
   onSingleSelect,
+  onHourlyValueRangeSelect,
+  onHourlyValueManualChange,
   onToolToggle,
   onClearTools,
   onBack,
@@ -41,6 +43,9 @@ export default function QuestionStep({
     fontFamily: BODY,
     fontSize: "clamp(0.92rem, min(1.5vw, 2vh), 0.96rem)",
   };
+
+  const manualHourlyValue = answers.hourlyValueManual || "";
+  const selectedHourlyRange = answers.hourlyValueRange || "";
 
   return (
     <section
@@ -129,6 +134,58 @@ export default function QuestionStep({
           </div>
         ) : null}
 
+        {question.kind === "hourly-value" ? (
+          <div style={{ display: "grid", gap: "clamp(14px, 2vh, 16px)", justifyItems: "center" }}>
+            <div style={answerGridStyle}>
+              {question.options.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  style={getChipStyle({ active: selectedHourlyRange === option.value && !manualHourlyValue })}
+                  onClick={() => onHourlyValueRangeSelect(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ width: "min(1028px, 100%)", display: "grid", gap: "clamp(8px, 1.2vh, 10px)", justifyItems: "center" }}>
+              <span style={{ color: C.textSoft, fontFamily: BODY, fontSize: "clamp(0.88rem, min(1.35vw, 1.9vh), 0.92rem)" }}>
+                Of vul zelf een uurwaarde in
+              </span>
+              <div style={{ width: "min(320px, 100%)", position: "relative" }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: 16,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: C.textSoft,
+                    fontFamily: BODY,
+                    fontSize: "clamp(0.92rem, min(1.5vw, 2vh), 0.96rem)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  €
+                </span>
+                <input
+                  inputMode="numeric"
+                  type="text"
+                  placeholder="Bijvoorbeeld 65"
+                  value={manualHourlyValue}
+                  onChange={(event) => onHourlyValueManualChange(event.target.value)}
+                  style={{
+                    ...fieldStyle,
+                    paddingLeft: 34,
+                    textAlign: "left",
+                  }}
+                />
+              </div>
+              {errors.hourlyValue ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.hourlyValue}</span> : null}
+            </div>
+          </div>
+        ) : null}
+
         {isMulti ? (
           <>
             <div style={answerGridStyle}>
@@ -171,7 +228,7 @@ export default function QuestionStep({
           <button type="button" style={getSecondaryButtonStyle()} onClick={onBack}>
             Vorige
           </button>
-          {question.kind === "profile" || isMulti ? (
+          {question.kind === "profile" || question.kind === "hourly-value" || isMulti ? (
             <button type="button" style={getPrimaryButtonStyle(false)} onClick={onNext}>
               Verder
             </button>

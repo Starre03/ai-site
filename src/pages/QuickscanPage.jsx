@@ -12,6 +12,7 @@ import { BODY, C } from "../lib/theme";
 import {
   getAiFollowupQuestionTitle,
   getAiUsageQuestionTitle,
+  getHourlyValueQuestionTitle,
   getPainPointOptions,
   getPainPointQuestionTitle,
   getToolOptions,
@@ -28,6 +29,8 @@ function createInitialAnswers() {
     processType: "",
     painPoint: "",
     weeklyHours: "",
+    hourlyValueRange: "",
+    hourlyValueManual: "",
     tools: [],
     aiUsage: "",
     aiIssue: "",
@@ -51,6 +54,13 @@ function getDynamicQuestion(stepId, answers) {
     return {
       ...baseQuestion,
       options: getToolOptions(answers.processType),
+    };
+  }
+
+  if (baseQuestion.id === "hourlyValue") {
+    return {
+      ...baseQuestion,
+      title: getHourlyValueQuestionTitle(answers.painPoint, answers.processType),
     };
   }
 
@@ -158,6 +168,18 @@ export default function QuickscanPage() {
       }
     }
 
+    if (currentQuestion?.kind === "hourly-value") {
+      const hasRange = Boolean(answers.hourlyValueRange);
+      const hasManualValue = Number.parseFloat(answers.hourlyValueManual) > 0;
+
+      if (!hasRange && !hasManualValue) {
+        setErrors({
+          hourlyValue: "Kies een range of vul zelf een uurwaarde in.",
+        });
+        return;
+      }
+    }
+
     setErrors({});
     setScreenIndex((current) => Math.min(flowStepIds.length - 1, current + 1));
   }
@@ -193,6 +215,32 @@ export default function QuickscanPage() {
     });
     setErrors({});
     setScreenIndex((current) => Math.min(getFlowStepIds({ ...answers, [key]: value }).length - 1, current + 1));
+  }
+
+  function handleHourlyValueRangeSelect(value) {
+    setAnswers((current) => ({
+      ...current,
+      hourlyValueRange: current.hourlyValueRange === value ? "" : value,
+      hourlyValueManual: "",
+    }));
+    setErrors((current) => ({
+      ...current,
+      hourlyValue: "",
+    }));
+  }
+
+  function handleHourlyValueManualChange(value) {
+    const sanitizedValue = value.replace(/[^\d]/g, "");
+
+    setAnswers((current) => ({
+      ...current,
+      hourlyValueManual: sanitizedValue,
+      hourlyValueRange: sanitizedValue ? "" : current.hourlyValueRange,
+    }));
+    setErrors((current) => ({
+      ...current,
+      hourlyValue: "",
+    }));
   }
 
   function handleMultiToggle(key, value) {
@@ -457,6 +505,8 @@ export default function QuickscanPage() {
             errors={errors}
             onProfileChange={handleProfileChange}
             onSingleSelect={handleSingleSelect}
+            onHourlyValueRangeSelect={handleHourlyValueRangeSelect}
+            onHourlyValueManualChange={handleHourlyValueManualChange}
             onToolToggle={handleMultiToggle}
             onClearTools={() => setAnswers((current) => ({ ...current, tools: [] }))}
             onBack={handleBack}

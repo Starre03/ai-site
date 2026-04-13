@@ -109,7 +109,18 @@ function SummaryCard({ label, value, note, details, accent = false }) {
         ) : null}
       </span>
       <strong style={{ color: C.text, fontFamily: BODY, fontSize: "clamp(1.05rem, min(2vw, 2.8vh), 1.28rem)", lineHeight: 1.15 }}>{value}</strong>
-      {note ? <span style={{ color: C.textSoft, fontSize: "clamp(0.82rem, min(1.2vw, 1.65vh), 0.88rem)", lineHeight: 1.4 }}>{note}</span> : null}
+      {note ? (
+        <span
+          style={{
+            color: C.textSoft,
+            fontSize: "clamp(0.82rem, min(1.2vw, 1.65vh), 0.88rem)",
+            lineHeight: 1.4,
+            whiteSpace: "pre-line",
+          }}
+        >
+          {note}
+        </span>
+      ) : null}
     </div>
   );
 }
@@ -228,7 +239,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         <SummaryCard
           label="Geld"
           value={`${formatCurrency(result.savings.monthlyLow)} - ${formatCurrency(result.savings.monthlyHigh)} p/m`}
-          note="Potentieel per maand"
+          note={`${result.savings.yearlyLabel}\nDit is een indicatie op basis van jouw antwoorden en inschattingen.`}
           details={result.savings.timeInfoText}
           accent
         />

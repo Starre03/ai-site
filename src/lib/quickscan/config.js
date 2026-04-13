@@ -6,6 +6,7 @@ export const STEP_IDS = [
   "v1-proces",
   "v2-knelpunt",
   "v3-uren",
+  "v3-uurwaarde",
   "v4-tools",
   "v5-ai",
   "v5-ai-frictie",
@@ -157,6 +158,48 @@ const AI_USAGE_TITLE_BY_PAIN_POINT = {
   "inzicht-te-laat": "Gebruik je al AI om sneller inzicht uit data te halen?",
 };
 
+const HOURLY_VALUE_TITLE_BY_PAIN_POINT = {
+  "losse-vragen-berichten": "Wat is een uur klantvragen beantwoorden ongeveer waard?",
+  "leads-niet-opgevolgd": "Wat is een uur lead- en klantopvolging ongeveer waard?",
+  "leads-buiten-kantooruren": "Wat is een uur leadopvolging buiten kantooruren ongeveer waard?",
+  "informatie-verspreid": "Wat is een uur klantinformatie uitzoeken ongeveer waard?",
+  "overdracht-kost-tijd": "Wat kost een uur overdracht en opvolging ongeveer?",
+  "gegevens-overzetten": "Wat kost een uur invoer en verwerking ongeveer?",
+  "invoer-controles": "Wat kost een uur controles en administratie ongeveer?",
+  "documenten-facturen": "Wat kost een uur document- en factuurverwerking ongeveer?",
+  "overzichten-maken": "Wat kost een uur overzichten maken ongeveer?",
+  "fouten-herstellen": "Wat kost een uur fouten controleren en herstellen ongeveer?",
+  "briefings-input": "Wat is een uur contentvoorbereiding ongeveer waard?",
+  "content-handwerk": "Wat is een uur content maken ongeveer waard?",
+  "feedback-afstemming": "Wat is een uur content consistent uitwerken ongeveer waard?",
+  "publicatie-planning": "Wat is een uur publiceren en plannen ongeveer waard?",
+  "campagnes-doorvertalen": "Wat is een uur campagne-uitvoer ongeveer waard?",
+  "offertes-opstellen": "Wat is een uur offertewerk ongeveer waard?",
+  "documenten-aanpassen": "Wat is een uur documentwerk ongeveer waard?",
+  "versies-feedback": "Wat is een uur feedback en versiebeheer ongeveer waard?",
+  "dossiers-opbouwen": "Wat is een uur dossieropbouw ongeveer waard?",
+  "informatie-opnieuw-invullen": "Wat kost een uur gegevens opnieuw invullen ongeveer?",
+  "planning-handwerk": "Wat kost een uur plannen en afstemmen ongeveer?",
+  "overdracht-onduidelijk": "Wat kost een uur overdracht en afstemming ongeveer?",
+  "taken-versnipperd": "Wat kost een uur taken en afspraken organiseren ongeveer?",
+  "losse-berichten": "Wat kost een uur interne afstemming ongeveer?",
+  "opvolging-niet-strak": "Wat kost een uur interne opvolging ongeveer?",
+  "data-verzamelen": "Wat is een uur data verzamelen ongeveer waard?",
+  "rapportages-langzaam": "Wat is een uur rapportagewerk ongeveer waard?",
+  "te-veel-bronnen": "Wat is een uur informatie bundelen ongeveer waard?",
+  "controle-opschoning": "Wat is een uur data opschonen ongeveer waard?",
+  "inzicht-te-laat": "Wat is een uur analyse en rapportage ongeveer waard?",
+};
+
+const HOURLY_VALUE_TITLE_BY_PROCESS = {
+  klantcontact: "Wat is een uur klantcontact en opvolging ongeveer waard?",
+  administratie: "Wat kost een uur administratie en invoer ongeveer?",
+  content: "Wat is een uur content en marketing ongeveer waard?",
+  offertes: "Wat is een uur offerte- en documentwerk ongeveer waard?",
+  planning: "Wat kost een uur planning en interne afstemming ongeveer?",
+  data: "Wat is een uur data en rapportages ongeveer waard?",
+};
+
 const AI_FOLLOWUP_TITLE_BY_PAIN_POINT = {
   "losse-vragen-berichten": "Wat werkt nog niet goed aan hoe je AI terugkerende vragen laat ondersteunen?",
   "leads-niet-opgevolgd": "Wat werkt nog niet goed aan hoe je AI voor opvolging inzet?",
@@ -226,6 +269,19 @@ export const QUESTIONS = [
     ],
   },
   {
+    id: "hourlyValue",
+    stepId: "v3-uurwaarde",
+    kind: "hourly-value",
+    title: "Wat is ongeveer een uur in jouw bedrijf waard?",
+    description: "Schatting is prima. Dit gebruiken we alleen voor een realistischer indicatie.",
+    options: [
+      { value: "25-50", label: "€25-€50" },
+      { value: "50-75", label: "€50-€75" },
+      { value: "75-100", label: "€75-€100" },
+      { value: "100+", label: "€100+" },
+    ],
+  },
+  {
     id: "tools",
     stepId: "v4-tools",
     kind: "multi",
@@ -262,9 +318,9 @@ export const QUESTIONS = [
     kind: "single",
     title: "Hoe belangrijk is het om dit binnenkort te verbeteren?",
     options: [
-      { value: "laag", label: "Heeft nu weinig prioriteit" },
-      { value: "interessant", label: "Is relevant, maar kan wachten" },
-      { value: "verbeteren", label: "Dit wil ik binnenkort aanpakken" },
+      { value: "laag", label: "Nu nog niet zo belangrijk" },
+      { value: "interessant", label: "Wel belangrijk, maar geen haast" },
+      { value: "verbeteren", label: "Dit wil ik binnenkort verbeteren" },
       { value: "snel-beter", label: "Dit wil ik zo snel mogelijk verbeteren" },
     ],
   },
@@ -293,6 +349,11 @@ export const getAiUsageQuestionTitle = (painPoint) =>
 
 export const getAiFollowupQuestionTitle = (painPoint) =>
   AI_FOLLOWUP_TITLE_BY_PAIN_POINT[painPoint] || "Wat werkt nog niet goed aan hoe je AI nu inzet?";
+
+export const getHourlyValueQuestionTitle = (painPoint, processType) =>
+  HOURLY_VALUE_TITLE_BY_PAIN_POINT[painPoint] ||
+  HOURLY_VALUE_TITLE_BY_PROCESS[processType] ||
+  "Wat is een uur van dit werk ongeveer waard?";
 
 export const PAIN_POINT_LABELS = Object.fromEntries(
   Object.values(PAIN_POINT_OPTIONS_BY_PROCESS)
@@ -345,9 +406,9 @@ export const AI_FOLLOWUP_OPTIONS = [
 export const AI_FOLLOWUP_LABELS = Object.fromEntries(AI_FOLLOWUP_OPTIONS.map((option) => [option.value, option.label]));
 
 export const URGENCY_LABELS = {
-  laag: "Heeft nu weinig prioriteit",
-  interessant: "Is relevant, maar kan wachten",
-  verbeteren: "Dit wil ik binnenkort aanpakken",
+  laag: "Nu nog niet zo belangrijk",
+  interessant: "Wel belangrijk, maar geen haast",
+  verbeteren: "Dit wil ik binnenkort verbeteren",
   "snel-beter": "Dit wil ik zo snel mogelijk verbeteren",
 };
 
@@ -358,6 +419,13 @@ export const HOUR_MAP = {
   "10-20": 15,
   "20-50": 35,
   "50+": 60,
+};
+
+export const HOURLY_VALUE_RANGE_MAP = {
+  "25-50": { low: 25, high: 50, label: "€25-€50" },
+  "50-75": { low: 50, high: 75, label: "€50-€75" },
+  "75-100": { low: 75, high: 100, label: "€75-€100" },
+  "100+": { low: 100, high: 125, label: "€100+" },
 };
 
 export const SAVINGS_SCENARIOS = {

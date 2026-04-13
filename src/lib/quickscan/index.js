@@ -3,6 +3,7 @@ import {
   AI_USAGE_LABELS,
   DISCLAIMER_TEXT,
   HOUR_MAP,
+  HOURLY_VALUE_RANGE_MAP,
   LIMITATIONS_TEXT,
   PAIN_POINT_LABELS,
   PAIN_POINT_OPTIONS_BY_PROCESS,
@@ -15,15 +16,6 @@ import {
 } from "./config.js";
 
 const MONTH_FACTOR = 4.33;
-
-const PROCESS_HOURLY_RATES = {
-  klantcontact: 45,
-  administratie: 45,
-  content: 55,
-  offertes: 55,
-  planning: 50,
-  data: 55,
-};
 
 const AI_FACTORS = {
   "nog-niet": 1,
@@ -68,6 +60,39 @@ const PRIMARY_CONCLUSIONS = {
   data: "Je grootste winst zit nu in data en rapportages.",
 };
 
+const PRIMARY_CONCLUSION_DETAILS = {
+  "losse-vragen-berichten": "het beantwoorden van terugkerende vragen",
+  "leads-niet-opgevolgd": "lead- en klantopvolging",
+  "leads-buiten-kantooruren": "opvolging buiten kantooruren",
+  "informatie-verspreid": "het zoeken en bundelen van klantinformatie",
+  "overdracht-kost-tijd": "overdracht en opvolging",
+  "gegevens-overzetten": "handmatige invoer en verwerking",
+  "invoer-controles": "controles en administratie",
+  "documenten-facturen": "document- en factuurverwerking",
+  "overzichten-maken": "het maken van overzichten",
+  "fouten-herstellen": "foutcontrole en herstel",
+  "briefings-input": "briefing en voorbereiding",
+  "content-handwerk": "contentproductie",
+  "feedback-afstemming": "consistentie en vaste contentlijnen",
+  "publicatie-planning": "publicatie en planning",
+  "campagnes-doorvertalen": "campagne-uitvoer",
+  "offertes-opstellen": "offerte-opbouw",
+  "documenten-aanpassen": "documentaanpassingen",
+  "versies-feedback": "feedback en versiebeheer",
+  "dossiers-opbouwen": "dossieropbouw",
+  "informatie-opnieuw-invullen": "het opnieuw invullen van gegevens",
+  "planning-handwerk": "heen-en-weer in planning en afstemming",
+  "overdracht-onduidelijk": "overdracht tussen mensen",
+  "taken-versnipperd": "taken en afspraken",
+  "losse-berichten": "interne afstemming via losse berichten",
+  "opvolging-niet-strak": "interne opvolging",
+  "data-verzamelen": "dataverzameling",
+  "rapportages-langzaam": "rapportage-opbouw",
+  "te-veel-bronnen": "het bundelen van informatie uit verschillende bronnen",
+  "controle-opschoning": "controle en opschoning",
+  "inzicht-te-laat": "analyse en rapportage",
+};
+
 const PAIN_POINT_SUMMARIES = {
   "losse-vragen-berichten":
     "Losse vragen en berichten maken opvolging minder strak. Daardoor gaat tijd verloren aan zoeken, beoordelen en opnieuw afstemmen.",
@@ -96,7 +121,7 @@ const PAIN_POINT_SUMMARIES = {
   "content-handwerk":
     "Content maken vraagt nu te veel losse handmatige stappen. Daardoor stokt de uitvoering sneller dan nodig.",
   "feedback-afstemming":
-    "Feedback en afstemming vertragen de uitvoering. Meer structuur kan de doorlooptijd duidelijk verkorten.",
+    "Consistentie kost nu te veel correctie- en afstemwerk. Vaste formats en een scherpere lijn kunnen de uitvoering duidelijk versnellen.",
   "publicatie-planning":
     "Publicatie en planning kosten nu te veel handwerk. Juist de vertaalslag naar kanalen kan slimmer worden ingericht.",
   "campagnes-doorvertalen":
@@ -150,6 +175,7 @@ const OPPORTUNITY_TITLES = {
     default: "Content en marketing versnellen",
     "campagnes-doorvertalen": "Campagne-uitvoer stroomlijnen",
     "content-handwerk": "Contentproductie structureren",
+    "feedback-afstemming": "Content consistenter uitwerken",
     "publicatie-planning": "Publicatie en planning stroomlijnen",
   },
   offertes: {
@@ -170,6 +196,45 @@ const OPPORTUNITY_TITLES = {
     "te-veel-bronnen": "Dataverwerking stroomlijnen",
     "controle-opschoning": "Controlewerk verminderen",
   },
+};
+
+const TOOL_SPECIFIC_OPPORTUNITY_TITLES = {
+  content: [
+    { tools: ["social-media", "contentplanning-notion"], title: "Social content en planning versnellen" },
+    { tools: ["meta-google-ads"], title: "Campagnevarianten sneller uitwerken" },
+    { tools: ["emailmarketing"], title: "E-mailcampagnes sneller opbouwen" },
+    { tools: ["canva-design"], title: "Design- en contentproductie versnellen" },
+  ],
+  klantcontact: [
+    { tools: ["whatsapp"], title: "WhatsApp-opvolging stroomlijnen" },
+    { tools: ["crm"], title: "CRM-opvolging strakker maken" },
+    { tools: ["supporttool"], title: "Supportvragen sneller afhandelen" },
+    { tools: ["agenda-planning"], title: "Opvolging en planning verbinden" },
+  ],
+  administratie: [
+    { tools: ["boekhouding"], title: "Boekhoudverwerking versnellen" },
+    { tools: ["excel-sheets"], title: "Excel-invoer en controles verminderen" },
+    { tools: ["erp-administratiepakket"], title: "ERP-verwerking slimmer inrichten" },
+    { tools: ["documentopslag"], title: "Documentverwerking stroomlijnen" },
+  ],
+  offertes: [
+    { tools: ["esigning-akkoordtools"], title: "Akkoordflow versnellen" },
+    { tools: ["microsoft-365-word-excel"], title: "Offertes en documenten standaardiseren" },
+    { tools: ["google-docs-drive"], title: "Documentfeedback sneller verwerken" },
+    { tools: ["crm"], title: "Klantgegevens direct in offertes gebruiken" },
+  ],
+  planning: [
+    { tools: ["projectmanagement"], title: "Taken en opvolging centraliseren" },
+    { tools: ["agenda-planning"], title: "Planning sneller afstemmen" },
+    { tools: ["whatsapp-chat"], title: "Losse afstemming naar structuur brengen" },
+    { tools: ["microsoft-google-docs"], title: "Overdracht en afspraken bundelen" },
+  ],
+  data: [
+    { tools: ["dashboards-bi"], title: "Dashboard-updates versnellen" },
+    { tools: ["excel-sheets"], title: "Excel-rapportages sneller opbouwen" },
+    { tools: ["crm", "erp-administratiepakket"], title: "Data uit systemen slimmer bundelen" },
+    { tools: ["microsoft-google-docs"], title: "Rapportage-input centraliseren" },
+  ],
 };
 
 const BULLET_LIBRARY = {
@@ -393,16 +458,38 @@ function hasAnyTool(answers, tools) {
   return getSelectedTools(answers).some((tool) => tools.includes(tool));
 }
 
-function getHourlyRate(answers) {
-  const rates = getSelectedProcessTypes(answers)
-    .map((processType) => PROCESS_HOURLY_RATES[processType])
-    .filter(Boolean);
+function getToolSpecificOpportunityTitle(answers, processType) {
+  const options = TOOL_SPECIFIC_OPPORTUNITY_TITLES[processType] || [];
+  const selectedTools = getSelectedTools(answers);
+  const ranked = options
+    .map((option) => ({
+      ...option,
+      matchCount: option.tools.filter((tool) => selectedTools.includes(tool)).length,
+    }))
+    .filter((option) => option.matchCount > 0)
+    .sort((a, b) => b.matchCount - a.matchCount || b.tools.length - a.tools.length);
 
-  if (rates.length === 0) {
-    return 50;
+  return ranked[0]?.title || null;
+}
+
+function getHourlyValueInput(answers) {
+  const manualValue = Number.parseFloat(answers.hourlyValueManual);
+
+  if (Number.isFinite(manualValue) && manualValue > 0) {
+    return {
+      source: "manual",
+      low: manualValue,
+      high: manualValue,
+      label: `€${Math.round(manualValue)}`,
+    };
   }
 
-  return Math.round(rates.reduce((sum, rate) => sum + rate, 0) / rates.length);
+  return HOURLY_VALUE_RANGE_MAP[answers.hourlyValueRange] || {
+    source: "range",
+    low: 50,
+    high: 75,
+    label: "€50-€75",
+  };
 }
 
 export function quickscanLog(event, payload = {}) {
@@ -435,15 +522,15 @@ export function getTimeOpportunity(answers) {
 export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
   const timeOpportunity = getTimeOpportunity(answers);
   const scenario = SAVINGS_SCENARIOS[scenarioKey] || SAVINGS_SCENARIOS.gemiddeld;
-  const hourlyRate = getHourlyRate(answers);
+  const hourlyValue = getHourlyValueInput(answers);
   const scenarioLow = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.low);
   const scenarioHigh = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.high);
-  const monthlyLow = roundToTens(scenarioLow * hourlyRate * MONTH_FACTOR);
-  const monthlyHigh = roundToTens(scenarioHigh * hourlyRate * MONTH_FACTOR);
+  const monthlyLow = roundToTens(scenarioLow * hourlyValue.low * MONTH_FACTOR);
+  const monthlyHigh = roundToTens(scenarioHigh * hourlyValue.high * MONTH_FACTOR);
   const yearlyLow = monthlyLow * 12;
   const yearlyHigh = monthlyHigh * 12;
-  const formulaText = `Berekening: ~${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × €${hourlyRate}/u × 4,33`;
-  const timeInfoText = `Berekend op basis van ${formatHoursNumber(timeOpportunity.weeklyHours)} uur/week × gemiddeld uurtarief MKB (€45-55/u) × 4,3 weken`;
+  const formulaText = `Berekening: ~${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × ${hourlyValue.label} × 4,3`;
+  const timeInfoText = `Indicatie op basis van jouw input (${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × ${hourlyValue.label} × 4,3 weken)`;
 
   return {
     scenario: scenarioKey,
@@ -452,7 +539,7 @@ export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
     weeklyLow: scenarioLow,
     weeklyHigh: scenarioHigh,
     weeklySavingsLabel: formatImpactRange(scenarioLow, scenarioHigh),
-    hourlyRate,
+    hourlyValue,
     monthlyLow,
     monthlyHigh,
     monthlyLabel: `${formatCurrency(monthlyLow)} - ${formatCurrency(monthlyHigh)} p/m`,
@@ -470,6 +557,11 @@ export function getMainAiOpportunity(result) {
   const focusProcessType = getFocusProcessType(result.answers);
   const processOptions = OPPORTUNITY_TITLES[focusProcessType] || OPPORTUNITY_TITLES.klantcontact;
   const painPointTitle = processOptions[result.answers.painPoint] || processOptions.default;
+  const toolSpecificTitle = getToolSpecificOpportunityTitle(result.answers, focusProcessType);
+
+  if (toolSpecificTitle) {
+    return toolSpecificTitle;
+  }
 
   if (focusProcessType === "content") {
     if (hasAnyTool(result.answers, ["meta-google-ads", "emailmarketing"])) {
@@ -519,12 +611,20 @@ export function getOpportunityBullets(result) {
         a.index - b.index,
     );
 
-  return ranked.slice(0, 3).map((item) => item.title);
+  return ranked
+    .filter((item, index, items) => items.findIndex((other) => other.title === item.title) === index)
+    .slice(0, 3)
+    .map((item) => item.title);
 }
 
 export function getPrimaryConclusion(result) {
   const companyName = result.answers.companyName || "je bedrijf";
   const focusLabel = PROCESS_LABELS[getFocusProcessType(result.answers)]?.toLowerCase() || "het gekozen proces";
+  const painPointDetail = PRIMARY_CONCLUSION_DETAILS[result.answers.painPoint];
+
+  if (painPointDetail) {
+    return `Het grootste verlies bij ${companyName} zit nu in ${focusLabel}, vooral in ${painPointDetail}.`;
+  }
 
   return `Het grootste verlies bij ${companyName} zit nu in ${focusLabel}.`;
 }
@@ -713,6 +813,7 @@ export function buildSubmissionPayload(result, contact) {
       aiIssueLabel: AI_FOLLOWUP_LABELS[result.answers.aiIssue] || "",
       urgencyLabel: URGENCY_LABELS[result.answers.urgency] || "",
       toolLabels: result.answers.tools.map((tool) => TOOL_LABELS[tool] || tool),
+      hourlyValueLabel: result.savings.hourlyValue.label,
       summary: result.diagnosis.summary,
       readinessLabel: result.diagnosis.readinessLabel,
       opportunityLabel: result.opportunityLabel,
@@ -746,6 +847,8 @@ export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
     processType: normalizedProcessTypes[0] || "",
     painPoint: answers.painPoint || "",
     weeklyHours: answers.weeklyHours || "",
+    hourlyValueRange: answers.hourlyValueRange || "",
+    hourlyValueManual: answers.hourlyValueManual || "",
     tools: Array.isArray(answers.tools) ? answers.tools : [],
     aiUsage: answers.aiUsage || "",
     aiIssue: answers.aiIssue || "",
@@ -766,7 +869,7 @@ export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
     yearlyLow: savings.yearlyLow,
     yearlyHigh: savings.yearlyHigh,
     yearlyLabel: savings.yearlyLabel,
-    hourlyRate: savings.hourlyRate,
+    hourlyValue: savings.hourlyValue,
   };
   const mainAiOpportunity = getMainAiOpportunity(resultContext);
   const opportunityBullets = getOpportunityBullets(resultContext);
