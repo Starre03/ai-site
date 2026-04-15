@@ -180,8 +180,430 @@ function getMicroTitle(title) {
   return getCompactTitle(title);
 }
 
+const CLASSIFICATION_DESCRIPTIONS = {
+  "Grote AI-kans": "Er ligt nu een duidelijke en direct relevante AI-kans in je proces.",
+  "Sterke AI-kans": "Je hebt een sterke AI-kans, met concrete winst in tijd en efficiëntie.",
+  "Duidelijke AI-kans": "Er zijn duidelijke AI-kansen zichtbaar, vooral in repetitief of handmatig werk.",
+  "AI-kans in opbouw": "Er zijn aanknopingspunten voor AI, maar de directe winst lijkt nog beperkter.",
+  Verkenningsfase: "Je zit nog in een vroege fase waarin AI vooral interessant is om te verkennen.",
+};
+
+const SCORE_DIMENSIONS = [
+  { key: "d1_tijdverlies", label: "Tijdverlies" },
+  { key: "d2_automatiseerbaarheid", label: "Automatiseerbaarheid" },
+  { key: "d3_koopbereidheid", label: "Koopbereidheid" },
+  { key: "d4_geldverlies", label: "Geldverlies" },
+];
+
+function getDimensionLevel(value) {
+  if (value >= 17) return "Hoog";
+  if (value >= 9) return "Gemiddeld";
+  return "Laag";
+}
+
+function getDimensionExplanation(key, value) {
+  const level = getDimensionLevel(value);
+
+  if (key === "d1_tijdverlies") {
+    if (level === "Hoog") return "Er gaat nu structureel veel tijd verloren in terugkerend werk.";
+    if (level === "Gemiddeld") return "Er zit merkbare tijdsdruk in dit proces, maar niet op elk onderdeel even zwaar.";
+    return "Het directe tijdverlies lijkt nu beperkter of meer geconcentreerd op een kleiner onderdeel.";
+  }
+
+  if (key === "d2_automatiseerbaarheid") {
+    if (level === "Hoog") return "Dit werk leent zich relatief goed voor standaardisatie, AI-ondersteuning of automatisering.";
+    if (level === "Gemiddeld") return "Er liggen kansen voor AI, maar waarschijnlijk niet overal even direct of schaalbaar.";
+    return "Een deel van dit werk vraagt waarschijnlijk nog meer maatwerk of afstemming dan automatisering.";
+  }
+
+  if (key === "d3_koopbereidheid") {
+    if (level === "Hoog") return "Je antwoorden laten zien dat er duidelijke bereidheid is om dit echt te verbeteren.";
+    if (level === "Gemiddeld") return "Er is interesse om te verbeteren, maar de stap naar uitvoering lijkt nog deels verkennend.";
+    return "De behoefte lijkt nu nog minder urgent of vooral bedoeld om eerst te oriënteren.";
+  }
+
+  if (key === "d4_geldverlies") {
+    if (level === "Hoog") return "De verloren tijd vertaalt zich waarschijnlijk direct naar merkbare financiële impact.";
+    if (level === "Gemiddeld") return "Er zit een duidelijke kostencomponent in dit proces, maar die loopt nog niet maximaal op.";
+    return "De financiële impact lijkt aanwezig, maar nu nog relatief beperkt vergeleken met andere processen.";
+  }
+
+  return "";
+}
+
+function getScoreAnalysisSummary(score) {
+  const strongestDimension = [...SCORE_DIMENSIONS].sort((a, b) => score[b.key] - score[a.key])[0];
+  const strongestLabel = strongestDimension?.label?.toLowerCase() || "de quickscan";
+  const lowDimensions = SCORE_DIMENSIONS.filter((dimension) => getDimensionLevel(score[dimension.key]) === "Laag");
+
+  if (score.d1_tijdverlies >= 17 && score.d2_automatiseerbaarheid >= 17 && score.d4_geldverlies >= 17) {
+    return "Deze combinatie laat zien dat er nu niet alleen veel tijd weglekt, maar dat dit ook relatief goed te verbeteren is en direct financiële impact heeft.";
+  }
+
+  if (score.d2_automatiseerbaarheid >= 17 && score.d3_koopbereidheid >= 17) {
+    return "De grootste kracht zit hier in werk dat goed automatiseerbaar is, gecombineerd met duidelijke bereidheid om daar echt iets mee te doen.";
+  }
+
+  if (lowDimensions.length >= 2) {
+    return `De score laat vooral zien dat ${strongestLabel} nu het duidelijkste aangrijpingspunt is, terwijl andere onderdelen nog meer afhankelijk zijn van timing, focus of proceskeuzes.`;
+  }
+
+  return `De verdeling laat zien dat ${strongestLabel} nu het zwaarst weegt in de uitkomst en daarmee de meest logische plek is om verbetering of AI-ondersteuning te starten.`;
+}
+
+function getScoreStatusLine(score) {
+  if (!score) return "";
+
+  if (score.d1_tijdverlies >= 18 && score.d2_automatiseerbaarheid >= 18) {
+    return "Je grootste winst zit nu in taken die veel tijd kosten en relatief goed te automatiseren zijn.";
+  }
+
+  if (score.d1_tijdverlies >= 16 && score.d4_geldverlies >= 16) {
+    return "Je score laat zien dat er duidelijke AI-kansen liggen, vooral waar handmatig werk en geldverlies samenkomen.";
+  }
+
+  if (score.d2_automatiseerbaarheid >= 18) {
+    return "Er ligt vooral winst in werk dat nu relatief goed te standaardiseren en te automatiseren is.";
+  }
+
+  if (score.d3_koopbereidheid >= 18) {
+    return "Je antwoorden laten zien dat er niet alleen kans is, maar ook bereidheid om hier echt mee te bewegen.";
+  }
+
+  if (score.total_score >= 45) {
+    return "Er liggen duidelijke AI-kansen, vooral in terugkerend werk waar nu nog veel handmatige tijd in gaat zitten.";
+  }
+
+  return "De quickscan ziet aanknopingspunten voor AI, maar de directe winst lijkt nu nog meer afhankelijk van focus en timing.";
+}
+
+function getLargestOpportunityLine(score) {
+  if (!score) return "";
+
+  const topScore = Math.max(
+    score.d1_tijdverlies,
+    score.d2_automatiseerbaarheid,
+    score.d3_koopbereidheid,
+    score.d4_geldverlies,
+  );
+
+  if (score.d1_tijdverlies === topScore && score.d4_geldverlies === topScore) {
+    return "Grootste kans: Tijdverlies + Geldverlies";
+  }
+
+  if (score.d1_tijdverlies === topScore && score.d4_geldverlies >= topScore - 1) {
+    return "Grootste kans zit in tijdverlies met directe financiële impact.";
+  }
+
+  if (score.d2_automatiseerbaarheid === topScore) {
+    return "Grootste kans: Automatiseerbaarheid";
+  }
+
+  if (score.d3_koopbereidheid === topScore) {
+    return "Grootste kans: Koopbereidheid";
+  }
+
+  if (score.d4_geldverlies === topScore) {
+    return "Grootste kans: Geldverlies";
+  }
+
+  return "Grootste kans: Tijdverlies";
+}
+
+function ScoreSection({ score, benchmark }) {
+  if (!score) {
+    return null;
+  }
+
+  const largestOpportunity = getLargestOpportunityLine(score).replace(/^Grootste kans:\s*/i, "");
+  const progress = `${Math.max(0, Math.min(100, score.total_score))}%`;
+
+  return (
+    <div
+      style={{
+        width: "min(920px, 100%)",
+        padding: "clamp(14px, 1.9vh, 16px) clamp(15px, 1.8vw, 18px)",
+        borderRadius: 20,
+        background: "rgba(255,255,255,0.035)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        display: "grid",
+        gap: "clamp(12px, 1.7vh, 14px)",
+        textAlign: "left",
+      }}
+    >
+      <div
+        style={{
+          display: "grid",
+          gap: "clamp(12px, 1.7vh, 14px)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gap: 10,
+            justifyItems: "start",
+          }}
+        >
+          <span
+            style={{
+              color: C.textMuted,
+              fontSize: "clamp(0.78rem, min(1.1vw, 1.5vh), 0.82rem)",
+              fontFamily: BODY,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+            }}
+          >
+            Quickscan-score
+          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <div
+              aria-hidden="true"
+              style={{
+                width: 92,
+                height: 92,
+                borderRadius: "50%",
+                background: `conic-gradient(rgba(56,189,248,0.95) 0 ${progress}, rgba(255,255,255,0.08) ${progress} 100%)`,
+                display: "grid",
+                placeItems: "center",
+                boxShadow: "0 18px 36px rgba(14,165,233,0.1)",
+              }}
+            >
+              <div
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: "50%",
+                  background: "rgba(11,17,32,0.98)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  display: "grid",
+                  placeItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <strong
+                  style={{
+                    color: C.text,
+                    fontFamily: BODY,
+                    fontSize: "1.2rem",
+                    lineHeight: 1,
+                  }}
+                >
+                  {score.total_score}
+                </strong>
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gap: 6 }}>
+              <strong
+                style={{
+                  color: C.text,
+                  fontFamily: BODY,
+                  fontSize: "clamp(1.2rem, min(2.1vw, 2.8vh), 1.55rem)",
+                  lineHeight: 1.05,
+                }}
+              >
+                {score.total_score} / 100
+              </strong>
+              <span
+                style={{
+                  color: "#8FD8FF",
+                  fontFamily: BODY,
+                  fontSize: "clamp(0.95rem, min(1.4vw, 1.9vh), 1rem)",
+                  fontWeight: 600,
+                }}
+              >
+                {score.classification}
+              </span>
+              <span
+                style={{
+                  color: C.textSoft,
+                  fontFamily: BODY,
+                  fontSize: "clamp(0.86rem, min(1.2vw, 1.7vh), 0.9rem)",
+                  lineHeight: 1.45,
+                }}
+              >
+                Grootste kans: {largestOpportunity}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gap: 8, alignContent: "start" }}>
+          <p
+            style={{
+              margin: 0,
+              color: C.textSoft,
+              fontFamily: BODY,
+              fontSize: "clamp(0.88rem, min(1.3vw, 1.8vh), 0.94rem)",
+              lineHeight: 1.55,
+            }}
+          >
+            {getScoreStatusLine(score)}
+          </p>
+          {benchmark?.percentile && benchmark?.industryLabel ? (
+            <span
+              style={{
+                color: C.textMuted,
+                fontFamily: BODY,
+                fontSize: "0.82rem",
+                lineHeight: 1.45,
+              }}
+            >
+              Benchmark beschikbaar voor {benchmark.industryLabel}: {benchmark.percentile}e percentiel
+            </span>
+          ) : null}
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gap: "clamp(10px, 1.3vh, 12px)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
+        }}
+      >
+        {SCORE_DIMENSIONS.map((dimension) => {
+          const value = score[dimension.key];
+          const progress = `${Math.max(0, Math.min(100, (value / 25) * 100))}%`;
+          const level = getDimensionLevel(value);
+          const explanation = getDimensionExplanation(dimension.key, value);
+
+          return (
+            <div
+              key={dimension.key}
+              style={{
+                display: "grid",
+                gap: 6,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 10,
+                }}
+              >
+                <span
+                  style={{
+                    color: C.textSoft,
+                    fontFamily: BODY,
+                    fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.9rem)",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {dimension.label}
+                </span>
+                <span
+                  style={{
+                    color: C.text,
+                    fontFamily: BODY,
+                    fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.9rem)",
+                    fontWeight: 600,
+                  }}
+                >
+                  {value}/25
+                </span>
+              </div>
+              <span
+                style={{
+                  color: "#8FD8FF",
+                  fontFamily: BODY,
+                  fontSize: "clamp(0.76rem, min(1.08vw, 1.5vh), 0.8rem)",
+                  fontWeight: 600,
+                }}
+              >
+                {level}
+              </span>
+              <div
+                style={{
+                  height: 8,
+                  borderRadius: 999,
+                  background: "rgba(255,255,255,0.08)",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: progress,
+                    height: "100%",
+                    borderRadius: 999,
+                    background: "linear-gradient(90deg, rgba(56,189,248,0.88), rgba(125,211,252,0.96))",
+                    boxShadow: "0 0 18px rgba(56,189,248,0.18)",
+                  }}
+                />
+              </div>
+              <span
+                style={{
+                  color: C.textMuted,
+                  fontFamily: BODY,
+                  fontSize: "clamp(0.78rem, min(1.08vw, 1.5vh), 0.82rem)",
+                  lineHeight: 1.5,
+                }}
+              >
+                {explanation}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gap: 8,
+          padding: "clamp(10px, 1.4vh, 12px) clamp(12px, 1.6vw, 14px)",
+          borderRadius: 16,
+          background: "rgba(255,255,255,0.025)",
+          border: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        <strong
+          style={{
+            color: "#EAF6FF",
+            fontFamily: BODY,
+            fontSize: "clamp(0.9rem, min(1.25vw, 1.7vh), 0.95rem)",
+            lineHeight: 1.4,
+          }}
+        >
+          Wat deze scoreverdeling zegt
+        </strong>
+        <p
+          style={{
+            margin: 0,
+            color: C.textSoft,
+            fontFamily: BODY,
+            fontSize: "clamp(0.84rem, min(1.2vw, 1.65vh), 0.9rem)",
+            lineHeight: 1.6,
+          }}
+        >
+          {getScoreAnalysisSummary(score)}
+        </p>
+        <p
+          style={{
+            margin: 0,
+            color: C.textMuted,
+            fontFamily: BODY,
+            fontSize: "clamp(0.8rem, min(1.15vw, 1.6vh), 0.84rem)",
+            lineHeight: 1.5,
+          }}
+        >
+          Deze quickscan-score is een interne inschatting op basis van je antwoorden en de onderliggende scoreverdeling.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function ScoreHero({ result, recommendations, onCtaClick }) {
   const titleText = result.primaryConclusion || result.hero?.headline || `Je grootste winst zit nu in ${result.opportunityLabel.toLowerCase()}.`;
+  const scoreSummary = result.score
+    ? `Quickscan-score: ${result.score.total_score}/100 · ${result.score.classification}`
+    : null;
+  const scoreOpportunity = result.score ? getLargestOpportunityLine(result.score) : null;
 
   return (
     <section
@@ -192,8 +614,42 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         justifyItems: "center",
         textAlign: "center",
       }}
-    >
-      <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)", width: "min(920px, 100%)", justifyItems: "center" }}>
+      >
+        <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)", width: "min(920px, 100%)", justifyItems: "center" }}>
+        {scoreSummary ? (
+          <div
+            style={{
+              display: "grid",
+              gap: 4,
+              justifyItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <span
+              style={{
+                color: "#8FD8FF",
+                fontFamily: BODY,
+                fontSize: "clamp(0.84rem, min(1.2vw, 1.65vh), 0.9rem)",
+                fontWeight: 700,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {scoreSummary}
+            </span>
+            {scoreOpportunity ? (
+              <span
+                style={{
+                  color: C.textSoft,
+                  fontFamily: BODY,
+                  fontSize: "clamp(0.82rem, min(1.15vw, 1.55vh), 0.88rem)",
+                  lineHeight: 1.45,
+                }}
+              >
+                {scoreOpportunity}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
         <h2
           style={{
             fontSize: "clamp(1.8rem, min(4.6vw, 8vh), 4rem)",
@@ -350,6 +806,8 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
           </div>
         </div>
       </div>
+
+      <ScoreSection score={result.score} benchmark={result.scoreBenchmark} />
     </section>
   );
 }

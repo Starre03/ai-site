@@ -200,6 +200,13 @@ const HOURLY_VALUE_TITLE_BY_PROCESS = {
   data: "Wat is een uur data en rapportages ongeveer waard?",
 };
 
+export const HOURLY_VALUE_OPTIONS = [
+  { value: "25-50", label: "€25-€50" },
+  { value: "50-75", label: "€50-€75" },
+  { value: "75-100", label: "€75-€100" },
+  { value: "100+", label: "€100+" },
+];
+
 const AI_FOLLOWUP_TITLE_BY_PAIN_POINT = {
   "losse-vragen-berichten": "Wat werkt nog niet goed aan hoe je AI terugkerende vragen laat ondersteunen?",
   "leads-niet-opgevolgd": "Wat werkt nog niet goed aan hoe je AI voor opvolging inzet?",
@@ -244,7 +251,7 @@ export const QUESTIONS = [
     id: "processType",
     stepId: "v1-proces",
     kind: "single",
-    title: "Waar verliest je team of bedrijf elke week de meeste tijd aan?",
+    title: "Welk proces zou je als eerste willen verbeteren?",
     options: PROCESS_OPTIONS,
   },
   {
@@ -274,12 +281,7 @@ export const QUESTIONS = [
     kind: "hourly-value",
     title: "Wat is ongeveer een uur in jouw bedrijf waard?",
     description: "Schatting is prima. Dit gebruiken we alleen voor een realistischer indicatie.",
-    options: [
-      { value: "25-50", label: "€25-€50" },
-      { value: "50-75", label: "€50-€75" },
-      { value: "75-100", label: "€75-€100" },
-      { value: "100+", label: "€100+" },
-    ],
+    options: HOURLY_VALUE_OPTIONS,
   },
   {
     id: "tools",
@@ -341,7 +343,7 @@ export const getToolOptions = (processType) =>
 export const getPainPointQuestionTitle = (processType) => {
   const selectedTypes = Array.isArray(processType) ? processType.filter(Boolean) : [processType].filter(Boolean);
   const label = PROCESS_LABELS[selectedTypes[0]]?.toLowerCase();
-  return label ? `Waar verlies je nu de meeste tijd bij ${label}?` : "Waar verlies je nu de meeste tijd bij dit werk?";
+  return label ? `Waar zit de meeste frictie in ${label}?` : "Waar zit de meeste frictie in dit proces?";
 };
 
 export const getAiUsageQuestionTitle = (painPoint) =>
@@ -420,6 +422,7 @@ export const HOUR_MAP = {
   "20-50": 35,
   "50+": 60,
 };
+
 
 export const HOURLY_VALUE_RANGE_MAP = {
   "25-50": { low: 25, high: 50, label: "€25-€50" },

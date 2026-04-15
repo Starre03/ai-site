@@ -3,6 +3,7 @@ import {
   AI_USAGE_LABELS,
   DISCLAIMER_TEXT,
   HOUR_MAP,
+  HOURLY_VALUE_OPTIONS,
   HOURLY_VALUE_RANGE_MAP,
   LIMITATIONS_TEXT,
   PAIN_POINT_LABELS,
@@ -16,6 +17,194 @@ import {
 } from "./config.js";
 
 const MONTH_FACTOR = 4.33;
+
+const D1_Q1_BASE = {
+  "Administratie en invoer": 8,
+  "Content en marketing": 8,
+  "Klantcontact en opvolging": 7,
+  "Data en rapportages": 7,
+  "Offertes en documenten": 6,
+  "Planning en interne afstemming": 4,
+};
+
+const D1_Q3_SCORES = {
+  "Minder dan 2 uur": 2,
+  "2-5 uur": 5,
+  "5-10 uur": 8,
+  "10-20 uur": 11,
+  "20-50 uur": 14,
+  "50 uur of meer": 17,
+};
+
+const D2_Q1_BASE = {
+  "Administratie en invoer": 9,
+  "Content en marketing": 9,
+  "Klantcontact en opvolging": 8,
+  "Offertes en documenten": 8,
+  "Data en rapportages": 7,
+  "Planning en interne afstemming": 3,
+};
+
+const D2_Q2_SCORES_BY_PROCESS = {
+  "Klantcontact en opvolging": {
+    "losse-vragen-berichten": 16,
+    "Ik beantwoord steeds dezelfde vragen": 16,
+    "leads-buiten-kantooruren": 14,
+    "Buiten kantooruren mis ik leads": 14,
+    "leads-niet-opgevolgd": 12,
+    "Opvolging schiet er bij in": 12,
+    "informatie-verspreid": 10,
+    "Informatie staat verspreid": 10,
+    "Elk gesprek begint bij nul": 10,
+    "overdracht-kost-tijd": 8,
+    "Overdracht kost te veel tijd": 8,
+    "Te veel kanalen om bij te houden": 8,
+  },
+  "Administratie en invoer": {
+    "gegevens-overzetten": 16,
+    "Ik voer te veel gegevens handmatig in": 16,
+    "Invoer kost te veel handwerk": 16,
+    "fouten-herstellen": 14,
+    "Fouten herstellen kost te veel tijd": 14,
+    "Fouten door handmatig overtypen": 14,
+    "overzichten-maken": 14,
+    "Overzichten maken duurt te lang": 14,
+    "Systemen praten niet met elkaar": 14,
+    "documenten-facturen": 11,
+    "Facturen en documenten blijven liggen": 11,
+    "Documenten zoeken kost te veel tijd": 11,
+    "invoer-controles": 9,
+    "Controle kost elke week veel tijd": 9,
+    "Goedkeuringsprocessen lopen vast": 9,
+  },
+  "Content en marketing": {
+    "content-handwerk": 15,
+    "Het kost te veel tijd per stuk content": 15,
+    "publicatie-planning": 14,
+    "Publiceren en plannen kost te veel tijd": 14,
+    "feedback-afstemming": 13,
+    "Consistentie lukt niet": 13,
+    "campagnes-doorvertalen": 12,
+    "Campagnes doorvertalen kost te veel werk": 12,
+    "briefings-input": 9,
+    "Ik weet niet goed wat ik moet maken": 9,
+    "Ideeën uitwerken naar content kost tijd": 9,
+  },
+  "Offertes en documenten": {
+    "offertes-opstellen": 16,
+    "Offertes maken duurt te lang": 16,
+    "Elke offerte opnieuw beginnen": 16,
+    "documenten-aanpassen": 14,
+    "Documenten aanpassen blijft handwerk": 14,
+    "Contracten aanpassen kost te veel tijd": 14,
+    "dossiers-opbouwen": 12,
+    "Dossiers opbouwen kost veel tijd": 12,
+    "Opvolging na offerte schiet er bij in": 12,
+    "informatie-opnieuw-invullen": 11,
+    "Gegevens opnieuw invullen kost tijd": 11,
+    "Vertalen naar meerdere talen": 11,
+    "versies-feedback": 10,
+    "Feedback en versies lopen door elkaar": 10,
+    "Versies en wijzigingen bijhouden": 10,
+  },
+  "Planning en interne afstemming": {
+    "losse-berichten": 12,
+    "Veel afstemming loopt via losse berichten": 12,
+    "Updates doorkommuniceren gaat mis": 12,
+    "planning-handwerk": 10,
+    "Plannen kost te veel heen-en-weer": 10,
+    "Vergaderingen afstemmen kost te veel": 10,
+    "opvolging-niet-strak": 10,
+    "Opvolging schiet er bij in": 10,
+    "Actiepunten worden niet opgevolgd": 10,
+    "taken-versnipperd": 9,
+    "Taken en afspraken raken verspreid": 9,
+    "Overzicht ontbreekt wie wat doet": 9,
+    "overdracht-onduidelijk": 7,
+    "Overdracht is niet duidelijk genoeg": 7,
+    "Prioriteiten schuiven constant": 7,
+  },
+  "Data en rapportages": {
+    "rapportages-langzaam": 16,
+    "Rapportages maken duurt te lang": 16,
+    "Rapporten handmatig opmaken": 16,
+    "data-verzamelen": 15,
+    "Data verzamelen kost te veel tijd": 15,
+    "Data uit meerdere bronnen samenvoegen": 15,
+    "te-veel-bronnen": 13,
+    "Informatie staat in te veel systemen": 13,
+    "Dashboards zijn verouderd": 13,
+    "inzicht-te-laat": 12,
+    "Inzicht komt te laat beschikbaar": 12,
+    "Inzichten komen te laat": 12,
+    "controle-opschoning": 11,
+    "Controleren en opschonen kost veel werk": 11,
+    "Analyses kosten te veel tijd": 11,
+  },
+};
+
+const D3_Q7_SCORES = {
+  "Dit wil ik zo snel mogelijk verbeteren": 18,
+  "Dit wil ik binnenkort verbeteren": 13,
+  "Wel belangrijk, maar geen haast": 7,
+  "Nu nog niet zo belangrijk": 2,
+};
+
+const D3_Q6_SCORES = {
+  "Nog niet": 7,
+  "Af en toe": 6,
+  Regelmatig: 4,
+  "Vast onderdeel van dit werk": 2,
+};
+
+const D4_Q4_SCORES = {
+  "€100+": 13,
+  "€75-€100": 10,
+  "€50-€75": 7,
+  "€25-€50": 4,
+};
+
+const D4_Q3_SCORES = {
+  "Minder dan 2 uur": 1,
+  "2-5 uur": 2,
+  "5-10 uur": 4,
+  "10-20 uur": 6,
+  "20-50 uur": 9,
+  "50 uur of meer": 12,
+};
+
+const Q3_NUMERIC_HOURS = {
+  "Minder dan 2 uur": 1.5,
+  "2-5 uur": 3.5,
+  "5-10 uur": 7.5,
+  "10-20 uur": 15,
+  "20-50 uur": 35,
+  "50 uur of meer": 50,
+};
+
+const Q3_VALUE_TO_LABEL = {
+  "<2": "Minder dan 2 uur",
+  "2-5": "2-5 uur",
+  "5-10": "5-10 uur",
+  "10-20": "10-20 uur",
+  "20-50": "20-50 uur",
+  "50+": "50 uur of meer",
+};
+
+const Q4_NUMERIC_RATE = {
+  "€25-€50": 37.5,
+  "€50-€75": 62.5,
+  "€75-€100": 87.5,
+  "€100+": 100,
+};
+
+const SCORE_CLASSIFICATIONS = [
+  { min: 80, label: "Grote AI-kans" },
+  { min: 65, label: "Sterke AI-kans" },
+  { min: 45, label: "Duidelijke AI-kans" },
+  { min: 25, label: "AI-kans in opbouw" },
+  { min: 0, label: "Verkenningsfase" },
+];
 
 const AI_FACTORS = {
   "nog-niet": 1,
@@ -376,6 +565,177 @@ function formatCurrency(value) {
   }).format(value);
 }
 
+function mapCustomHourlyRateToBucket(rate) {
+  if (rate >= 100) return "€100+";
+  if (rate >= 75) return "€75-€100";
+  if (rate >= 50) return "€50-€75";
+  return "€25-€50";
+}
+
+function clampDimensionScore(value) {
+  return Math.min(value, 25);
+}
+
+function classifyScore(totalScore) {
+  return SCORE_CLASSIFICATIONS.find((item) => totalScore >= item.min)?.label || "Verkenningsfase";
+}
+
+function resolveProcessLabel(processType) {
+  if (!processType) return null;
+  if (PROCESS_LABELS[processType]) return PROCESS_LABELS[processType];
+  if (Object.values(PROCESS_LABELS).includes(processType)) return processType;
+  return null;
+}
+
+function resolveWeeklyHoursLabel(weeklyHours) {
+  if (!weeklyHours) return null;
+  if (Q3_VALUE_TO_LABEL[weeklyHours]) return Q3_VALUE_TO_LABEL[weeklyHours];
+  if (Object.keys(Q3_NUMERIC_HOURS).includes(weeklyHours)) return weeklyHours;
+  return null;
+}
+
+function resolveAiUsageLabel(aiUsage) {
+  if (!aiUsage) return null;
+  if (AI_USAGE_LABELS[aiUsage]) return AI_USAGE_LABELS[aiUsage];
+  if (Object.values(AI_USAGE_LABELS).includes(aiUsage)) return aiUsage;
+  return null;
+}
+
+function resolveUrgencyLabel(urgency) {
+  if (!urgency) return null;
+  if (URGENCY_LABELS[urgency]) return URGENCY_LABELS[urgency];
+  if (Object.values(URGENCY_LABELS).includes(urgency)) return urgency;
+  return null;
+}
+
+function resolveHourlyBucketLabel(answers) {
+  const manualValue = Number.parseFloat(answers.hourlyValueManual);
+
+  if (Number.isFinite(manualValue) && manualValue > 0) {
+    return mapCustomHourlyRateToBucket(manualValue);
+  }
+
+  const rangeValue = answers.hourlyValueRange;
+  const rangeOption = HOURLY_VALUE_OPTIONS.find((option) => option.value === rangeValue);
+
+  if (rangeOption) {
+    return rangeOption.label;
+  }
+
+  if (Object.keys(D4_Q4_SCORES).includes(rangeValue)) {
+    return rangeValue;
+  }
+
+  return null;
+}
+
+function resolveNumericHourlyRate(answers) {
+  const manualValue = Number.parseFloat(answers.hourlyValueManual);
+
+  if (Number.isFinite(manualValue) && manualValue > 0) {
+    return manualValue;
+  }
+
+  const bucketLabel = resolveHourlyBucketLabel(answers);
+  return bucketLabel ? Q4_NUMERIC_RATE[bucketLabel] || null : null;
+}
+
+function resolvePainPointScore(processLabel, painPoint) {
+  if (!processLabel || !painPoint) return null;
+  const processScores = D2_Q2_SCORES_BY_PROCESS[processLabel];
+
+  if (!processScores) return null;
+
+  if (processScores[painPoint] != null) {
+    return processScores[painPoint];
+  }
+
+  const livePainPointLabel = PAIN_POINT_LABELS[painPoint];
+
+  if (livePainPointLabel && processScores[livePainPointLabel] != null) {
+    return processScores[livePainPointLabel];
+  }
+
+  return null;
+}
+
+function getMissingScoreFields(answers) {
+  const processLabel = resolveProcessLabel(answers.processType);
+  const weeklyHoursLabel = resolveWeeklyHoursLabel(answers.weeklyHours);
+  const aiUsageLabel = resolveAiUsageLabel(answers.aiUsage);
+  const urgencyLabel = resolveUrgencyLabel(answers.urgency);
+  const hourlyBucketLabel = resolveHourlyBucketLabel(answers);
+  const numericHourlyRate = resolveNumericHourlyRate(answers);
+  const painPointScore = resolvePainPointScore(processLabel, answers.painPoint);
+
+  return {
+    processLabel,
+    weeklyHoursLabel,
+    aiUsageLabel,
+    urgencyLabel,
+    hourlyBucketLabel,
+    numericHourlyRate,
+    painPointScore,
+    missing: [
+      !processLabel && "Q1 processType",
+      !answers.painPoint && "Q2 painPoint",
+      answers.painPoint && painPointScore == null && "Q2 painPoint mapping",
+      !weeklyHoursLabel && "Q3 weeklyHours",
+      !hourlyBucketLabel && "Q4 hourlyValue",
+      !(Number.isFinite(numericHourlyRate) && numericHourlyRate > 0) && "Q4 numeric hourly value",
+      !aiUsageLabel && "Q6 aiUsage",
+      !urgencyLabel && "Q7 urgency",
+    ].filter(Boolean),
+  };
+}
+
+export function getQuickscanScoreResult(answers, options = {}) {
+  const { logErrors = false } = options;
+  const scoreState = getMissingScoreFields(answers);
+
+  if (scoreState.missing.length > 0) {
+    if (logErrors) {
+      console.warn("[quickscan-score] Incomplete or invalid scoring input", {
+        missing: scoreState.missing,
+        answers,
+      });
+    }
+
+    return null;
+  }
+
+  const {
+    processLabel,
+    weeklyHoursLabel,
+    aiUsageLabel,
+    urgencyLabel,
+    hourlyBucketLabel,
+    numericHourlyRate,
+    painPointScore,
+  } = scoreState;
+
+  const d1_tijdverlies = clampDimensionScore(D1_Q1_BASE[processLabel] + D1_Q3_SCORES[weeklyHoursLabel]);
+  const d2_automatiseerbaarheid = clampDimensionScore(D2_Q1_BASE[processLabel] + painPointScore);
+  const d3_koopbereidheid = clampDimensionScore(D3_Q7_SCORES[urgencyLabel] + D3_Q6_SCORES[aiUsageLabel]);
+  const d4_geldverlies = clampDimensionScore(D4_Q4_SCORES[hourlyBucketLabel] + D4_Q3_SCORES[weeklyHoursLabel]);
+  const total_score = Math.min(d1_tijdverlies + d2_automatiseerbaarheid + d3_koopbereidheid + d4_geldverlies, 100);
+  const classification = classifyScore(total_score);
+  const hours = Q3_NUMERIC_HOURS[weeklyHoursLabel];
+  const monthly_savings_low = roundToTens(hours * 0.4 * numericHourlyRate * MONTH_FACTOR);
+  const monthly_savings_high = roundToTens(hours * 0.65 * numericHourlyRate * MONTH_FACTOR);
+
+  return {
+    d1_tijdverlies,
+    d2_automatiseerbaarheid,
+    d3_koopbereidheid,
+    d4_geldverlies,
+    total_score,
+    classification,
+    monthly_savings_low,
+    monthly_savings_high,
+  };
+}
+
 function getSelectedProcessTypes(answers) {
   if (Array.isArray(answers.processTypes) && answers.processTypes.length > 0) {
     return answers.processTypes;
@@ -520,25 +880,30 @@ export function getTimeOpportunity(answers) {
 }
 
 export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
+  const scoreResult = getQuickscanScoreResult(answers);
   const timeOpportunity = getTimeOpportunity(answers);
-  const scenario = SAVINGS_SCENARIOS[scenarioKey] || SAVINGS_SCENARIOS.gemiddeld;
   const hourlyValue = getHourlyValueInput(answers);
-  const scenarioLow = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.low);
-  const scenarioHigh = roundToHalf(timeOpportunity.potentialWeeklyHours * scenario.high);
-  const monthlyLow = roundToTens(scenarioLow * hourlyValue.low * MONTH_FACTOR);
-  const monthlyHigh = roundToTens(scenarioHigh * hourlyValue.high * MONTH_FACTOR);
+  const monthlyLow = scoreResult?.monthly_savings_low ?? 0;
+  const monthlyHigh = scoreResult?.monthly_savings_high ?? 0;
   const yearlyLow = monthlyLow * 12;
   const yearlyHigh = monthlyHigh * 12;
-  const formulaText = `Berekening: ~${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × ${hourlyValue.label} × 4,3`;
-  const timeInfoText = `Indicatie op basis van jouw input (${formatHoursNumber(scenarioLow)}-${formatHoursNumber(scenarioHigh)} uur/week × ${hourlyValue.label} × 4,3 weken)`;
+  const scoreHoursLabel = resolveWeeklyHoursLabel(answers.weeklyHours) || "";
+  const numericHours = scoreHoursLabel ? Q3_NUMERIC_HOURS[scoreHoursLabel] : timeOpportunity.weeklyHours;
+  const numericRate = resolveNumericHourlyRate(answers);
+  const rateLabel =
+    Number.isFinite(Number.parseFloat(answers.hourlyValueManual)) && Number.parseFloat(answers.hourlyValueManual) > 0
+      ? `€${formatHoursNumber(Number.parseFloat(answers.hourlyValueManual))}`
+      : hourlyValue.label;
+  const formulaText = `Indicatie op basis van jouw input (${formatHoursNumber(numericHours)} uur/week × ${rateLabel} × 4,3 weken)`;
+  const timeInfoText = formulaText;
 
   return {
     scenario: scenarioKey,
-    scenarioLabel: scenario.label,
+    scenarioLabel: SAVINGS_SCENARIOS[scenarioKey]?.label || SAVINGS_SCENARIOS.gemiddeld.label,
     weeklyHours: timeOpportunity.weeklyHours,
-    weeklyLow: scenarioLow,
-    weeklyHigh: scenarioHigh,
-    weeklySavingsLabel: formatImpactRange(scenarioLow, scenarioHigh),
+    weeklyLow: timeOpportunity.low,
+    weeklyHigh: timeOpportunity.high,
+    weeklySavingsLabel: timeOpportunity.label,
     hourlyValue,
     monthlyLow,
     monthlyHigh,
@@ -794,6 +1159,7 @@ function getReadinessLabel(result) {
 
 export function buildSubmissionPayload(result, contact) {
   const submittedAt = new Date().toISOString();
+  const score = result.score || getQuickscanScoreResult(result.answers, { logErrors: true });
 
   return {
     answers: result.answers,
@@ -820,6 +1186,7 @@ export function buildSubmissionPayload(result, contact) {
     },
     recommendations: result.recommendations,
     routing: result.routing,
+    score,
     contact: {
       name: contact.name.trim(),
       companyName: contact.companyName?.trim() || result.answers.companyName || "",
@@ -860,6 +1227,7 @@ export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
   };
   const routing = getCTA(baseResult);
   const resultContext = { ...baseResult, routing };
+  const score = getQuickscanScoreResult(normalizedAnswers);
   const timeOpportunity = getTimeOpportunity(normalizedAnswers);
   const savings = getSavingsRange(normalizedAnswers, scenarioKey);
   const moneyOpportunity = {
@@ -893,6 +1261,7 @@ export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {
     diagnosis,
     recommendations,
     routing,
+    score,
     opportunityLabel: mainAiOpportunity,
     processLabel: PROCESS_LABELS[getFocusProcessType(normalizedAnswers)] || "",
     processLabels: getProcessLabelList(normalizedAnswers),
