@@ -30,7 +30,6 @@ export function SmoothSection({
   zIndex = 1,
   minH = "120vh",
   center = false,
-  blendFrom,
 }) {
   const ref = useRef(null);
   const progress = useSectionProgress(ref);
@@ -51,9 +50,7 @@ export function SmoothSection({
           alignItems: center ? "center" : undefined,
           textAlign: center ? "center" : undefined,
           padding: "6rem clamp(1.5rem, 5vw, 5rem)",
-          background: blendFrom
-            ? `linear-gradient(to bottom, ${blendFrom} 0%, ${bg} 12%)`
-            : bg,
+          background: bg,
           zIndex,
           opacity: fadeOut,
           transform: `translateY(${drift}px) translateZ(0)`,

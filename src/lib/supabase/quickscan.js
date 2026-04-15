@@ -1,5 +1,19 @@
 import { hasSupabaseConfig, supabase } from "./client.js";
 
+const MAX_ATTEMPTS = 3;
+const BASE_DELAY_MS = 600;
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function invokeOnce(payload) {
+  const { data, error } = await supabase.functions.invoke("quickscan-submit", {
+    body: payload,
+  });
+  return { data, error };
+}
+
 export async function saveQuickscanSubmission(payload) {
   if (!hasSupabaseConfig() || !supabase) {
     return {
@@ -9,23 +23,37 @@ export async function saveQuickscanSubmission(payload) {
     };
   }
 
-  const { data, error } = await supabase.functions.invoke("quickscan-submit", {
-    body: payload,
-  });
+  let lastError = null;
 
-  if (error) {
-    return {
-      ok: false,
-      skipped: false,
-      error,
-    };
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+    try {
+      const { data, error } = await invokeOnce(payload);
+
+      if (!error) {
+        return {
+          ok: true,
+          skipped: false,
+          attempts: attempt,
+          data: {
+            id: data?.id || null,
+          },
+        };
+      }
+
+      lastError = error;
+    } catch (thrown) {
+      lastError = thrown;
+    }
+
+    if (attempt < MAX_ATTEMPTS) {
+      await delay(BASE_DELAY_MS * attempt);
+    }
   }
 
   return {
-    ok: true,
+    ok: false,
     skipped: false,
-    data: {
-      id: data?.id || null,
-    },
+    attempts: MAX_ATTEMPTS,
+    error: lastError,
   };
 }

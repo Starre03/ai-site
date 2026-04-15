@@ -40,22 +40,18 @@ function createInitialAnswers() {
 }
 
 async function submitQuickscanPreview(payload) {
-  console.log("[quickscan] submitting payload", payload);
-
   const submission = await saveQuickscanSubmission(payload);
 
   if (submission.skipped) {
-    console.warn("[quickscan] SKIPPED — missing Supabase config in bundle:", submission.reason);
+    console.warn("[quickscan] skipped:", submission.reason);
   } else if (!submission.ok) {
-    console.error("[quickscan] FAILED:", submission.error);
-  } else {
-    console.log("[quickscan] SAVED id:", submission.data?.id);
+    console.error("[quickscan] failed after retries:", submission.error);
   }
 
   quickscanLog("scan_complete", {
-    payload,
     submissionStatus: submission.ok ? "saved" : submission.skipped ? "skipped" : "failed",
     submissionId: submission.data?.id || null,
+    attempts: submission.attempts || null,
   });
 
   return payload;
