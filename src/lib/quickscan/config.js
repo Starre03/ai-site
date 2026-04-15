@@ -1,4 +1,4 @@
-export const QUICKSCAN_VERSION = "quickscan-v5-personal-branching-preview";
+export const QUICKSCAN_VERSION = "quickscan-v5-personal-branching";
 
 export const STEP_IDS = [
   "intro",

@@ -1160,6 +1160,7 @@ function getReadinessLabel(result) {
 export function buildSubmissionPayload(result, contact) {
   const submittedAt = new Date().toISOString();
   const score = result.score || getQuickscanScoreResult(result.answers, { logErrors: true });
+  const source = getQuickscanSubmissionSource();
 
   return {
     answers: result.answers,
@@ -1195,10 +1196,34 @@ export function buildSubmissionPayload(result, contact) {
     },
     meta: {
       submittedAt,
-      source: "quickscan-preview",
+      source,
       version: QUICKSCAN_VERSION,
     },
   };
+}
+
+function getQuickscanSubmissionSource() {
+  if (typeof window === "undefined") {
+    return "quickscan";
+  }
+
+  const hostname = window.location.hostname;
+
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.startsWith("192.168.") ||
+    hostname.startsWith("10.") ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname)
+  ) {
+    return "quickscan-local";
+  }
+
+  if (hostname.endsWith(".vercel.app")) {
+    return "quickscan-preview";
+  }
+
+  return "quickscan";
 }
 
 export function createQuickscanResult(answers, scenarioKey = "gemiddeld") {

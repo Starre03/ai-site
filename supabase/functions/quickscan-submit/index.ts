@@ -198,7 +198,7 @@ function mapPayloadToRow(payload: any) {
     answers: buildAnswersJson(payload, hourlyValue, toolEntries),
     analysis: buildAnalysisJson(payload),
     score_data: payload.score || {},
-    source: payload.meta?.source || "quickscan-preview",
+    source: payload.meta?.source || "quickscan",
     version: payload.meta?.version || null,
   };
 }
