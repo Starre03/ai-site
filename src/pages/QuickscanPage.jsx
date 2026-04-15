@@ -21,6 +21,7 @@ import {
   STEP_IDS,
 } from "../lib/quickscan/config.js";
 import { buildSubmissionPayload, createQuickscanResult, quickscanLog } from "../lib/quickscan/index.js";
+import { saveQuickscanSubmission } from "../lib/supabase/quickscan.js";
 
 function createInitialAnswers() {
   return {
@@ -39,7 +40,18 @@ function createInitialAnswers() {
 }
 
 async function submitQuickscanPreview(payload) {
-  quickscanLog("scan_complete", { payload });
+  const submission = await saveQuickscanSubmission(payload);
+
+  if (!submission.ok && !submission.skipped) {
+    console.error("Quickscan submission failed", submission.error);
+  }
+
+  quickscanLog("scan_complete", {
+    payload,
+    submissionStatus: submission.ok ? "saved" : submission.skipped ? "skipped" : "failed",
+    submissionId: submission.data?.id || null,
+  });
+
   return payload;
 }
 
