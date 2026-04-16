@@ -3,10 +3,13 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
 import Intro from "./components/Intro";
 import Nav from "./components/Nav";
+import RequireAuth from "./components/RequireAuth.jsx";
 import { C, shell } from "./lib/theme";
 import AgentsPage from "./pages/Agents";
+import AdminPage from "./pages/Admin";
 import AboutPage from "./pages/About";
 import AuditPage from "./pages/Audit";
+import AuthCallbackPage from "./pages/AuthCallback";
 import BrandPreviewPage from "./pages/BrandPreview";
 import ExamplesSectionPreviewPage from "./pages/ExamplesSectionPreview";
 import FaqPage from "./pages/FaqPage";
@@ -26,6 +29,7 @@ import WhyNowIconsPreviewPage from "./pages/WhyNowIconsPreview";
 import IntakeCtaPreviewPage from "./pages/IntakeCtaPreview";
 import IntakeFormPreviewPage from "./pages/IntakeFormPreview";
 import WorkshopPage from "./pages/Workshop";
+import LoginPage from "./pages/Login";
 
 function ScrollManager() {
   const location = useLocation();
@@ -72,6 +76,16 @@ export default function App() {
           <Route path="/ai-integraties" element={<IntegrationsPage />} />
           <Route path="/ai-agents" element={<AgentsPage />} />
           <Route path="/ai-workshop" element={<WorkshopPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route
+            path="/admin"
+            element={(
+              <RequireAuth>
+                <AdminPage />
+              </RequireAuth>
+            )}
+          />
           <Route path="/over" element={<AboutPage />} />
           <Route path="/brand-preview" element={<BrandPreviewPage />} />
           <Route path="/examples-section-preview" element={<ExamplesSectionPreviewPage />} />
