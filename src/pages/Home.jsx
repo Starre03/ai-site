@@ -1042,6 +1042,7 @@ export default function Home() {
         submitLabel="Verstuur bericht →"
         doneTitle="Uw bericht is verstuurd"
         doneText="We nemen contact op om uw vraag of situatie verder te bespreken."
+        submissionKind="contact"
       />
     </>
   );

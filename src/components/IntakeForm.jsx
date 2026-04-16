@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { intakeSteps } from "../content/siteContent";
+import { buildIntakeSubmissionPayload } from "../lib/intake/index.js";
+import { saveIntakeSubmission } from "../lib/supabase/intake.js";
 import { BODY, C } from "../lib/theme";
 import { GlowCard, PrimaryButton, Reveal, SectionHeading } from "./ui";
 
@@ -102,12 +104,14 @@ export default function IntakeForm({
   submitLabel,
   doneTitle,
   doneText,
+  submissionKind = "intake",
 }) {
   const [step, setStep] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
   const [data, setData] = useState(() => (preferredRoute ? { route: preferredRoute } : {}));
 
   const current = steps[step];
@@ -121,6 +125,7 @@ export default function IntakeForm({
   const update = (idValue, nextValue) => {
     setData((currentData) => ({ ...currentData, [idValue]: nextValue }));
     setErrors((currentErrors) => ({ ...currentErrors, [idValue]: undefined }));
+    setSubmitError("");
   };
 
   const toggle = (idValue, option) => {
@@ -181,12 +186,25 @@ export default function IntakeForm({
 
     setSubmitting(true);
     try {
-      const payload = {
-        ...data,
-        submittedAt: new Date().toISOString(),
-      };
-      void payload;
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      setSubmitError("");
+      const payload = buildIntakeSubmissionPayload({
+        formId: id,
+        formKind: submissionKind,
+        preferredRoute,
+        steps,
+        answers: data,
+      });
+      const submission = await saveIntakeSubmission(payload);
+
+      if (!submission.ok) {
+        if (!submission.skipped) {
+          console.error("Intake submission failed", submission.error);
+        }
+
+        setSubmitError("Er ging iets mis bij het versturen. Probeer het nog een keer.");
+        return;
+      }
+
       setDone(true);
     } finally {
       setSubmitting(false);
@@ -461,6 +479,20 @@ export default function IntakeForm({
                   {submitting ? "Versturen..." : step < steps.length - 1 ? "Volgende stap →" : submitLabel || "Verstuur intake →"}
                 </PrimaryButton>
               </div>
+              {submitError ? (
+                <div
+                  style={{
+                    marginTop: 12,
+                    fontSize: "0.78rem",
+                    lineHeight: 1.6,
+                    color: C.danger,
+                    fontFamily: BODY,
+                    textAlign: centered ? "center" : "left",
+                  }}
+                >
+                  {submitError}
+                </div>
+              ) : null}
             </div>
           </GlowCard>
         </Reveal>

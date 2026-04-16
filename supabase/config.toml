@@ -147,6 +147,9 @@ max_indexes = 5
 [functions.quickscan-submit]
 verify_jwt = false
 
+[functions.intake-submit]
+verify_jwt = false
+
 # Vector Buckets is available to Supabase Pro plan.
 # [storage.vector.buckets.documents-openai]
 
