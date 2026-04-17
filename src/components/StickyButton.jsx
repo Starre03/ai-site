@@ -1,48 +1,13 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useScrollToggle } from "../lib/hooks";
 import { BODY, C } from "../lib/theme";
 
-function useIntakeVisible() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const check = () => {
-      const el = document.getElementById("intake");
-      if (!el) {
-        setVisible(false);
-        return;
-      }
-      const rect = el.getBoundingClientRect();
-      const inView = rect.top < window.innerHeight && rect.bottom > 0;
-      setVisible(inView);
-    };
-
-    window.addEventListener("scroll", check, { passive: true });
-    check();
-    return () => window.removeEventListener("scroll", check);
-  }, []);
-
-  return visible;
-}
-
 export default function StickyButton() {
   const show = useScrollToggle(0.7);
-  const intakeVisible = useIntakeVisible();
-  const location = useLocation();
   const navigate = useNavigate();
-  const hiddenPreviewRoute = ["/brand-preview", "/problem-section-preview", "/services-section-preview", "/examples-section-preview", "/home-flow-preview", "/why-now-preview", "/why-now-icons-preview", "/intake-cta-preview"].includes(location.pathname);
 
   const handleClick = () => {
-    if (location.pathname !== "/") {
-      navigate("/#intake");
-      setTimeout(() => {
-        document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 50);
-      return;
-    }
-
-    document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    navigate("/quickscan");
   };
 
   return (
@@ -52,10 +17,10 @@ export default function StickyButton() {
         bottom: 18,
         right: 18,
         zIndex: 999,
-        opacity: show && !intakeVisible && !hiddenPreviewRoute ? 1 : 0,
-        transform: show && !intakeVisible && !hiddenPreviewRoute ? "translateY(0)" : "translateY(12px)",
+        opacity: show ? 1 : 0,
+        transform: show ? "translateY(0)" : "translateY(12px)",
         transition: "all 0.5s cubic-bezier(.22,1,.36,1)",
-        pointerEvents: show && !intakeVisible && !hiddenPreviewRoute ? "all" : "none",
+        pointerEvents: show ? "all" : "none",
       }}
     >
       <button
@@ -73,7 +38,7 @@ export default function StickyButton() {
           boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 20px ${C.primary}15`,
         }}
       >
-        Plan intake
+        Start quickscan
       </button>
     </div>
   );

@@ -188,7 +188,26 @@ export default function LoginPage() {
                   />
                 </label>
                 <button type="submit" style={{ ...buttonStyle, opacity: phase === "submitting" ? 0.7 : 1 }} disabled={phase === "submitting" || status === "loading"}>
-                  {phase === "submitting" ? "Link versturen..." : phase === "sent" ? "Nieuwe link versturen" : "Verstuur loginlink"}
+                  {phase === "submitting" ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      <span
+                        style={{
+                          width: 14,
+                          height: 14,
+                          border: "2px solid rgba(255,255,255,0.3)",
+                          borderTopColor: "#fff",
+                          borderRadius: "50%",
+                          animation: "spin 0.7s linear infinite",
+                          display: "inline-block",
+                        }}
+                      />
+                      Link versturen...
+                    </span>
+                  ) : phase === "sent" ? (
+                    "Nieuwe link versturen"
+                  ) : (
+                    "Verstuur loginlink"
+                  )}
                 </button>
               </form>
               <p

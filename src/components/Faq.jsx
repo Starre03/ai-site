@@ -69,9 +69,10 @@ export default function Faq({
               </button>
               <div
                 style={{
-                  maxHeight: openIndex === index ? 240 : 0,
+                  maxHeight: openIndex === index ? 600 : 0,
+                  opacity: openIndex === index ? 1 : 0,
                   overflow: "hidden",
-                  transition: "max-height 0.4s cubic-bezier(.22,1,.36,1)",
+                  transition: "max-height 0.4s cubic-bezier(.22,1,.36,1), opacity 0.3s ease",
                 }}
               >
                 <p

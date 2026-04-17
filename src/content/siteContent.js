@@ -83,6 +83,22 @@ export const homeFaq = [
     q: "Hoe snel kan AI support automation, document AI of een agentflow live zijn?",
     a: "Een AI audit kan snel gepland worden. Een gerichte AI integratie of eerste OpenClaw agentflow is vaak binnen enkele weken operationeel, afhankelijk van koppelingen, data en interne afstemming.",
   },
+  {
+    q: "Wat kost een AI Audit?",
+    a: "De AI Audit is een vaste opdracht met een helder tarief. Neem contact op voor de actuele prijs — we stemmen de scope altijd af op de grootte en complexiteit van uw bedrijf.",
+  },
+  {
+    q: "Hoe snel kunnen we starten?",
+    a: "Na een eerste gesprek kunnen we binnen één à twee weken starten. De AI Audit duurt gemiddeld twee tot drie weken. Een eerste OpenClaw setup is doorgaans binnen vier weken live.",
+  },
+  {
+    q: "Werkt dit ook voor kleinere bedrijven?",
+    a: "Ja. De meeste klanten zijn mkb-bedrijven met 5 tot 50 medewerkers. Juist bij die bedrijven levert AI snel aantoonbaar resultaat omdat processen nog niet overgeautomatiseerd zijn.",
+  },
+  {
+    q: "Wat heb ik nodig om te starten?",
+    a: "Alleen een goed gesprek. We beginnen altijd met begrijpen hoe uw bedrijf nu werkt, waar de druk zit en wat u wilt bereiken. Van daaruit bepalen we samen de beste route.",
+  },
 ];
 
 export const demoTabs = [

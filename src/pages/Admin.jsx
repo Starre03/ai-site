@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthProvider.jsx";
 import { GlowCard, PageSection, Reveal, SectionHeading, Tag, usePageSeo } from "../components/ui";
@@ -22,24 +22,31 @@ const STATUS_OPTIONS = ["new", "contacted", "closed"];
 
 const STATUS_META = {
   new: {
-    label: "New",
+    label: "Nieuw",
     color: C.primaryLight,
     background: "rgba(14,165,233,0.12)",
     border: "rgba(14,165,233,0.26)",
   },
   contacted: {
-    label: "Contacted",
+    label: "In behandeling",
     color: C.accent,
     background: "rgba(245,158,11,0.12)",
     border: "rgba(245,158,11,0.28)",
   },
   closed: {
-    label: "Closed",
+    label: "Gesloten",
     color: "#34D399",
     background: "rgba(52,211,153,0.12)",
     border: "rgba(52,211,153,0.28)",
   },
 };
+
+const CONTACT_FILTER_OPTIONS = [
+  { value: "all", label: "Alle" },
+  { value: "new", label: "Nieuw" },
+  { value: "contacted", label: "In behandeling" },
+  { value: "closed", label: "Gesloten" },
+];
 
 const actionButtonStyle = {
   display: "inline-flex",
@@ -70,6 +77,28 @@ const modalCardStyle = {
   background: "rgba(11,17,32,0.96)",
   border: `1px solid ${C.borderLight}`,
   boxShadow: "0 28px 120px rgba(2,8,23,0.55)",
+};
+
+const secondaryButtonStyle = {
+  ...actionButtonStyle,
+  background: "rgba(255,255,255,0.04)",
+  color: C.text,
+  border: `1px solid ${C.borderLight}`,
+  padding: "10px 14px",
+  fontSize: "0.8rem",
+};
+
+const controlInputStyle = {
+  width: "100%",
+  minHeight: 44,
+  borderRadius: 12,
+  border: `1px solid ${C.borderLight}`,
+  background: "rgba(11,17,32,0.72)",
+  color: C.text,
+  padding: "12px 14px",
+  fontSize: "0.88rem",
+  fontFamily: BODY,
+  outline: "none",
 };
 
 function formatDate(value) {
@@ -112,6 +141,37 @@ function truncateText(value, limit) {
   if (!value) return "—";
   if (value.length <= limit) return value;
   return `${value.slice(0, limit).trimEnd()}...`;
+}
+
+function formatScoreForCsv(row) {
+  if (row.total_score == null && !row.classification) {
+    return "";
+  }
+
+  if (row.total_score == null) {
+    return row.classification || "";
+  }
+
+  return row.classification ? `${row.total_score} (${row.classification})` : String(row.total_score);
+}
+
+function escapeCsvValue(value) {
+  const stringValue = String(value ?? "");
+  return `"${stringValue.replace(/"/g, '""')}"`;
+}
+
+function downloadCsv(filename, headers, rows) {
+  const csv = [headers, ...rows].map((columns) => columns.map(escapeCsvValue).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 function countRowsInLastWeek(rows) {
@@ -547,6 +607,8 @@ export default function AdminPage() {
   const [selectedQuickscan, setSelectedQuickscan] = useState(null);
   const [statusError, setStatusError] = useState("");
   const [pendingStatusIds, setPendingStatusIds] = useState({});
+  const [quickscanQuery, setQuickscanQuery] = useState("");
+  const [contactStatusFilter, setContactStatusFilter] = useState("all");
 
   useEffect(() => {
     if (selectedQuickscan) {
@@ -660,6 +722,55 @@ export default function AdminPage() {
   }
 
   const stats = buildStats(quickscans, contacts);
+  const filteredQuickscans = useMemo(() => {
+    const term = quickscanQuery.trim().toLowerCase();
+
+    if (!term) {
+      return quickscans;
+    }
+
+    return quickscans.filter((submission) =>
+      [submission.name, submission.company_name, submission.email]
+        .some((value) => String(value || "").toLowerCase().includes(term)),
+    );
+  }, [quickscans, quickscanQuery]);
+  const filteredContacts = useMemo(() => {
+    if (contactStatusFilter === "all") {
+      return contacts;
+    }
+
+    return contacts.filter((submission) => (submission.status || "new") === contactStatusFilter);
+  }, [contacts, contactStatusFilter]);
+
+  function handleQuickscanExport() {
+    downloadCsv(
+      `quickscans-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["datum", "naam", "bedrijf", "e-mail", "score", "aanbevolen stap"],
+      filteredQuickscans.map((submission) => [
+        formatDate(submission.created_at),
+        submission.name || "",
+        submission.company_name || "",
+        submission.email || "",
+        formatScoreForCsv(submission),
+        submission.recommended_next_step || "",
+      ]),
+    );
+  }
+
+  function handleContactExport() {
+    downloadCsv(
+      `contact-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["datum", "naam", "bedrijf", "e-mail", "status", "bericht"],
+      filteredContacts.map((submission) => [
+        formatDate(submission.created_at),
+        submission.name || "",
+        submission.company_name || "",
+        submission.email || "",
+        STATUS_META[submission.status || "new"]?.label || submission.status || "",
+        truncateText(submission.message || "", 100),
+      ]),
+    );
+  }
 
   return (
     <PageSection bg={C.bg} pad="8.5rem clamp(1.5rem, 5vw, 5rem) 5rem" minH="100vh">
@@ -742,8 +853,8 @@ export default function AdminPage() {
           }}
         >
           {[
-            { id: "quickscan", label: "Quickscan" },
-            { id: "contact", label: "Contact" },
+            { id: "quickscan", label: "Quickscan", count: quickscans.length },
+            { id: "contact", label: "Contact", count: contacts.length },
           ].map((tab) => {
             const active = activeTab === tab.id;
 
@@ -764,7 +875,25 @@ export default function AdminPage() {
                   cursor: "pointer",
                 }}
               >
-                {tab.label}
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <span>{tab.label}</span>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minWidth: 26,
+                      padding: "2px 8px",
+                      borderRadius: 999,
+                      background: active ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.05)",
+                      color: active ? "#fff" : C.textMuted,
+                      fontSize: "0.76rem",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {tab.count}
+                  </span>
+                </span>
               </button>
             );
           })}
@@ -818,8 +947,52 @@ export default function AdminPage() {
                   lineHeight: 1.75,
                 }}
               >
-                {quickscans.length} inzendingen, gesorteerd op meest recent.
+                {filteredQuickscans.length} van {quickscans.length} inzendingen, gesorteerd op meest recent.
               </p>
+            </div>
+            <div
+              style={{
+                padding: "0 1.4rem 1rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                gap: 16,
+                flexWrap: "wrap",
+              }}
+            >
+              <label style={{ display: "grid", gap: 8, flex: "1 1 320px", maxWidth: 460 }}>
+                <span
+                  style={{
+                    color: C.textMuted,
+                    fontFamily: BODY,
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Zoek op naam, bedrijf of e-mail
+                </span>
+                <input
+                  type="search"
+                  value={quickscanQuery}
+                  onChange={(event) => setQuickscanQuery(event.target.value)}
+                  placeholder="Zoek quickscans..."
+                  style={controlInputStyle}
+                />
+              </label>
+              <button
+                type="button"
+                onClick={handleQuickscanExport}
+                disabled={filteredQuickscans.length === 0}
+                style={{
+                  ...secondaryButtonStyle,
+                  opacity: filteredQuickscans.length === 0 ? 0.5 : 1,
+                  cursor: filteredQuickscans.length === 0 ? "default" : "pointer",
+                }}
+              >
+                Exporteer CSV
+              </button>
             </div>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980 }}>
@@ -845,14 +1018,14 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {quickscans.length === 0 ? (
+                  {filteredQuickscans.length === 0 ? (
                     <tr>
                       <td colSpan={7} style={{ ...tableCellStyle, color: C.textMuted }}>
-                        Nog geen quickscan-inzendingen gevonden.
+                        {quickscans.length === 0 ? "Nog geen quickscan-inzendingen gevonden." : "Geen quickscans gevonden voor deze zoekopdracht."}
                       </td>
                     </tr>
                   ) : (
-                    quickscans.map((submission) => (
+                    filteredQuickscans.map((submission) => (
                       <tr key={submission.id}>
                         <td style={tableCellStyle}>
                           <div style={{ color: C.text, fontWeight: 700 }}>{submission.name || "—"}</div>
@@ -916,7 +1089,7 @@ export default function AdminPage() {
                   lineHeight: 1.75,
                 }}
               >
-                {contacts.length} inzendingen, gesorteerd op meest recent.
+                {filteredContacts.length} van {contacts.length} inzendingen, gesorteerd op meest recent.
               </p>
               {statusError ? (
                 <div
@@ -931,6 +1104,54 @@ export default function AdminPage() {
                   {statusError}
                 </div>
               ) : null}
+            </div>
+            <div
+              style={{
+                padding: "0 1.4rem 1rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                gap: 16,
+                flexWrap: "wrap",
+              }}
+            >
+              <label style={{ display: "grid", gap: 8, minWidth: 220 }}>
+                <span
+                  style={{
+                    color: C.textMuted,
+                    fontFamily: BODY,
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Statusfilter
+                </span>
+                <select
+                  value={contactStatusFilter}
+                  onChange={(event) => setContactStatusFilter(event.target.value)}
+                  style={controlInputStyle}
+                >
+                  {CONTACT_FILTER_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                onClick={handleContactExport}
+                disabled={filteredContacts.length === 0}
+                style={{
+                  ...secondaryButtonStyle,
+                  opacity: filteredContacts.length === 0 ? 0.5 : 1,
+                  cursor: filteredContacts.length === 0 ? "default" : "pointer",
+                }}
+              >
+                Exporteer CSV
+              </button>
             </div>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1100 }}>
@@ -956,14 +1177,14 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {contacts.length === 0 ? (
+                  {filteredContacts.length === 0 ? (
                     <tr>
                       <td colSpan={7} style={{ ...tableCellStyle, color: C.textMuted }}>
-                        Nog geen contactinzendingen gevonden.
+                        {contacts.length === 0 ? "Nog geen contactinzendingen gevonden." : "Geen contactinzendingen gevonden voor dit filter."}
                       </td>
                     </tr>
                   ) : (
-                    contacts.map((submission) => (
+                    filteredContacts.map((submission) => (
                       <tr key={submission.id} style={{ opacity: pendingStatusIds[submission.id] ? 0.72 : 1 }}>
                         <td style={tableCellStyle}>
                           <div style={{ color: C.text, fontWeight: 700 }}>{submission.name || "—"}</div>
@@ -1005,7 +1226,7 @@ export default function AdminPage() {
                                     color: active ? STATUS_META[statusOption].color : C.textSoft,
                                   }}
                                 >
-                                  {statusOption}
+                                  {STATUS_META[statusOption].label}
                                 </button>
                               );
                             })}
