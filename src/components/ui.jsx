@@ -213,16 +213,38 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false }
 
 export function usePageSeo({ title, description }) {
   useEffect(() => {
-    document.title = title.replace(/starre\.ai/gi, "StarLeo");
+    const normalizedTitle = title.replace(/starre\.ai/gi, "StarLeo");
+    const currentUrl = window.location.href;
 
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "description");
-      document.head.appendChild(meta);
-    }
+    const upsertMeta = (selector, attribute, value) => {
+      let meta = document.querySelector(selector);
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute(attribute, value);
+        document.head.appendChild(meta);
+      }
+      return meta;
+    };
 
-    meta.setAttribute("content", description);
+    const upsertLink = (selector, relValue) => {
+      let link = document.querySelector(selector);
+      if (!link) {
+        link = document.createElement("link");
+        link.setAttribute("rel", relValue);
+        document.head.appendChild(link);
+      }
+      return link;
+    };
+
+    document.title = normalizedTitle;
+
+    upsertMeta('meta[name="description"]', "name", "description").setAttribute("content", description);
+    upsertMeta('meta[property="og:title"]', "property", "og:title").setAttribute("content", normalizedTitle);
+    upsertMeta('meta[property="og:description"]', "property", "og:description").setAttribute("content", description);
+    upsertMeta('meta[property="og:url"]', "property", "og:url").setAttribute("content", currentUrl);
+    upsertMeta('meta[name="twitter:title"]', "name", "twitter:title").setAttribute("content", normalizedTitle);
+    upsertMeta('meta[name="twitter:description"]', "name", "twitter:description").setAttribute("content", description);
+    upsertLink('link[rel="canonical"]', "canonical").setAttribute("href", currentUrl);
   }, [description, title]);
 }
 

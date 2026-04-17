@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function AgentsPage() {
   usePageSeo({
-    title: "StarLeo | OpenClaw setup en AI agents voor inbox automation, leads en support",
+    title: "OpenClaw AI Agents voor bedrijven — Inbox & lead automation | StarLeo",
     description:
       "OpenClaw AI agents en agent systems voor bedrijven. Voor inbox automation, lead qualification, intake automation, support routing en AI workflow automatisering.",
   });
@@ -113,7 +113,7 @@ export default function AgentsPage() {
             <SectionHeading
               tag="Wanneer dit past"
               title={<>Kies AI agents zodra werk niet mag stoppen bij een antwoord, maar door moet naar actie</>}
-              text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heb je geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
+              text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heeft u geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
             />
           </div>
           <Reveal delay={0.18}>
@@ -121,10 +121,10 @@ export default function AgentsPage() {
               <div style={{ padding: "1.35rem" }}>
                 <BulletList
                   items={[
-                    "Je wilt inbox, leads of supportstromen slimmer afhandelen",
+                    "U wilt inbox, leads of supportstromen slimmer afhandelen",
                     "Meerdere systemen moeten samenwerken in één flow",
                     "Taken moeten worden doorgezet of uitgevoerd, niet alleen beoordeeld",
-                    "Je zoekt een concreet OpenClaw setup in plaats van een losse AI demo",
+                    "U zoekt een concrete OpenClaw setup in plaats van een losse AI demo",
                   ]}
                 />
               </div>
@@ -164,7 +164,7 @@ export default function AgentsPage() {
         title={
           <>
             Onderzoek of een OpenClaw setup
-            <em style={{ color: C.primary, fontStyle: "italic" }}> direct werk kan overnemen in je team</em>
+            <em style={{ color: C.primary, fontStyle: "italic" }}> direct werk kan overnemen in uw team</em>
           </>
         }
         text="Vertel welke inbox-, support-, intake- of leadprocessen nu handmatig blijven hangen. Dan kunnen we direct inschatten of een OpenClaw setup met AI agents past."

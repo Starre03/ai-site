@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function IntegrationsPage() {
   usePageSeo({
-    title: "StarLeo | AI implementatie, Claude integratie, ChatGPT integratie en OpenAI integratie",
+    title: "Claude & ChatGPT integratie voor bedrijven — AI implementatie | StarLeo",
     description:
       "AI integraties voor bedrijven met Claude, ChatGPT en OpenAI. Voor support, documentanalyse, AI kennisassistenten en workflow verbetering in bestaande processen.",
   });
@@ -12,14 +12,14 @@ export default function IntegrationsPage() {
   return (
     <>
       <PageHero
-        badge="AI implementatie · Claude integratie · ChatGPT integratie · OpenAI integratie"
+        badge="AI implementatie · Claude · ChatGPT · OpenAI"
         title={
           <>
-            AI implementatie voor support,
-            <span style={{ color: C.primary }}> document AI en kenniswerk.</span>
+            Claude en ChatGPT integreren in uw bedrijf —
+            <span style={{ color: C.primary }}> zodat het direct iets oplevert.</span>
           </>
         }
-        text="StarLeo bouwt Claude integraties, ChatGPT integraties en OpenAI integraties voor bedrijven die support, documentanalyse, interne kennis en bestaande workflows slimmer willen maken. Geen OpenClaw hier, maar gerichte AI implementatie binnen bestaand werk."
+        text="Wij richten Claude en ChatGPT in voor uw support, documentprocessen of interne kenniswerk. Geen software bouwen — maar de juiste tool, goed ingericht op uw situatie, zodat uw team er morgen al mee kan werken."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
@@ -35,13 +35,13 @@ export default function IntegrationsPage() {
           <GlowCard style={{ background: C.bg2, maxWidth: 360 }}>
             <div style={{ padding: "1.35rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                Positionering
+                Wat Claude en ChatGPT al kunnen
               </div>
               <p style={{ color: C.text, fontFamily: BODY, fontWeight: 600, marginTop: 12 }}>
-                Geen OpenClaw hier. Deze dienst draait bewust om Claude, ChatGPT en OpenAI integraties.
+                Zonder iets te bouwen: documenten samenvatten, vragen beantwoorden op basis van uw eigen kennisbank, support-antwoorden voorbereiden en interne informatie snel vindbaar maken.
               </p>
               <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.75, fontSize: "0.82rem", marginTop: 10 }}>
-                Voor AI kennisassistenten, documentanalyse, support automation en AI in bestaande processen.
+                Wij zorgen dat het aansluit op uw situatie.
               </p>
             </div>
           </GlowCard>
@@ -50,32 +50,32 @@ export default function IntegrationsPage() {
 
       <PageSection bg={C.bg2}>
         <SectionHeading
-          tag="Wat we bouwen"
+          tag="Wat het oplevert"
           title={
             <>
-              Claude en ChatGPT integraties voor bedrijven die
-              <em style={{ color: C.primary, fontStyle: "italic" }}> sneller, consistenter en slimmer willen werken</em>
+              Wat Claude en ChatGPT al kunnen doen
+              <em style={{ color: C.primary, fontStyle: "italic" }}> zonder iets te bouwen</em>
             </>
           }
-          text="Het verschil met AI agents is bewust scherp. Deze dienst helpt teams beter werken met AI in support, documentprocessen en interne workflows. Dit is geen OpenClaw agentlaag, maar praktische AI implementatie in bestaande systemen."
+          text="De kracht zit al in de tools zelf. Wij zorgen voor de juiste inrichting, de juiste context en de koppeling met uw processen — zodat het daadwerkelijk werkt voor uw team."
         />
         <div className="card-grid-two" style={{ marginTop: 28 }}>
           {[
             {
-              title: "Kennisassistenten",
-              body: "Zoek en antwoord op basis van interne documentatie, procedures, handleidingen of projectinformatie, zodat teams minder tijd kwijt zijn aan zoeken en afstemmen.",
+              title: "Documenten samenvatten en analyseren",
+              body: "Claude leest contracten, rapporten, dossiers of handleidingen en geeft direct een samenvatting, actiepunten of antwoord op een specifieke vraag. Bespaart uren per week.",
             },
             {
-              title: "Documentanalyse",
-              body: "Laat Claude of ChatGPT documenten samenvatten, vergelijken, actiepunten extraheren of vertalen naar bruikbare output voor sales, operations of support.",
+              title: "Vragen beantwoorden op uw eigen kennisbank",
+              body: "Koppel uw documentatie, FAQ of procedures aan Claude — en uw team of klanten krijgen direct het juiste antwoord, zonder te zoeken of collega's lastig te vallen.",
             },
             {
-              title: "Support workflows",
-              body: "Bereid antwoorden voor, categoriseer vragen, haal context uit bestaande bronnen op en maak support consistenter zonder elk ticket volledig handmatig te behandelen.",
+              title: "Support consistenter en sneller maken",
+              body: "ChatGPT of Claude bereidt antwoorden voor op binnenkomende vragen, op basis van uw eigen documentatie. Uw team controleert en verstuurt — sneller, consistenter.",
             },
             {
-              title: "Interne tools",
-              body: "Voeg AI toe aan interne dashboards, portals of operationele tools zodat teams sneller kunnen beoordelen, samenvatten, vinden en beslissen.",
+              title: "Interne informatie toegankelijk maken",
+              body: "Beleid, procedures, eerdere projecten — Claude maakt het doorzoekbaar en begrijpelijk. Nieuwe medewerkers vinden antwoorden zelf, zonder steeds te hoeven vragen.",
             },
           ].map((item, index) => (
             <Reveal key={item.title} delay={0.12 + index * 0.05} fill>
@@ -98,7 +98,7 @@ export default function IntegrationsPage() {
             <SectionHeading
               tag="Waar dit goed werkt"
               title={<>De juiste dienst als support, kenniswerk en documentprocessen slimmer moeten zonder agentlaag</>}
-              text="Kies AI integraties wanneer de bottleneck zit in informatie ophalen, antwoorden voorbereiden, documenten beoordelen of interne context gebruiken. Niet wanneer je al toe bent aan OpenClaw AI agents die taken doorzetten of uitvoeren."
+              text="Kies deze dienst als de tools er al zijn — of kunnen komen — maar de inrichting, context en koppeling aan uw processen nog ontbreekt. Geen softwareontwikkeling, maar slimme implementatie van wat er al is."
             />
           </div>
           <Reveal delay={0.18}>
@@ -122,9 +122,9 @@ export default function IntegrationsPage() {
         <div className="two-col" style={{ alignItems: "start" }}>
           <div>
             <SectionHeading
-              tag="Use-cases"
-              title={<>Van AI support automation tot document AI en interne kennisassistenten</>}
-              text="Deze dienst is er voor bedrijven die zoekintentie hebben rond Claude integratie, ChatGPT integratie, OpenAI integratie, document AI en AI voor kenniswerk."
+              tag="Maatwerk"
+              title={<>Heeft u iets specifieks in gedachten? <em style={{ color: C.primary, fontStyle: "italic" }}>We kijken eerlijk naar wat haalbaar is.</em></>}
+              text="Standaard implementaties zijn een goed startpunt. Maar elke situatie is anders. Als uw vraag verder gaat — een specifieke koppeling, een afwijkend proces of een idee dat u wilt verkennen — bespreken we graag wat realistisch is. Geen verkooppraatje, maar een eerlijk gesprek over haalbaarheid."
             />
           </div>
           <Reveal delay={0.18}>
@@ -132,10 +132,10 @@ export default function IntegrationsPage() {
               <div style={{ padding: "1.35rem" }}>
                 <BulletList
                   items={[
-                    "Supportteams die sneller en consistenter willen reageren met AI context uit documentatie",
-                    "Documentprocessen waar samenvatten, vergelijken of informatie extraheren veel tijd kost",
-                    "Interne teams die een AI kennisassistent willen op policies, handleidingen of dossiers",
-                    "Bedrijven die AI implementatie willen toevoegen aan bestaande processen zonder OpenClaw agent setup",
+                    "Specifieke koppeling met uw bestaande systemen",
+                    "Inrichting op uw eigen documenten of kennisbank",
+                    "Begeleiding bij adoptie en gebruik in uw team",
+                    "Verkenning van wat verder mogelijk is",
                   ]}
                 />
               </div>
@@ -148,11 +148,11 @@ export default function IntegrationsPage() {
         preferredRoute="AI Integraties"
         title={
           <>
-            Verken AI integraties die
-            <em style={{ color: C.primary, fontStyle: "italic" }}> morgen al waarde kunnen hebben in je team</em>
+            Vertel uw situatie —
+            <em style={{ color: C.primary, fontStyle: "italic" }}> dan kijken we wat Claude of ChatGPT voor u kan doen</em>
           </>
         }
-        text="De intake helpt ons bepalen welk support-, document- of kennisproces het meest geschikt is voor een eerste Claude integratie, ChatGPT integratie of bredere OpenAI implementatie."
+        text="Beschrijf welk proces, welke vraag of welke uitdaging u heeft. Dan kijken we samen welke inrichting van Claude of ChatGPT het meeste oplevert — en of er meer mogelijk is."
       />
     </>
   );

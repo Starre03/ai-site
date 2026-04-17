@@ -4,7 +4,7 @@ import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, Sec
 
 export default function AuditPage() {
   usePageSeo({
-    title: "StarLeo | AI audit voor bedrijven, workflow analyse en implementatie roadmap",
+    title: "AI Audit voor bedrijven — Workflow analyse & roadmap | StarLeo",
     description:
       "AI audit voor bedrijven die eerst duidelijkheid willen over AI implementatie. Inclusief workflow analyse, bottleneck analyse, AI kansen, tooladvies en implementatie roadmap.",
   });
@@ -267,7 +267,7 @@ export default function AuditPage() {
             <em style={{ color: C.primary, fontStyle: "italic" }}> richting, prioriteit en onderbouwing oplevert</em>
           </>
         }
-        text="Gebruik dit formulier om context mee te geven voor je AI audit. Dan kunnen we tijdens het gesprek direct inzoomen op processen, bottlenecks en de beste implementatierichting."
+        text="Gebruik dit formulier om context mee te geven voor uw AI audit. Dan kunnen we tijdens het gesprek direct inzoomen op processen, bottlenecks en de beste implementatierichting."
       />
     </>
   );

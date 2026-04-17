@@ -185,7 +185,7 @@ function AboutCore() {
 
 export default function AboutPage() {
   usePageSeo({
-    title: "StarLeo | Over ons",
+    title: "Over StarLeo — AI bureau voor MKB bedrijven",
     description:
       "Over StarLeo. Wij helpen bedrijven AI beter begrijpen, slimmer toepassen en concreet integreren in dagelijks werk.",
   });
