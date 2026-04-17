@@ -44,14 +44,7 @@ function AboutHero() {
             </span>
           </h1>
         </Reveal>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-            gap: 18,
-            marginTop: 34,
-          }}
-        >
+        <div className="card-grid-three" style={{ marginTop: 34 }}>
           {topCards.map((item, index) => (
             <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
               <GlowCard style={{ background: C.bg2, height: "100%" }}>
@@ -91,7 +84,7 @@ function AboutHero() {
 
 function AboutCore() {
   return (
-    <PageSection bg={C.lightBg} pad="6rem clamp(1.5rem, 5vw, 5rem) 7rem">
+    <PageSection bg={C.lightBg} pad="clamp(4rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem) clamp(4.5rem, 9vw, 7rem)">
       <div style={{ maxWidth: 1140, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.04}>
           <Tag>Wie wij zijn</Tag>

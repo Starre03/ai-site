@@ -13,7 +13,7 @@ export default function AuditPage() {
     <>
       <PageHero
         badge="Zelfstandige dienst · AI audit"
-        pad="7.4rem clamp(1.5rem, 5vw, 5rem) 4.6rem"
+        pad="clamp(5.75rem, 10vw, 7.4rem) clamp(1.5rem, 5vw, 5rem) clamp(4rem, 8vw, 4.6rem)"
         minH="100vh"
         centerY
         titleSize="clamp(2.2rem, 5vw, 4.15rem)"

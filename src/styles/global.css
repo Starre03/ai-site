@@ -173,9 +173,18 @@ textarea:focus-visible {
     grid-template-columns: 1fr !important;
   }
 
+  .card-grid-three {
+    gap: 14px !important;
+  }
+
   .ambient {
     width: 260px;
     height: 260px;
+  }
+
+  section {
+    padding-left: clamp(1rem, 4vw, 1.5rem);
+    padding-right: clamp(1rem, 4vw, 1.5rem);
   }
 }
 

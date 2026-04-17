@@ -373,7 +373,7 @@ function HowWeWorkSection() {
   const cards = isProcess ? processCards : promiseCards;
 
   return (
-    <PageSection bg={C.lightBg} pad="3.6rem clamp(1.5rem, 5vw, 5rem) 7rem">
+    <PageSection bg={C.lightBg} pad="clamp(3.5rem, 8vw, 3.6rem) clamp(1.5rem, 5vw, 5rem) clamp(4.5rem, 9vw, 7rem)">
       <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.04}>
           <Tag>Zo werken wij</Tag>
@@ -443,14 +443,7 @@ function HowWeWorkSection() {
           </div>
         </Reveal>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-            gap: 18,
-            marginTop: 28,
-          }}
-        >
+        <div className="card-grid-three" style={{ marginTop: 28 }}>
           {cards.map((item, index) => (
             <Reveal key={item.title} delay={0.28 + index * 0.05} fill>
               <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%" }}>
@@ -533,14 +526,7 @@ function ServicesOverview() {
             U kunt starten met een audit, direct kiezen voor implementatie of een agentflow laten bouwen.
           </p>
         </Reveal>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-            gap: 20,
-            marginTop: 28,
-          }}
-        >
+        <div className="card-grid-three" style={{ marginTop: 28 }}>
         {serviceCards.map((card, index) => (
           <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
             <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
@@ -614,7 +600,7 @@ function SolidGlyphIcon({ kind }) {
 
 function WhyNowSection() {
   return (
-    <PageSection bg={C.lightBg} pad="6rem clamp(1.5rem, 5vw, 5rem) 3.8rem">
+    <PageSection bg={C.lightBg} pad="clamp(4rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem) clamp(3.25rem, 7vw, 3.8rem)">
       <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.04}>
           <Tag>Waarom nu</Tag>
@@ -635,7 +621,7 @@ function WhyNowSection() {
             Haal meer uit uw bedrijf met <span style={{ color: C.primary }}>AI.</span>
           </h2>
         </Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 18, marginTop: 30 }}>
+        <div className="card-grid-two" style={{ marginTop: 30 }}>
           {whyNowCards.map((item, index) => (
             <Reveal key={item.title} delay={0.16 + index * 0.05} fill>
               <GlowCard light style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
@@ -664,7 +650,7 @@ function IntakeCtaSection() {
     <section
       style={{
         background: C.lightBg,
-        padding: "4rem clamp(1.5rem, 5vw, 5rem) 4.1rem",
+        padding: "clamp(3.25rem, 7vw, 4rem) clamp(1.5rem, 5vw, 5rem) clamp(3.25rem, 7vw, 4.1rem)",
       }}
     >
       <div style={{ maxWidth: 980, margin: "0 auto", width: "100%" }}>
