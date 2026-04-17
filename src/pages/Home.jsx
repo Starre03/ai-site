@@ -49,9 +49,21 @@ const serviceCards = [
 ];
 
 const trustedBrands = [
-  { name: "CareUp" },
-  { name: "ShirtPrintShop" },
-  { name: "Mizo" },
+  {
+    name: "CareUp",
+    logo: "https://careup.online/wp-content/uploads/2017/09/TMM-LOGO-web.png",
+    url: "https://careup.online",
+  },
+  {
+    name: "De ShirtPrintShop",
+    logo: "https://shirtprintshop.nl/wp-content/uploads/2020/09/SPS-logo.png",
+    url: "https://shirtprintshop.nl",
+  },
+  {
+    name: "Mizo",
+    logo: "https://mizo-ai.com/image_3300.png",
+    url: "https://mizo-ai.com/en",
+  },
 ];
 
 const exampleTabs = ["AI Implementatie", "AI Agents"];
@@ -336,34 +348,33 @@ function TrustedBannerSection() {
             `}</style>
             <div className="trusted-marquee">
               {brands.map((brand, index) => (
-                <div
+                <a
                   key={`${brand.name}-${index}`}
+                  href={brand.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={brand.name}
                   style={{
-                    minWidth: brand.name.length > 12 ? 280 : 220,
-                    padding: "0 1.8rem",
+                    minWidth: 200,
+                    padding: "0 2rem",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 12,
-                    whiteSpace: "nowrap",
+                    textDecoration: "none",
                   }}
                 >
-                  <div
+                  <img
+                    src={brand.logo}
+                    alt={brand.name}
                     style={{
-                      color: "#4E6784",
-                      fontFamily: BODY,
-                      fontWeight: 800,
-                      fontSize:
-                        brand.name.length > 16
-                          ? "clamp(0.96rem, 1.5vw, 1.24rem)"
-                          : "clamp(1rem, 1.75vw, 1.34rem)",
-                      letterSpacing: "-0.03em",
-                      lineHeight: 1,
+                      display: "block",
+                      maxHeight: 36,
+                      maxWidth: 140,
+                      width: "100%",
+                      objectFit: "contain",
                     }}
-                  >
-                    {brand.name}
-                  </div>
-                </div>
+                  />
+                </a>
               ))}
             </div>
           </div>
