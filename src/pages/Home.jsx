@@ -8,6 +8,7 @@ import {
   PageSection,
   PrimaryButton,
   Reveal,
+  SectionGlow,
   SectionHeading,
   SmoothSection,
   Tag,
@@ -180,10 +181,18 @@ function FadeSwitcher() {
 }
 
 function Hero() {
+  const heroBg = (
+    <>
+      <div className="hero-grid-overlay" aria-hidden="true" />
+      <div className="ambient ambient-left" aria-hidden="true" />
+      <div className="ambient ambient-right" aria-hidden="true" />
+      <div className="ambient-hero-tr" aria-hidden="true" />
+      <div className="ambient-hero-bl" aria-hidden="true" />
+    </>
+  );
   return (
-    <SmoothSection bg={C.bg} zIndex={1} minH="120vh" center>
-      <div className="ambient ambient-left" />
-      <div style={{ maxWidth: 980, margin: "0 auto", textAlign: "center" }}>
+    <SmoothSection bg={C.bg} zIndex={1} minH="120vh" center bgLayer={heroBg}>
+      <div style={{ maxWidth: 980, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
         <Reveal delay={0.08}>
           <h1
             style={{
@@ -685,9 +694,10 @@ function IntakeCtaSection() {
       <div style={{ maxWidth: 980, margin: "0 auto", width: "100%" }}>
         <Reveal delay={0.06}>
           <GlowCard
+            className="cta-breath"
             style={{
               background:
-                `radial-gradient(circle at 18% 22%, ${C.primary}18, transparent 30%), radial-gradient(circle at 82% 78%, ${C.primary}10, transparent 28%), linear-gradient(135deg, ${C.bg2} 0%, ${C.bg} 100%)`,
+                `radial-gradient(circle at 18% 22%, ${C.primary}22, transparent 32%), radial-gradient(circle at 82% 78%, ${C.primary}14, transparent 30%), linear-gradient(135deg, ${C.bg2} 0%, ${C.bg} 100%)`,
               boxShadow: `0 18px 44px rgba(2, 8, 23, 0.14)`,
             }}
           >
@@ -745,8 +755,10 @@ export default function Home() {
       <Hero />
       <TrustedBannerSection />
       <ServicesOverview />
+      <SectionGlow bg={C.lightBg} />
       <WhyNowSection />
       <IntakeCtaSection />
+      <SectionGlow bg={C.lightBg} />
       <HowWeWorkSection />
       <IntakeForm
         id="contact"

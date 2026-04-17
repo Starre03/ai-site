@@ -30,6 +30,7 @@ export function SmoothSection({
   zIndex = 1,
   minH = "120vh",
   center = false,
+  bgLayer = null,
 }) {
   const ref = useRef(null);
   const progress = useSectionProgress(ref);
@@ -38,25 +39,27 @@ export function SmoothSection({
   const drift = exit * -30;
 
   return (
-    <section ref={ref} id={id} style={{ minHeight: minH, position: "relative" }}>
+    <section ref={ref} id={id} style={{ minHeight: minH, position: "relative", background: bg }}>
       <div
         style={{
           position: "sticky",
           top: 0,
           minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: center ? "center" : undefined,
-        textAlign: center ? "center" : undefined,
-        padding: "clamp(4rem, 9vw, 6rem) clamp(1.25rem, 5vw, 5rem)",
-        background: bg,
-        zIndex,
-        opacity: fadeOut,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: center ? "center" : undefined,
+          textAlign: center ? "center" : undefined,
+          padding: "clamp(4rem, 9vw, 6rem) clamp(1.25rem, 5vw, 5rem)",
+          background: bg,
+          zIndex,
+          opacity: fadeOut,
           transform: `translateY(${drift}px) translateZ(0)`,
           willChange: "transform, opacity",
+          overflow: bgLayer ? "hidden" : undefined,
         }}
       >
+        {bgLayer}
         <div style={shell.content}>{children}</div>
       </div>
     </section>
@@ -92,9 +95,13 @@ export function GlowCard({ children, style = {}, light = false, className = "" }
   const ref = useRef(null);
   const [glow, setGlow] = useState({ x: 50, y: 50, on: false });
 
+  // Subtle 3D tilt based on mouse offset from card center (max ~3deg).
+  const tiltX = glow.on ? (50 - glow.y) * 0.06 : 0;
+  const tiltY = glow.on ? (glow.x - 50) * 0.06 : 0;
+
   return (
     <div
-      className={className}
+      className={`${className} glowcard-tilt ${glow.on ? "glowcard-hover-active" : ""}`.trim()}
       ref={ref}
       onMouseMove={(event) => {
         const rect = ref.current.getBoundingClientRect();
@@ -109,7 +116,11 @@ export function GlowCard({ children, style = {}, light = false, className = "" }
         position: "relative",
         borderRadius: 18,
         overflow: "hidden",
-        transition: "transform 0.4s cubic-bezier(.22,1,.36,1)",
+        transformStyle: "preserve-3d",
+        transform: glow.on
+          ? `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-2px)`
+          : "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)",
+        transition: "transform 0.5s cubic-bezier(.22,1,.36,1), box-shadow 0.5s cubic-bezier(.22,1,.36,1)",
         ...style,
       }}
     >
@@ -119,7 +130,7 @@ export function GlowCard({ children, style = {}, light = false, className = "" }
           inset: -1,
           borderRadius: 18,
           pointerEvents: "none",
-          background: `radial-gradient(220px at ${glow.x}% ${glow.y}%, ${C.primary}15, transparent 70%)`,
+          background: `radial-gradient(260px at ${glow.x}% ${glow.y}%, ${C.primary}1f, transparent 70%)`,
           opacity: glow.on ? 1 : 0,
           transition: "opacity 0.6s ease",
         }}
@@ -130,11 +141,24 @@ export function GlowCard({ children, style = {}, light = false, className = "" }
           inset: 0,
           borderRadius: 18,
           pointerEvents: "none",
-          border: `1px solid ${glow.on ? `${C.primary}20` : light ? C.lightCardBorder : C.border}`,
-          transition: "border-color 0.6s ease",
+          border: `1px solid ${glow.on ? `${C.primary}35` : light ? C.lightCardBorder : C.border}`,
+          boxShadow: glow.on
+            ? (light ? "0 18px 48px rgba(14, 165, 233, 0.14)" : `0 18px 44px ${C.primary}22`)
+            : "none",
+          transition: "border-color 0.6s ease, box-shadow 0.6s ease",
         }}
       />
       <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
+    </div>
+  );
+}
+
+export function SectionGlow({ bg = C.lightBg }) {
+  return (
+    <div style={{ background: bg, position: "relative", zIndex: 3, padding: "0 clamp(1.5rem, 5vw, 5rem)" }} aria-hidden="true">
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+        <div className="section-glow-divider" />
+      </div>
     </div>
   );
 }
@@ -168,6 +192,21 @@ export function Tag({ children }) {
   );
 }
 
+function renderBtnChildren(children) {
+  if (typeof children !== "string") return children;
+  // Split off trailing arrow-like glyph so we can animate it (idle nudge).
+  const match = children.match(/^(.*?)(\s*)([\u2190-\u21FF])\s*$/);
+  if (!match) return children;
+  const [, body, gap, arrow] = match;
+  return (
+    <>
+      {body}
+      {gap}
+      <span className="chev-nudge" aria-hidden="true">{arrow}</span>
+    </>
+  );
+}
+
 export function PrimaryButton({ children, to, href, onClick, secondary = false }) {
   const style = {
     display: "inline-flex",
@@ -185,28 +224,31 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false }
     color: "#fff",
     cursor: "pointer",
     boxShadow: secondary ? "none" : `0 4px 24px ${C.primary}25`,
-    transition: "all 0.4s cubic-bezier(.22,1,.36,1)",
+    transition: "transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s cubic-bezier(.22,1,.36,1), background 0.3s ease",
   };
+
+  const className = secondary ? "lift-on-hover" : "btn-premium";
+  const rendered = renderBtnChildren(children);
 
   if (to) {
     return (
-      <Link className="lift-on-hover" to={to} style={style}>
-        {children}
+      <Link className={className} to={to} style={style}>
+        {rendered}
       </Link>
     );
   }
 
   if (href) {
     return (
-      <a className="lift-on-hover" href={href} onClick={onClick} style={style}>
-        {children}
+      <a className={className} href={href} onClick={onClick} style={style}>
+        {rendered}
       </a>
     );
   }
 
   return (
-    <button className="lift-on-hover" onClick={onClick} style={style}>
-      {children}
+    <button className={className} onClick={onClick} style={style}>
+      {rendered}
     </button>
   );
 }
