@@ -51,18 +51,21 @@ const serviceCards = [
 const trustedBrands = [
   {
     name: "CareUp",
-    logo: "https://careup.online/wp-content/uploads/2017/09/TMM-LOGO-web.png",
+    logo: "https://careup.online/wp-content/uploads/2025/12/cropped-CareUp_logo_nieuw-300x97-1.png",
     url: "https://careup.online",
+    showName: false,
   },
   {
     name: "De ShirtPrintShop",
     logo: "https://shirtprintshop.nl/wp-content/uploads/2020/09/SPS-logo.png",
     url: "https://shirtprintshop.nl",
+    showName: false,
   },
   {
     name: "Mizo",
     logo: "https://mizo-ai.com/image_3300.png",
     url: "https://mizo-ai.com/en",
+    showName: true,
   },
 ];
 
@@ -355,11 +358,13 @@ function TrustedBannerSection() {
                   rel="noreferrer"
                   aria-label={brand.name}
                   style={{
-                    minWidth: 200,
+                    minWidth: 220,
                     padding: "0 2rem",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
+                    gap: 8,
                     textDecoration: "none",
                   }}
                 >
@@ -368,12 +373,23 @@ function TrustedBannerSection() {
                     alt={brand.name}
                     style={{
                       display: "block",
-                      maxHeight: 36,
-                      maxWidth: 140,
+                      maxHeight: 48,
+                      maxWidth: 160,
                       width: "100%",
                       objectFit: "contain",
                     }}
                   />
+                  {brand.showName ? (
+                    <span style={{
+                      color: "#4E6784",
+                      fontFamily: BODY,
+                      fontWeight: 600,
+                      fontSize: "0.78rem",
+                      letterSpacing: "-0.01em",
+                    }}>
+                      {brand.name}
+                    </span>
+                  ) : null}
                 </a>
               ))}
             </div>
