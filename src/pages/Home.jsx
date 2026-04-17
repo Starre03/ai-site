@@ -54,18 +54,21 @@ const trustedBrands = [
     logo: "https://careup.online/wp-content/uploads/2025/12/cropped-CareUp_logo_nieuw-300x97-1.png",
     url: "https://careup.online",
     showName: false,
+    logoHeight: 40,
   },
   {
     name: "De ShirtPrintShop",
     logo: "https://shirtprintshop.nl/wp-content/uploads/2020/09/SPS-logo.png",
     url: "https://shirtprintshop.nl",
     showName: false,
+    logoHeight: 56,
   },
   {
     name: "Mizo",
     logo: "https://mizo-ai.com/image_3300.png",
     url: "https://mizo-ai.com/en",
     showName: true,
+    logoHeight: 44,
   },
 ];
 
@@ -373,9 +376,9 @@ function TrustedBannerSection() {
                     alt={brand.name}
                     style={{
                       display: "block",
-                      maxHeight: 48,
-                      maxWidth: 160,
-                      width: "100%",
+                      height: brand.logoHeight || 44,
+                      width: "auto",
+                      maxWidth: 180,
                       objectFit: "contain",
                     }}
                   />
