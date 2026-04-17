@@ -215,7 +215,7 @@ function buildCustomerConfirmationHtml(row: Record<string, unknown>) {
       </p>
       <p style="margin:0 0 24px;">
         We nemen binnen één werkdag persoonlijk contact met u op om de mogelijkheden vrijblijvend te bespreken.
-        Heeft u in de tussentijd vragen? Reply gerust op deze mail.
+        Heeft u in de tussentijd vragen? Stuur gerust een mail naar <a href="mailto:info@starreai.com" style="color:#0ea5e9;text-decoration:none;">info@starreai.com</a>.
       </p>
       <p style="margin:0 0 24px;">
         <a href="${SERVICES_URL}" style="${CTA_STYLE}">Bekijk onze diensten</a>

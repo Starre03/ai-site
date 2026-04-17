@@ -142,7 +142,7 @@ function buildCustomerConfirmationHtml(row: Record<string, unknown>) {
         persoonlijk contact met u op om uw situatie te bespreken.
       </p>
       <p style="margin:0 0 24px;">
-        Heeft u in de tussentijd een aanvullende vraag? Reply gerust op deze mail — uw bericht komt direct bij ons terecht.
+        Heeft u in de tussentijd een aanvullende vraag? Stuur gerust een mail naar <a href="mailto:info@starreai.com" style="color:#0ea5e9;text-decoration:none;">info@starreai.com</a>.
       </p>
       <p style="margin:0 0 24px;">
         <a href="${QUICKSCAN_URL}" style="${CTA_STYLE}">Start alvast de gratis quickscan</a>
