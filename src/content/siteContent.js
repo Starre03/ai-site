@@ -14,34 +14,6 @@ export const serviceMenuLinks = [
     to: "/ai-agents",
     description: "Agent systems voor inbox, intake, opvolging en routing die echt werk uitvoeren.",
   },
-  {
-    label: "AI Workshop",
-    to: "/ai-workshop",
-    description: "Praktische sessie over hoe AI werkt, hoe je beter prompt en waar het direct bruikbaar is.",
-  },
-];
-
-export const solutionMenuLinks = [
-  {
-    label: "Support automation",
-    to: "/ai-integraties",
-    description: "Snellere supportflows, antwoordconcepten en betere categorisering.",
-  },
-  {
-    label: "Document AI",
-    to: "/ai-integraties",
-    description: "Documentanalyse, samenvattingen, controles en actiepunten uit dossiers of contracten.",
-  },
-  {
-    label: "Inbox & intake",
-    to: "/ai-agents",
-    description: "OpenClaw flows voor mail begrijpen, intake starten en opvolging klaarzetten.",
-  },
-  {
-    label: "AI roadmap",
-    to: "/ai-audit",
-    description: "Bepaal eerst waar AI het meeste oplevert voordat je gaat bouwen.",
-  },
 ];
 
 export const serviceCards = [
@@ -82,19 +54,6 @@ export const serviceCards = [
       "Multi-agent samenwerking",
       "CRM, inbox en routing koppelingen",
       "Acties klaarzetten of uitvoeren",
-    ],
-  },
-  {
-    slug: "/ai-workshop",
-    eyebrow: "Dienst 04",
-    title: "AI Workshop",
-    summary:
-      "Praktische AI workshop voor teams die willen begrijpen hoe AI werkt, hoe je er goed mee werkt en waar het direct bruikbaar is in dagelijkse processen.",
-    points: [
-      "Uitleg over AI, prompting en modelgedrag",
-      "Tips en tricks voor dagelijks gebruik",
-      "Use-cases per team of rol",
-      "Sterk voor adoptie en AI-geletterdheid",
     ],
   },
 ];
@@ -212,7 +171,7 @@ export const intakeSteps = [
         id: "route",
         label: "Welke dienst lijkt nu het best te passen?",
         type: "chips",
-        options: ["AI Audit", "AI Implementatie", "OpenClaw Agents", "AI Workshop", "Weet ik nog niet"],
+        options: ["AI Audit", "AI Implementatie", "OpenClaw Agents", "Weet ik nog niet"],
       },
       {
         id: "timeline",
@@ -256,7 +215,6 @@ export const homeIntakeSteps = [
           "AI Audit",
           "AI Implementatie",
           "OpenClaw Agents",
-          "AI Workshop",
           "Weet ik nog niet",
         ],
       },

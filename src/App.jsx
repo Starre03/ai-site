@@ -17,7 +17,6 @@ import NotFoundPage from "./pages/NotFound";
 import PrivacyPage from "./pages/Privacy";
 import QuickscanPage from "./pages/QuickscanPage";
 import TermsPage from "./pages/Terms";
-import WorkshopPage from "./pages/Workshop";
 import LoginPage from "./pages/Login";
 
 function ScrollManager() {
@@ -62,7 +61,6 @@ export default function App() {
           <Route path="/ai-audit" element={<AuditPage />} />
           <Route path="/ai-integraties" element={<IntegrationsPage />} />
           <Route path="/ai-agents" element={<AgentsPage />} />
-          <Route path="/ai-workshop" element={<WorkshopPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { serviceMenuLinks, solutionMenuLinks } from "../content/siteContent";
+import { serviceMenuLinks } from "../content/siteContent";
 import { BODY, C } from "../lib/theme";
 import { BrandMark } from "./ui";
 
@@ -12,10 +12,7 @@ export default function Nav() {
   const location = useLocation();
 
   const menus = useMemo(
-    () => [
-      { label: "Diensten", items: serviceMenuLinks },
-      { label: "Oplossingen", items: solutionMenuLinks },
-    ],
+    () => [{ label: "Diensten", items: serviceMenuLinks }],
     [],
   );
 
