@@ -6,6 +6,8 @@ import { BODY, C } from "../lib/theme";
 import { GlowCard, PrimaryButton, Reveal, SectionHeading } from "./ui";
 
 function InputField({ field, value, onChange, selected, onToggle, error }) {
+  const [focused, setFocused] = useState(false);
+
   const chipStyle = (isSelected) => ({
     padding: "7px 14px",
     borderRadius: 7,
@@ -23,11 +25,21 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
   if (field.type === "chips") {
     return (
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {field.options.map((option) => (
-          <button key={option} type="button" onClick={() => onChange(field.id, option)} style={chipStyle(value === option)}>
-            {option}
-          </button>
-        ))}
+        {field.options.map((option) => {
+          const isSelected = value === option;
+
+          return (
+            <button
+              key={option}
+              className={isSelected ? undefined : "chip-hover"}
+              type="button"
+              onClick={() => onChange(field.id, option)}
+              style={chipStyle(isSelected)}
+            >
+              {option}
+            </button>
+          );
+        })}
       </div>
     );
   }
@@ -38,7 +50,13 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
         {field.options.map((option) => {
           const isSelected = selected.includes(option);
           return (
-            <button key={option} type="button" onClick={() => onToggle(field.id, option)} style={chipStyle(isSelected)}>
+            <button
+              key={option}
+              className={isSelected ? undefined : "chip-hover"}
+              type="button"
+              onClick={() => onToggle(field.id, option)}
+              style={chipStyle(isSelected)}
+            >
               {isSelected ? "✓ " : ""}
               {option}
             </button>
@@ -53,13 +71,15 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
       <textarea
         value={value}
         onChange={(event) => onChange(field.id, event.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         placeholder={field.placeholder}
         rows={4}
         style={{
           width: "100%",
           padding: "12px 14px",
           background: C.bg,
-          border: `1px solid ${error ? C.danger : C.border}`,
+          border: `1px solid ${error ? C.danger : focused ? C.primary : C.border}`,
           borderRadius: 10,
           color: C.text,
           fontSize: "0.86rem",
@@ -76,12 +96,14 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
       type={field.type}
       value={value}
       onChange={(event) => onChange(field.id, event.target.value)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       placeholder={field.placeholder}
       style={{
         width: "100%",
         padding: "11px 14px",
         background: C.bg,
-        border: `1px solid ${error ? C.danger : C.border}`,
+        border: `1px solid ${error ? C.danger : focused ? C.primary : C.border}`,
         borderRadius: 10,
         color: C.text,
         fontSize: "0.86rem",
@@ -476,7 +498,26 @@ export default function IntakeForm({
                   </button>
                 ) : null}
                 <PrimaryButton onClick={() => (step < steps.length - 1 ? jump(1) : submit())}>
-                  {submitting ? "Versturen..." : step < steps.length - 1 ? "Volgende stap →" : submitLabel || "Verstuur intake →"}
+                  {submitting ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      <span
+                        style={{
+                          width: 14,
+                          height: 14,
+                          border: "2px solid rgba(255,255,255,0.3)",
+                          borderTopColor: "#fff",
+                          borderRadius: "50%",
+                          animation: "spin 0.7s linear infinite",
+                          display: "inline-block",
+                        }}
+                      />
+                      Versturen...
+                    </span>
+                  ) : step < steps.length - 1 ? (
+                    "Volgende stap →"
+                  ) : (
+                    submitLabel || "Verstuur intake →"
+                  )}
                 </PrimaryButton>
               </div>
               {submitError ? (

@@ -88,12 +88,13 @@ export function PageSection({
   );
 }
 
-export function GlowCard({ children, style = {}, light = false }) {
+export function GlowCard({ children, style = {}, light = false, className = "" }) {
   const ref = useRef(null);
   const [glow, setGlow] = useState({ x: 50, y: 50, on: false });
 
   return (
     <div
+      className={className}
       ref={ref}
       onMouseMove={(event) => {
         const rect = ref.current.getBoundingClientRect();

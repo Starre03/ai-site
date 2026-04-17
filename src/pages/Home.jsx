@@ -227,8 +227,29 @@ function Hero() {
           </p>
         </Reveal>
         <Reveal delay={0.22}>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginTop: 22 }}>
-            <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 22 }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+              <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
+            </div>
+            <a
+              href="#diensten"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("diensten")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              style={{
+                color: "rgba(232,238,248,0.55)",
+                fontSize: "0.82rem",
+                fontFamily: BODY,
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                marginTop: 4,
+              }}
+            >
+              Bekijk onze diensten ↓
+            </a>
           </div>
         </Reveal>
       </div>
@@ -446,7 +467,11 @@ function HowWeWorkSection() {
         <div className="card-grid-three" style={{ marginTop: 28 }}>
           {cards.map((item, index) => (
             <Reveal key={item.title} delay={0.28 + index * 0.05} fill>
-              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%" }}>
+              <GlowCard
+                className="card-light-hover"
+                light
+                style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%" }}
+              >
                 <div style={{ padding: "1.5rem", textAlign: "left", height: "100%" }}>
                   <h3
                     style={{
@@ -527,32 +552,36 @@ function ServicesOverview() {
           </p>
         </Reveal>
         <div className="card-grid-three" style={{ marginTop: 28 }}>
-        {serviceCards.map((card, index) => (
-          <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
-            <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
-              <GlowCard light style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-                <div
-                  style={{
-                    padding: "1.4rem 1.5rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
-                    height: "100%",
-                    textAlign: "left",
-                  }}
+          {serviceCards.map((card, index) => (
+            <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
+              <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
+                <GlowCard
+                  className="card-light-hover"
+                  light
+                  style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
                 >
-                  <h3 style={{ fontFamily: BODY, fontSize: "1.04rem", fontWeight: 700, color: C.primary, margin: 0 }}>
-                    {card.title}
-                  </h3>
-                  <p style={{ color: C.lightTextSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
-                    {card.desc}
-                  </p>
-                </div>
-              </GlowCard>
-            </Link>
-          </Reveal>
-        ))}
-      </div>
+                  <div
+                    style={{
+                      padding: "1.4rem 1.5rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                      height: "100%",
+                      textAlign: "left",
+                    }}
+                  >
+                    <h3 style={{ fontFamily: BODY, fontSize: "1.04rem", fontWeight: 700, color: C.primary, margin: 0 }}>
+                      {card.title}
+                    </h3>
+                    <p style={{ color: C.lightTextSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
+                      {card.desc}
+                    </p>
+                  </div>
+                </GlowCard>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </SmoothSection>
   );
