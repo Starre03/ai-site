@@ -181,24 +181,26 @@ function FadeSwitcher() {
 }
 
 const STAR_COLORS = [
-  "rgba(255, 255, 255, 0.95)",
-  "rgba(186, 230, 253, 0.95)",
-  "rgba(196, 181, 253, 0.85)",
-  "rgba(147, 197, 253, 0.9)",
-  "rgba(255, 255, 255, 0.8)",
-  "rgba(224, 231, 255, 0.9)",
+  "rgba(255, 255, 255, 0.9)",
+  "rgba(186, 230, 253, 0.85)",
+  "rgba(196, 181, 253, 0.75)",
+  "rgba(147, 197, 253, 0.8)",
+  "rgba(255, 255, 255, 0.7)",
+  "rgba(224, 231, 255, 0.8)",
 ];
 
-const HERO_STARS = Array.from({ length: 26 }, (_, i) => {
-  // Distribute in a loose 6-col grid with noise per star.
-  const col = i % 6;
-  const row = Math.floor(i / 6);
-  const left = (col * 16.5 + 3 + ((i * 11) % 9)) % 100;
-  const top = (row * 22 + 6 + ((i * 7) % 14)) % 94;
-  const size = [2.5, 3, 3.5, 4, 5, 6][i % 6];
-  const delay = ((i * 0.41) % 5).toFixed(2);
-  const twinkleDur = (2.2 + (i % 4) * 0.7).toFixed(2);
-  const driftDur = 60 + ((i * 13) % 50);
+// Fewer, calmer stars — a quiet night sky rather than a twinkling disco.
+// Distributed in a 4×5 loose grid (avoids the dense mid-section cluster) and
+// biased toward the edges where they can breathe around the headline.
+const HERO_STARS = Array.from({ length: 18 }, (_, i) => {
+  const col = i % 4;
+  const row = Math.floor(i / 4);
+  const left = (col * 25 + 6 + ((i * 13) % 11)) % 100;
+  const top = (row * 22 + 4 + ((i * 7) % 11)) % 92;
+  const size = [2, 2, 2.5, 3, 3, 3.5][i % 6];
+  const delay = ((i * 0.67) % 6).toFixed(2);
+  const twinkleDur = (4.5 + (i % 4) * 1.2).toFixed(2);
+  const driftDur = 140 + ((i * 17) % 80);
   const color = STAR_COLORS[i % STAR_COLORS.length];
   return { left, top, size, delay, twinkleDur, driftDur, color };
 });
@@ -227,9 +229,10 @@ function HeroBackground() {
           />
         ))}
       </div>
-      <div className="ambient ambient-left" aria-hidden="true" />
       <div className="ambient-hero-tr" aria-hidden="true" />
       <div className="ambient-hero-bl" aria-hidden="true" />
+      {/* Dim the center last so title + CTA sit in a calmer focal zone */}
+      <div className="hero-bg-center-dim" aria-hidden="true" />
       <div className="hero-bg-noise" aria-hidden="true" />
       <div className="hero-bg-vignette" aria-hidden="true" />
     </>
@@ -241,7 +244,6 @@ function Hero() {
   return (
     <SmoothSection bg={C.bg} zIndex={1} minH="120vh" center bgLayer={heroBg}>
       <div style={{ maxWidth: 980, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <div className="hero-title-backlight" aria-hidden="true" />
         <Reveal delay={0.08}>
           <h1
             style={{
@@ -255,7 +257,7 @@ function Hero() {
               maxWidth: 1120,
               marginInline: "auto",
               position: "relative",
-              textShadow: "0 2px 40px rgba(11, 17, 32, 0.5)",
+              textShadow: "0 2px 28px rgba(6, 10, 22, 0.45)",
             }}
           >
             Benut de kracht van AI
@@ -323,10 +325,14 @@ function TrustedBannerSection() {
   return (
     <section
       style={{
-        background: `linear-gradient(180deg, ${C.bg} 0%, ${C.bg} 43%, ${C.lightBg} 43%, ${C.lightBg} 100%)`,
+        // Transparent top lets the hero's aurora bleed through — no dark strip
+        // between hero and banner. The gradient hands off to lightBg exactly
+        // where the white brand card sits.
+        background: `linear-gradient(180deg, transparent 0%, transparent 38%, ${C.lightBg} 55%, ${C.lightBg} 100%)`,
         padding: "0 0 3.15rem",
         position: "relative",
         zIndex: 2,
+        marginTop: "-180px",
       }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto", textAlign: "center", padding: "0 clamp(1.5rem, 5vw, 5rem)" }}>

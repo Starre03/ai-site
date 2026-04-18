@@ -138,20 +138,34 @@ textarea::placeholder {
 }
 
 /* === Hero premium moving background === */
+/* Palette concentrated in the corners — keeps the center darker so the
+   title and CTA read clearly against a calm focal zone. */
 .hero-bg-liquid {
   position: absolute;
   inset: -25%;
   pointer-events: none;
   background:
-    radial-gradient(circle at 18% 28%, rgba(14, 165, 233, 0.30), transparent 42%),
-    radial-gradient(circle at 82% 20%, rgba(139, 92, 246, 0.22), transparent 48%),
-    radial-gradient(circle at 64% 76%, rgba(56, 189, 248, 0.24), transparent 48%),
-    radial-gradient(circle at 22% 74%, rgba(167, 139, 250, 0.18), transparent 46%),
-    radial-gradient(circle at 88% 58%, rgba(14, 165, 233, 0.14), transparent 44%),
-    radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.10), transparent 60%);
-  filter: blur(55px);
-  animation: liquid-flow 34s ease-in-out infinite alternate;
+    radial-gradient(circle at 10% 14%, rgba(14, 165, 233, 0.32), transparent 42%),
+    radial-gradient(circle at 92% 12%, rgba(124, 58, 237, 0.26), transparent 46%),
+    radial-gradient(circle at 82% 88%, rgba(8, 145, 178, 0.22), transparent 46%),
+    radial-gradient(circle at 12% 86%, rgba(79, 70, 229, 0.18), transparent 46%);
+  filter: blur(65px);
+  animation: liquid-flow 46s ease-in-out infinite alternate;
   will-change: transform;
+}
+
+/* Keeps the center perceptibly darker than the colored corners so the
+   headline + CTA pop without needing heavier text shadows. */
+.hero-bg-center-dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 58% 46% at 50% 46%,
+    rgba(6, 10, 22, 0.55) 0%,
+    rgba(6, 10, 22, 0.25) 42%,
+    transparent 72%
+  );
 }
 
 @keyframes liquid-flow {
@@ -172,18 +186,18 @@ textarea::placeholder {
   background: conic-gradient(
     from 0deg at 50% 50%,
     transparent 0deg,
-    rgba(14, 165, 233, 0.09) 40deg,
+    rgba(14, 165, 233, 0.06) 40deg,
     transparent 80deg,
-    rgba(99, 102, 241, 0.06) 150deg,
+    rgba(124, 58, 237, 0.05) 150deg,
     transparent 200deg,
-    rgba(56, 189, 248, 0.08) 270deg,
+    rgba(8, 145, 178, 0.05) 270deg,
     transparent 320deg,
     transparent 360deg
   );
-  filter: blur(60px);
+  filter: blur(70px);
   mix-blend-mode: screen;
   transform-origin: center;
-  animation: conic-spin 90s linear infinite;
+  animation: conic-spin 140s linear infinite;
   will-change: transform;
 }
 
@@ -249,12 +263,12 @@ textarea::placeholder {
   background: var(--star-color, rgba(255, 255, 255, 0.92));
   border-radius: 50%;
   box-shadow:
-    0 0 6px 1px var(--star-color, rgba(186, 230, 253, 0.65)),
-    0 0 14px 2px rgba(14, 165, 233, 0.22);
+    0 0 4px 0.5px var(--star-color, rgba(186, 230, 253, 0.45)),
+    0 0 10px 1.5px rgba(14, 165, 233, 0.14);
   opacity: 0;
   animation:
-    star-twinkle var(--twinkle-dur, 3s) ease-in-out infinite,
-    star-drift var(--drift-dur, 80s) ease-in-out infinite;
+    star-twinkle var(--twinkle-dur, 5s) ease-in-out infinite,
+    star-drift var(--drift-dur, 160s) ease-in-out infinite;
   will-change: opacity, transform, translate;
 }
 
@@ -265,57 +279,44 @@ textarea::placeholder {
   top: 50%;
   left: 50%;
   pointer-events: none;
-  opacity: 0.75;
 }
 
 .hero-star::before {
-  width: calc(var(--star-size, 3px) * 5);
+  width: calc(var(--star-size, 3px) * 3.5);
   height: 1px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--star-color, rgba(255, 255, 255, 0.8)) 50%,
+    var(--star-color, rgba(255, 255, 255, 0.7)) 50%,
     transparent 100%
   );
   transform: translate(-50%, -50%);
+  opacity: 0.55;
 }
 
 .hero-star::after {
   width: 1px;
-  height: calc(var(--star-size, 3px) * 5);
+  height: calc(var(--star-size, 3px) * 3.5);
   background: linear-gradient(
     180deg,
     transparent 0%,
-    var(--star-color, rgba(255, 255, 255, 0.8)) 50%,
+    var(--star-color, rgba(255, 255, 255, 0.7)) 50%,
     transparent 100%
   );
   transform: translate(-50%, -50%);
+  opacity: 0.55;
 }
 
 @keyframes star-twinkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.12); }
+  0%, 100% { opacity: 0.45; transform: scale(0.92); }
+  50% { opacity: 0.95; transform: scale(1.04); }
 }
 
 @keyframes star-drift {
   0%, 100% { translate: 0 0; }
-  50% { translate: 8px -10px; }
+  50% { translate: 5px -6px; }
 }
 
-/* === Hero title backlight — keeps heading legible against richer bg === */
-.hero-title-backlight {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 118%;
-  height: 260%;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(11, 17, 32, 0.65) 0%, rgba(11, 17, 32, 0.3) 40%, transparent 72%);
-  filter: blur(24px);
-  z-index: -1;
-}
 
 .hero-bg-noise {
   position: absolute;
