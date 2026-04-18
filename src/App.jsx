@@ -38,6 +38,10 @@ function ScrollManager() {
 export default function App() {
   const [ready, setReady] = useState(() => {
     if (typeof window === "undefined") return false;
+    // Dev escape: ?intro=1 forces the intro to play on localhost so we can
+    // iterate on the animation; otherwise localhost skips it for fast reloads.
+    const forceIntro = typeof window !== "undefined" && window.location.search.includes("intro");
+    if (forceIntro) return false;
     return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   });
 
