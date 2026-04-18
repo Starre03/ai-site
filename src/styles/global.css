@@ -216,13 +216,13 @@ textarea::placeholder {
   background: linear-gradient(
     115deg,
     transparent 46%,
-    rgba(125, 211, 252, 0.06) 49%,
-    rgba(125, 211, 252, 0.18) 50%,
-    rgba(125, 211, 252, 0.06) 51%,
+    rgba(125, 211, 252, 0.05) 49%,
+    rgba(125, 211, 252, 0.14) 50%,
+    rgba(125, 211, 252, 0.05) 51%,
     transparent 54%
   );
   filter: blur(2px);
-  animation: beam-sweep 14s linear infinite;
+  animation: beam-sweep 30s linear infinite;
   will-change: transform, opacity;
   opacity: 0;
 }
@@ -246,6 +246,22 @@ textarea::placeholder {
     rgba(14, 165, 233, 0.04) 51%,
     transparent 53%
   );
+}
+
+/* Third, slower violet beam at a steeper angle — adds depth without
+   drawing attention. Duration 38s, delayed so it never syncs with -1/-2. */
+.hero-bg-beam-3 {
+  animation-duration: 38s;
+  animation-delay: 14s;
+  background: linear-gradient(
+    98deg,
+    transparent 47%,
+    rgba(167, 139, 250, 0.05) 49%,
+    rgba(167, 139, 250, 0.13) 50%,
+    rgba(167, 139, 250, 0.05) 51%,
+    transparent 53%
+  );
+  filter: blur(3px);
 }
 
 /* === Hero stars === */

@@ -212,6 +212,7 @@ function HeroBackground() {
       <div className="hero-bg-conic" aria-hidden="true" />
       <div className="hero-bg-beam" aria-hidden="true" />
       <div className="hero-bg-beam hero-bg-beam-2" aria-hidden="true" />
+      <div className="hero-bg-beam hero-bg-beam-3" aria-hidden="true" />
       <div className="hero-bg-stars" aria-hidden="true">
         {HERO_STARS.map((s, i) => (
           <span
@@ -325,10 +326,10 @@ function TrustedBannerSection() {
   return (
     <section
       style={{
-        // Transparent top lets the hero's aurora bleed through — no dark strip
-        // between hero and banner. The gradient hands off to lightBg exactly
-        // where the white brand card sits.
-        background: `linear-gradient(180deg, transparent 0%, transparent 38%, ${C.lightBg} 55%, ${C.lightBg} 100%)`,
+        // Transparent bg: the white logo card becomes a floating island
+        // between the dark hero above and the dark services section below.
+        // Hero aurora bleeds through the top, dark body bg shows beneath.
+        background: "transparent",
         padding: "0 0 3.15rem",
         position: "relative",
         zIndex: 2,
@@ -370,7 +371,7 @@ function TrustedBannerSection() {
                 position: "absolute",
                 inset: "0 auto 0 0",
                 width: 140,
-                background: `linear-gradient(90deg, ${C.lightBg} 0%, rgba(244,248,252,0) 100%)`,
+                background: "linear-gradient(90deg, #FFFFFF 0%, rgba(255,255,255,0) 100%)",
                 zIndex: 2,
               }}
             />
@@ -379,7 +380,7 @@ function TrustedBannerSection() {
                 position: "absolute",
                 inset: "0 0 0 auto",
                 width: 140,
-                background: `linear-gradient(270deg, ${C.lightBg} 0%, rgba(244,248,252,0) 100%)`,
+                background: "linear-gradient(270deg, #FFFFFF 0%, rgba(255,255,255,0) 100%)",
                 zIndex: 2,
               }}
             />
@@ -579,7 +580,7 @@ function HowWeWorkSection() {
 
 function ServicesOverview() {
   return (
-    <SmoothSection id="diensten" bg={C.lightBg} zIndex={2} minH="108vh" center>
+    <SmoothSection id="diensten" bg={C.bg} zIndex={2} minH="108vh" center>
       <div style={{ maxWidth: 1160, margin: "0 auto", textAlign: "center" }}>
         <Reveal delay={0.04}>
           <Tag>Onze diensten</Tag>
@@ -593,7 +594,7 @@ function ServicesOverview() {
               fontWeight: 700,
               margin: "0 auto",
               letterSpacing: "-0.03em",
-              color: C.lightText,
+              color: C.text,
               maxWidth: 920,
             }}
           >
@@ -606,7 +607,7 @@ function ServicesOverview() {
         <Reveal delay={0.16}>
           <p
             style={{
-              color: C.lightTextSoft,
+              color: C.textSoft,
               fontSize: "0.94rem",
               lineHeight: 1.72,
               maxWidth: 780,
@@ -622,9 +623,7 @@ function ServicesOverview() {
             <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
               <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
                 <GlowCard
-                  className="card-light-hover"
-                  light
-                  style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                  style={{ background: C.bg2, height: "100%" }}
                 >
                   <div
                     style={{
@@ -639,7 +638,7 @@ function ServicesOverview() {
                     <h3 style={{ fontFamily: BODY, fontSize: "1.04rem", fontWeight: 700, color: C.primary, margin: 0 }}>
                       {card.title}
                     </h3>
-                    <p style={{ color: C.lightTextSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
+                    <p style={{ color: C.textSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
                       {card.desc}
                     </p>
                   </div>
@@ -812,7 +811,6 @@ export default function Home() {
       <Hero />
       <TrustedBannerSection />
       <ServicesOverview />
-      <SectionGlow bg={C.lightBg} />
       <WhyNowSection />
       <IntakeCtaSection />
       <SectionGlow bg={C.lightBg} />
