@@ -189,20 +189,35 @@ const STAR_COLORS = [
   "rgba(224, 231, 255, 0.8)",
 ];
 
-// Fewer, calmer stars — a quiet night sky rather than a twinkling disco.
-// Distributed in a 4×5 loose grid (avoids the dense mid-section cluster) and
-// biased toward the edges where they can breathe around the headline.
+// Drift vectors per star — each follows its own diagonal path out of frame
+// so the night sky feels alive (stars slowly float across, fade at the edge,
+// next cycle re-enters at the start point). Varied per-index.
+const DRIFT_VECTORS = [
+  { x: 180, y: -220 },
+  { x: -200, y: -180 },
+  { x: 160, y: 200 },
+  { x: -170, y: 190 },
+  { x: 220, y: -90 },
+  { x: -140, y: -240 },
+];
+
+// 18 stars drifting across the hero as a quiet sky: each has its own
+// twinkle cadence, drift duration and direction. Delays are spread across
+// the full drift cycle so they never all fade in or out together.
 const HERO_STARS = Array.from({ length: 18 }, (_, i) => {
   const col = i % 4;
   const row = Math.floor(i / 4);
   const left = (col * 25 + 6 + ((i * 13) % 11)) % 100;
   const top = (row * 22 + 4 + ((i * 7) % 11)) % 92;
   const size = [2, 2, 2.5, 3, 3, 3.5][i % 6];
-  const delay = ((i * 0.67) % 6).toFixed(2);
   const twinkleDur = (4.5 + (i % 4) * 1.2).toFixed(2);
-  const driftDur = 140 + ((i * 17) % 80);
+  const driftDur = 60 + ((i * 11) % 45); // 60–105s per cycle
+  const vec = DRIFT_VECTORS[i % DRIFT_VECTORS.length];
+  // Spread delays across the full drift cycle so stars desync naturally.
+  const twinkleDelay = ((i * 0.67) % 6).toFixed(2);
+  const driftDelay = ((i * 13.3) % driftDur).toFixed(2);
   const color = STAR_COLORS[i % STAR_COLORS.length];
-  return { left, top, size, delay, twinkleDur, driftDur, color };
+  return { left, top, size, twinkleDur, driftDur, color, vec, twinkleDelay, driftDelay };
 });
 
 function HeroBackground() {
@@ -212,7 +227,6 @@ function HeroBackground() {
       <div className="hero-bg-conic" aria-hidden="true" />
       <div className="hero-bg-beam" aria-hidden="true" />
       <div className="hero-bg-beam hero-bg-beam-2" aria-hidden="true" />
-      <div className="hero-bg-beam hero-bg-beam-3" aria-hidden="true" />
       <div className="hero-bg-stars" aria-hidden="true">
         {HERO_STARS.map((s, i) => (
           <span
@@ -225,7 +239,11 @@ function HeroBackground() {
               "--star-color": s.color,
               "--twinkle-dur": `${s.twinkleDur}s`,
               "--drift-dur": `${s.driftDur}s`,
-              animationDelay: `${s.delay}s, ${s.delay}s`,
+              "--drift-x": `${s.vec.x}px`,
+              "--drift-y": `${s.vec.y}px`,
+              // Negative delays start the animation already in-flight so
+              // nothing all pops into existence on page load.
+              animationDelay: `${s.twinkleDelay}s, -${s.driftDelay}s`,
             }}
           />
         ))}
@@ -329,11 +347,14 @@ function TrustedBannerSection() {
         // Transparent bg: the white logo card becomes a floating island
         // between the dark hero above and the dark services section below.
         // Hero aurora bleeds through the top, dark body bg shows beneath.
+        // Heavy negative margin-top + small negative margin-bottom pull
+        // everything tight so neither side leaves a dark gap around the card.
         background: "transparent",
-        padding: "0 0 3.15rem",
+        padding: 0,
         position: "relative",
-        zIndex: 2,
-        marginTop: "-180px",
+        zIndex: 3,
+        marginTop: "-260px",
+        marginBottom: "-40px",
       }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto", textAlign: "center", padding: "0 clamp(1.5rem, 5vw, 5rem)" }}>
@@ -623,7 +644,12 @@ function ServicesOverview() {
             <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
               <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
                 <GlowCard
-                  style={{ background: C.bg2, height: "100%" }}
+                  light
+                  style={{
+                    background: C.lightCard,
+                    height: "100%",
+                    boxShadow: "0 12px 30px rgba(2, 8, 23, 0.35)",
+                  }}
                 >
                   <div
                     style={{
@@ -638,7 +664,7 @@ function ServicesOverview() {
                     <h3 style={{ fontFamily: BODY, fontSize: "1.04rem", fontWeight: 700, color: C.primary, margin: 0 }}>
                       {card.title}
                     </h3>
-                    <p style={{ color: C.textSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
+                    <p style={{ color: C.lightTextSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
                       {card.desc}
                     </p>
                   </div>

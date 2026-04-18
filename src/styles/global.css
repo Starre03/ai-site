@@ -248,22 +248,6 @@ textarea::placeholder {
   );
 }
 
-/* Third, slower violet beam at a steeper angle — adds depth without
-   drawing attention. Duration 38s, delayed so it never syncs with -1/-2. */
-.hero-bg-beam-3 {
-  animation-duration: 38s;
-  animation-delay: 14s;
-  background: linear-gradient(
-    98deg,
-    transparent 47%,
-    rgba(167, 139, 250, 0.05) 49%,
-    rgba(167, 139, 250, 0.13) 50%,
-    rgba(167, 139, 250, 0.05) 51%,
-    transparent 53%
-  );
-  filter: blur(3px);
-}
-
 /* === Hero stars === */
 .hero-bg-stars {
   position: absolute;
@@ -282,9 +266,12 @@ textarea::placeholder {
     0 0 4px 0.5px var(--star-color, rgba(186, 230, 253, 0.45)),
     0 0 10px 1.5px rgba(14, 165, 233, 0.14);
   opacity: 0;
+  /* Twinkle only touches scale; drift owns translate + opacity so they
+     fade in when entering, drift across, fade out when leaving — replaced
+     by the next star whose delay cycles it back to the start. */
   animation:
     star-twinkle var(--twinkle-dur, 5s) ease-in-out infinite,
-    star-drift var(--drift-dur, 160s) ease-in-out infinite;
+    star-drift var(--drift-dur, 70s) linear infinite;
   will-change: opacity, transform, translate;
 }
 
@@ -324,13 +311,17 @@ textarea::placeholder {
 }
 
 @keyframes star-twinkle {
-  0%, 100% { opacity: 0.45; transform: scale(0.92); }
-  50% { opacity: 0.95; transform: scale(1.04); }
+  /* scale-only breathing; opacity is owned by star-drift */
+  0%, 100% { transform: scale(0.9); }
+  50% { transform: scale(1.06); }
 }
 
 @keyframes star-drift {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 5px -6px; }
+  /* Enter → drift diagonally → exit. Direction set per-star via CSS vars. */
+  0% { translate: 0 0; opacity: 0; }
+  14% { opacity: 0.9; }
+  86% { opacity: 0.9; }
+  100% { translate: var(--drift-x, 120px) var(--drift-y, -160px); opacity: 0; }
 }
 
 
