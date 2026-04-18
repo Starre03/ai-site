@@ -109,71 +109,73 @@ export default function IntegrationsPage() {
       </PageSection>
 
       <PageSection bg={C.bg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              tag="Waar dit goed werkt"
-              title={
-                <>
-                  Claude of ChatGPT goed inrichten is al genoeg.
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    Geen agentlaag, geen grote herbouw.
-                  </span>
-                </>
-              }
-              text="Kies deze dienst als de tools er al zijn — of kunnen komen — maar de inrichting, context en koppeling aan uw processen nog ontbreekt. Geen softwareontwikkeling, maar slimme implementatie van wat er al is."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            tag="Waar dit goed werkt"
+            title={
+              <>
+                Claude of ChatGPT goed inrichten is al genoeg.
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  Geen agentlaag, geen grote herbouw.
+                </span>
+              </>
+            }
+            text="Kies deze dienst als de tools er al zijn — of kunnen komen — maar de inrichting, context en koppeling aan uw processen nog ontbreekt. Geen softwareontwikkeling, maar slimme implementatie van wat er al is."
+          />
           <Reveal delay={0.18}>
-            <GlowCard style={{ background: C.bg2 }}>
-              <div style={{ padding: "1.35rem" }}>
-                <BulletList
-                  items={[
-                    "Supportteams met veel terugkerende vragen of documentchecks",
-                    "Kennisintensieve teams die werken met policies, contracten of dossiers",
-                    "Interne processen waar informatie uit meerdere bronnen samenkomt",
-                    "Organisaties die AI in hun bestaande stack willen opnemen zonder grote herbouw",
-                  ]}
-                />
-              </div>
-            </GlowCard>
+            <div style={{ marginTop: 32 }}>
+              <GlowCard style={{ background: C.bg2 }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <BulletList
+                    items={[
+                      "Supportteams met veel terugkerende vragen of documentchecks",
+                      "Kennisintensieve teams die werken met policies, contracten of dossiers",
+                      "Interne processen waar informatie uit meerdere bronnen samenkomt",
+                      "Organisaties die AI in hun bestaande stack willen opnemen zonder grote herbouw",
+                    ]}
+                  />
+                </div>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>
 
       <PageSection bg={C.lightBg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              light
-              tag="Maatwerk"
-              title={
-                <>
-                  Heeft u iets specifieks in gedachten?
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    We kijken eerlijk naar wat haalbaar is.
-                  </span>
-                </>
-              }
-              text="Standaard implementaties zijn een goed startpunt. Maar elke situatie is anders. Als uw vraag verder gaat — een specifieke koppeling, een afwijkend proces of een idee dat u wilt verkennen — bespreken we graag wat realistisch is. Geen verkooppraatje, maar een eerlijk gesprek over haalbaarheid."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            light
+            tag="Maatwerk"
+            title={
+              <>
+                Heeft u iets specifieks in gedachten?
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  We kijken eerlijk naar wat haalbaar is.
+                </span>
+              </>
+            }
+            text="Standaard implementaties zijn een goed startpunt. Maar elke situatie is anders. Als uw vraag verder gaat — een specifieke koppeling, een afwijkend proces of een idee dat u wilt verkennen — bespreken we graag wat realistisch is. Geen verkooppraatje, maar een eerlijk gesprek over haalbaarheid."
+          />
           <Reveal delay={0.18}>
-            <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ padding: "1.35rem" }}>
-                <div style={{ color: C.lightTextSoft }}>
-                <BulletList
-                  light
-                  items={[
-                    "Specifieke koppeling met uw bestaande systemen",
-                    "Inrichting op uw eigen documenten of kennisbank",
-                    "Begeleiding bij adoptie en gebruik in uw team",
-                    "Verkenning van wat verder mogelijk is",
-                  ]}
-                />
+            <div style={{ marginTop: 32 }}>
+              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <div style={{ color: C.lightTextSoft }}>
+                  <BulletList
+                    light
+                    items={[
+                      "Specifieke koppeling met uw bestaande systemen",
+                      "Inrichting op uw eigen documenten of kennisbank",
+                      "Begeleiding bij adoptie en gebruik in uw team",
+                      "Verkenning van wat verder mogelijk is",
+                    ]}
+                  />
+                  </div>
                 </div>
-              </div>
-            </GlowCard>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>

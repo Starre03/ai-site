@@ -113,106 +113,109 @@ export default function AuditPage() {
       </PageSection>
 
       <PageSection bg={C.bg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              tag="Voor wie"
-              title={
-                <>
-                  Voor bedrijven die AI serieus willen inzetten,
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    maar eerst scherpte nodig hebben.
-                  </span>
-                </>
-              }
-              text="Deze dienst past wanneer de urgentie er al is, maar er nog onvoldoende zekerheid is over welke AI implementatie eerst moet, welke tools logisch zijn en waar de grootste winst ligt."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            tag="Voor wie"
+            title={
+              <>
+                Voor bedrijven die AI serieus willen inzetten,
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  maar eerst scherpte nodig hebben.
+                </span>
+              </>
+            }
+            text="Deze dienst past wanneer de urgentie er al is, maar er nog onvoldoende zekerheid is over welke AI implementatie eerst moet, welke tools logisch zijn en waar de grootste winst ligt."
+          />
           <Reveal delay={0.18}>
-            <GlowCard style={{ background: C.bg2 }}>
-              <div style={{ padding: "1.35rem" }}>
-                <BulletList
-                  items={[
-                    "U hebt meerdere ideeën, maar geen duidelijke volgorde",
-                    "Uw team ziet kansen, maar niemand wil gokken op de verkeerde tool",
-                    "Er is behoefte aan een onderbouwde AI roadmap",
-                    "U wilt later zelf of met iemand anders implementeren",
-                  ]}
-                />
-              </div>
-            </GlowCard>
+            <div style={{ marginTop: 32 }}>
+              <GlowCard style={{ background: C.bg2 }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <BulletList
+                    items={[
+                      "U hebt meerdere ideeën, maar geen duidelijke volgorde",
+                      "Uw team ziet kansen, maar niemand wil gokken op de verkeerde tool",
+                      "Er is behoefte aan een onderbouwde AI roadmap",
+                      "U wilt later zelf of met iemand anders implementeren",
+                    ]}
+                  />
+                </div>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>
 
       <PageSection bg={C.lightBg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              tag="Hoe de audit werkt"
-              light
-              title={
-                <>
-                  Van intake naar analyse naar prioriteiten.
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    Snel en zonder omwegen.
-                  </span>
-                </>
-              }
-              text="De audit is bedoeld om snel bruikbare scherpte te geven. Geen lang traject vooraf, maar een duidelijke analyse, een heldere sessie en een besluitdocument waar u echt verder mee kunt."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            tag="Hoe de audit werkt"
+            light
+            title={
+              <>
+                Van intake naar analyse naar prioriteiten.
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  Snel en zonder omwegen.
+                </span>
+              </>
+            }
+            text="De audit is bedoeld om snel bruikbare scherpte te geven. Geen lang traject vooraf, maar een duidelijke analyse, een heldere sessie en een besluitdocument waar u echt verder mee kunt."
+          />
           <Reveal delay={0.18}>
-            <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ padding: "1.35rem" }}>
-                <div style={{ display: "grid", gap: 14 }}>
-                  {[
-                    ["1. Intake en context", "We bespreken processen, huidige knelpunten, teams, systemen en wat er al is geprobeerd."],
-                    ["2. Analyse van workflows", "We kijken waar handmatig werk, vertraging en overdrachtsmomenten onnodig veel tijd kosten."],
-                    ["3. AI kansen en keuzes", "We bepalen welke toepassingen logisch zijn en wat nu vooral afleiding of te vroeg is."],
-                    ["4. Roadmap en advies", "U krijgt een helder overzicht van prioriteiten, vervolgstappen en toolrichting."],
-                  ].map(([title, body]) => (
-                    <div key={title}>
-                      <div style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.84rem", fontWeight: 700 }}>{title}</div>
-                      <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.8rem", lineHeight: 1.72, marginTop: 6 }}>{body}</p>
-                    </div>
-                  ))}
+            <div style={{ marginTop: 32 }}>
+              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <div style={{ display: "grid", gap: 14 }}>
+                    {[
+                      ["1. Intake en context", "We bespreken processen, huidige knelpunten, teams, systemen en wat er al is geprobeerd."],
+                      ["2. Analyse van workflows", "We kijken waar handmatig werk, vertraging en overdrachtsmomenten onnodig veel tijd kosten."],
+                      ["3. AI kansen en keuzes", "We bepalen welke toepassingen logisch zijn en wat nu vooral afleiding of te vroeg is."],
+                      ["4. Roadmap en advies", "U krijgt een helder overzicht van prioriteiten, vervolgstappen en toolrichting."],
+                    ].map(([title, body]) => (
+                      <div key={title}>
+                        <div style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.84rem", fontWeight: 700 }}>{title}</div>
+                        <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.8rem", lineHeight: 1.72, marginTop: 6 }}>{body}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </GlowCard>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>
 
       <PageSection bg={C.bg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              tag="Uitkomst"
-              title={
-                <>
-                  Na de audit weet u precies waar te starten
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    en wat u kunt laten liggen.
-                  </span>
-                </>
-              }
-              text="Dat is precies waarom deze dienst los waarde heeft. U koopt duidelijkheid, prioritering en een betere basis voor AI implementatie."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            tag="Uitkomst"
+            title={
+              <>
+                Na de audit weet u precies waar te starten
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  en wat u kunt laten liggen.
+                </span>
+              </>
+            }
+            text="Dat is precies waarom deze dienst los waarde heeft. U koopt duidelijkheid, prioritering en een betere basis voor AI implementatie."
+          />
           <Reveal delay={0.18}>
-            <GlowCard style={{ background: C.bg2 }}>
-              <div style={{ padding: "1.35rem" }}>
-                <BulletList
-                  items={[
-                    "Een overzicht van bottlenecks en processen waar AI impact maakt",
-                    "Een shortlist van haalbare use-cases voor AI audit, integraties of agents",
-                    "Tooladvies voor Claude, ChatGPT / OpenAI of OpenClaw waar relevant",
-                    "Een implementatie roadmap met prioriteiten, volgorde en realistische volgende stap",
-                  ]}
-                />
-              </div>
-            </GlowCard>
+            <div style={{ marginTop: 32 }}>
+              <GlowCard style={{ background: C.bg2 }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <BulletList
+                    items={[
+                      "Een overzicht van bottlenecks en processen waar AI impact maakt",
+                      "Een shortlist van haalbare use-cases voor AI audit, integraties of agents",
+                      "Tooladvies voor Claude, ChatGPT / OpenAI of OpenClaw waar relevant",
+                      "Een implementatie roadmap met prioriteiten, volgorde en realistische volgende stap",
+                    ]}
+                  />
+                </div>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>

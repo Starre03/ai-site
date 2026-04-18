@@ -124,71 +124,73 @@ export default function AgentsPage() {
       </PageSection>
 
       <PageSection bg={C.bg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              tag="Wanneer dit past"
-              title={
-                <>
-                  Kies AI agents als werk niet stopt bij een antwoord.
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    Het moet door naar actie.
-                  </span>
-                </>
-              }
-              text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heeft u geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            tag="Wanneer dit past"
+            title={
+              <>
+                Kies AI agents als werk niet stopt bij een antwoord.
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  Het moet door naar actie.
+                </span>
+              </>
+            }
+            text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heeft u geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
+          />
           <Reveal delay={0.18}>
-            <GlowCard style={{ background: C.bg2 }}>
-              <div style={{ padding: "1.35rem" }}>
-                <BulletList
-                  items={[
-                    "U wilt inbox, leads of supportstromen slimmer afhandelen",
-                    "Meerdere systemen moeten samenwerken in één flow",
-                    "Taken moeten worden doorgezet of uitgevoerd, niet alleen beoordeeld",
-                    "U zoekt een concrete OpenClaw setup in plaats van een losse AI demo",
-                  ]}
-                />
-              </div>
-            </GlowCard>
+            <div style={{ marginTop: 32 }}>
+              <GlowCard style={{ background: C.bg2 }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <BulletList
+                    items={[
+                      "U wilt inbox, leads of supportstromen slimmer afhandelen",
+                      "Meerdere systemen moeten samenwerken in één flow",
+                      "Taken moeten worden doorgezet of uitgevoerd, niet alleen beoordeeld",
+                      "U zoekt een concrete OpenClaw setup in plaats van een losse AI demo",
+                    ]}
+                  />
+                </div>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>
 
       <PageSection bg={C.lightBg} minH="100vh" centerY>
-        <div className="two-col" style={{ alignItems: "start" }}>
-          <div>
-            <SectionHeading
-              light
-              tag="Waarom OpenClaw"
-              title={
-                <>
-                  Meerdere agents die tegelijk kijken, redeneren en handelen.
-                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                    Dat is het verschil met een losse integratie.
-                  </span>
-                </>
-              }
-              text="Dat maakt OpenClaw interessant voor bedrijven die nieuwsgierig zijn naar moderne AI agents voor bedrijven, AI automatisering en agent systems die samenwerken tussen inbox, CRM, routing en opvolging."
-            />
-          </div>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            light
+            tag="Waarom OpenClaw"
+            title={
+              <>
+                Meerdere agents die tegelijk kijken, redeneren en handelen.
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  Dat is het verschil met een losse integratie.
+                </span>
+              </>
+            }
+            text="Dat maakt OpenClaw interessant voor bedrijven die nieuwsgierig zijn naar moderne AI agents voor bedrijven, AI automatisering en agent systems die samenwerken tussen inbox, CRM, routing en opvolging."
+          />
           <Reveal delay={0.18}>
-            <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ padding: "1.35rem" }}>
-                <div style={{ color: C.lightTextSoft }}>
-                <BulletList
-                  light
-                  items={[
-                    "Een inbox-agent kan mail begrijpen terwijl een CRM-agent context ophaalt en een routing-agent de volgende stap voorbereidt",
-                    "Lead qualification, intake automation en support routing kunnen binnen één OpenClaw setup samenkomen",
-                    "Agents kunnen acties klaarzetten of uitvoeren in plaats van alleen suggesties teruggeven",
-                    "Dit maakt OpenClaw krachtig voor AI workflow automatisering met echte bedrijfslogica",
-                  ]}
-                />
+            <div style={{ marginTop: 32 }}>
+              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+                <div style={{ padding: "1.35rem" }}>
+                  <div style={{ color: C.lightTextSoft }}>
+                  <BulletList
+                    light
+                    items={[
+                      "Een inbox-agent kan mail begrijpen terwijl een CRM-agent context ophaalt en een routing-agent de volgende stap voorbereidt",
+                      "Lead qualification, intake automation en support routing kunnen binnen één OpenClaw setup samenkomen",
+                      "Agents kunnen acties klaarzetten of uitvoeren in plaats van alleen suggesties teruggeven",
+                      "Dit maakt OpenClaw krachtig voor AI workflow automatisering met echte bedrijfslogica",
+                    ]}
+                  />
+                  </div>
                 </div>
-              </div>
-            </GlowCard>
+              </GlowCard>
+            </div>
           </Reveal>
         </div>
       </PageSection>
