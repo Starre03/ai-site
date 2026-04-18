@@ -180,16 +180,53 @@ function FadeSwitcher() {
   );
 }
 
-function Hero() {
-  const heroBg = (
+const HERO_PARTICLES = Array.from({ length: 14 }, (_, i) => {
+  // Distribute horizontally with slight variance, varied sizes, delays, drifts.
+  const left = (i * 7.3 + (i % 3) * 4.1) % 100;
+  const size = 1.4 + ((i * 7) % 5) * 0.45;
+  const duration = 28 + ((i * 11) % 22);
+  const delay = (i * 2.8) % 30;
+  const drift = (((i % 5) - 2) * 26);
+  const opacity = 0.55 + ((i * 3) % 4) * 0.12;
+  return { left, size, duration, delay, drift, opacity };
+});
+
+function HeroBackground() {
+  return (
     <>
+      <div className="hero-bg-liquid" aria-hidden="true" />
+      <div className="hero-bg-conic" aria-hidden="true" />
       <div className="hero-grid-overlay" aria-hidden="true" />
+      <div className="hero-bg-beam" aria-hidden="true" />
+      <div className="hero-bg-beam hero-bg-beam-2" aria-hidden="true" />
+      <div className="hero-bg-particles" aria-hidden="true">
+        {HERO_PARTICLES.map((p, i) => (
+          <span
+            key={i}
+            className="hero-particle"
+            style={{
+              left: `${p.left}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${p.delay}s`,
+              "--drift": `${p.drift}px`,
+              opacity: p.opacity,
+            }}
+          />
+        ))}
+      </div>
       <div className="ambient ambient-left" aria-hidden="true" />
-      <div className="ambient ambient-right" aria-hidden="true" />
       <div className="ambient-hero-tr" aria-hidden="true" />
       <div className="ambient-hero-bl" aria-hidden="true" />
+      <div className="hero-bg-noise" aria-hidden="true" />
+      <div className="hero-bg-vignette" aria-hidden="true" />
     </>
   );
+}
+
+function Hero() {
+  const heroBg = <HeroBackground />;
   return (
     <SmoothSection bg={C.bg} zIndex={1} minH="120vh" center bgLayer={heroBg}>
       <div style={{ maxWidth: 980, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>

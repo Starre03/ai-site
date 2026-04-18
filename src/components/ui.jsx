@@ -155,9 +155,20 @@ export function GlowCard({ children, style = {}, light = false, className = "" }
 
 export function SectionGlow({ bg = C.lightBg }) {
   return (
-    <div style={{ background: bg, position: "relative", zIndex: 3, padding: "0 clamp(1.5rem, 5vw, 5rem)" }} aria-hidden="true">
+    <div
+      style={{
+        background: bg,
+        position: "relative",
+        zIndex: 3,
+        padding: "18px clamp(1.5rem, 5vw, 5rem)",
+      }}
+      aria-hidden="true"
+    >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        <div className="section-glow-divider" />
+        <div className="section-glow-row">
+          <div className="section-glow-divider" />
+          <span className="section-glow-dot" />
+        </div>
       </div>
     </div>
   );
