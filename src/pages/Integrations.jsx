@@ -1,4 +1,5 @@
 import IntakeForm from "../components/IntakeForm";
+import { contactSteps } from "../content/siteContent";
 import { BODY, C } from "../lib/theme";
 import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
 
@@ -58,6 +59,7 @@ export default function IntegrationsPage() {
         <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
             tag="Wat het oplevert"
+            centered
             light
             title={
               <>
@@ -162,13 +164,20 @@ export default function IntegrationsPage() {
 
       <IntakeForm
         preferredRoute="AI Integraties"
+        centered
+        tagLabel="Contact"
+        steps={contactSteps}
+        submissionKind="contact"
         title={
           <>
-            Vertel uw situatie —
-            <em style={{ color: C.primary, fontStyle: "italic" }}> dan kijken we wat Claude of ChatGPT voor u kan doen</em>
+            Wilt u Claude of ChatGPT integreren?
+            <em style={{ color: C.primary, fontStyle: "italic" }}> We bespreken graag de mogelijkheden.</em>
           </>
         }
-        text="Beschrijf welk proces, welke vraag of welke uitdaging u heeft. Dan kijken we samen welke inrichting van Claude of ChatGPT het meeste oplevert — en of er meer mogelijk is."
+        text="Beschrijf uw situatie kort. Dan kijken we samen welke integratie het meeste oplevert."
+        submitLabel="Verstuur bericht →"
+        doneTitle="Bericht ontvangen"
+        doneText="We nemen contact op om uw situatie en wensen verder te bespreken."
       />
     </>
   );

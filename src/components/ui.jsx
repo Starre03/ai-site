@@ -362,18 +362,38 @@ export function TyperText({
   );
 }
 
-export function SectionHeading({ tag, title, text, width = 640, light = false }) {
+export function SectionHeading({ tag, title, text, width = 640, light = false, centered = false }) {
   return (
     <>
       <Reveal>
-        <Tag>{tag}</Tag>
+        <div style={centered ? { textAlign: "center" } : undefined}>
+          <Tag>{tag}</Tag>
+        </div>
       </Reveal>
       <Reveal delay={0.06}>
-        <h2 style={{ ...shell.sectionTitle, maxWidth: width, ...(light ? { color: C.lightText } : {}) }}>{title}</h2>
+        <h2
+          style={{
+            ...shell.sectionTitle,
+            maxWidth: width,
+            ...(light ? { color: C.lightText } : {}),
+            ...(centered ? { margin: "0 auto", textAlign: "center" } : {}),
+          }}
+        >
+          {title}
+        </h2>
       </Reveal>
       {text ? (
         <Reveal delay={0.12}>
-          <p style={{ ...shell.sectionText, maxWidth: Math.min(width, 560), marginTop: 14, ...(light ? { color: C.lightTextSoft } : {}) }}>{text}</p>
+          <p
+            style={{
+              ...shell.sectionText,
+              maxWidth: Math.min(width, 560),
+              ...(centered ? { margin: "14px auto 0", textAlign: "center" } : { marginTop: 14 }),
+              ...(light ? { color: C.lightTextSoft } : {}),
+            }}
+          >
+            {text}
+          </p>
         </Reveal>
       ) : null}
     </>

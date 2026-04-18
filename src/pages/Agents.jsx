@@ -1,4 +1,5 @@
 import IntakeForm from "../components/IntakeForm";
+import { contactSteps } from "../content/siteContent";
 import { BODY, C } from "../lib/theme";
 import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, TyperText, usePageSeo } from "../components/ui";
 
@@ -65,6 +66,7 @@ export default function AgentsPage() {
         <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
             tag="Wat OpenClaw doet"
+            centered
             light
             title={
               <>
@@ -177,13 +179,20 @@ export default function AgentsPage() {
 
       <IntakeForm
         preferredRoute="AI Agents"
+        centered
+        tagLabel="Contact"
+        steps={contactSteps}
+        submissionKind="contact"
         title={
           <>
-            Onderzoek of een OpenClaw setup
-            <em style={{ color: C.primary, fontStyle: "italic" }}> direct werk kan overnemen in uw team</em>
+            Interesse in een OpenClaw setup?
+            <em style={{ color: C.primary, fontStyle: "italic" }}> Laat het ons weten.</em>
           </>
         }
-        text="Vertel welke inbox-, support-, intake- of leadprocessen nu handmatig blijven hangen. Dan kunnen we direct inschatten of een OpenClaw setup met AI agents past."
+        text="Vertel kort welk proces u wilt automatiseren. Dan kijken we samen of een OpenClaw setup past."
+        submitLabel="Verstuur bericht →"
+        doneTitle="Bericht ontvangen"
+        doneText="We nemen contact op om uw situatie en wensen verder te bespreken."
       />
     </>
   );
