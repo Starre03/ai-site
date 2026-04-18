@@ -65,10 +65,17 @@ export default function AuditPage() {
       <PageSection bg={C.lightBg} minH="100vh" centerY>
         <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
-            tag="Wat je krijgt"
+            tag="Wat u krijgt"
             light
             centered
-            title={<>Een AI audit die niet blijft hangen in inspiratie, maar eindigt in prioriteiten en keuzes</>}
+            title={
+              <>
+                Geen inspiratiesessie, maar een audit die eindigt
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  in prioriteiten en uitvoerbare keuzes.
+                </span>
+              </>
+            }
             text="Het resultaat moet bruikbaar zijn voor directie, operations en teams die echt met AI aan de slag willen. Daarom is deze AI consultancy bewust concreet, zakelijk en gericht op uitvoerbare keuzes."
           />
           <div className="card-grid-two" style={{ marginTop: 28 }}>
@@ -79,7 +86,7 @@ export default function AuditPage() {
               },
               {
                 title: "Bottleneck inzicht",
-                body: "Je krijgt concreet zicht op welke processen vertragen, hoeveel ruis er zit in intake, support, documentverwerking of interne kennisvragen en waar de meeste winst haalbaar is.",
+                body: "U krijgt concreet zicht op welke processen vertragen, hoeveel ruis er zit in intake, support, documentverwerking of interne kennisvragen en waar de meeste winst haalbaar is.",
               },
               {
                 title: "Concrete AI kansen",
@@ -93,7 +100,7 @@ export default function AuditPage() {
               <Reveal key={item.title} delay={0.12 + index * 0.05} fill>
                 <GlowCard light style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
                   <div style={{ padding: "1.35rem", height: "100%" }}>
-                    <h3 style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
                     <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
                       {item.body}
                     </p>
@@ -110,7 +117,14 @@ export default function AuditPage() {
           <div>
             <SectionHeading
               tag="Voor wie"
-              title={<>Voor bedrijven die AI serieus willen inzetten, maar eerst scherpte nodig hebben</>}
+              title={
+                <>
+                  Voor bedrijven die AI serieus willen inzetten,
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    maar eerst scherpte nodig hebben.
+                  </span>
+                </>
+              }
               text="Deze dienst past wanneer de urgentie er al is, maar er nog onvoldoende zekerheid is over welke AI implementatie eerst moet, welke tools logisch zijn en waar de grootste winst ligt."
             />
           </div>
@@ -119,10 +133,10 @@ export default function AuditPage() {
               <div style={{ padding: "1.35rem" }}>
                 <BulletList
                   items={[
-                    "Je hebt meerdere ideeën, maar geen duidelijke volgorde",
-                    "Je team ziet kansen, maar niemand wil gokken op de verkeerde tool",
+                    "U hebt meerdere ideeën, maar geen duidelijke volgorde",
+                    "Uw team ziet kansen, maar niemand wil gokken op de verkeerde tool",
                     "Er is behoefte aan een onderbouwde AI roadmap",
-                    "Je wilt later zelf of met iemand anders implementeren",
+                    "U wilt later zelf of met iemand anders implementeren",
                   ]}
                 />
               </div>
@@ -137,8 +151,15 @@ export default function AuditPage() {
             <SectionHeading
               tag="Hoe de audit werkt"
               light
-              title={<>Een compacte werkwijze die snel van intake naar analyse en prioriteiten gaat</>}
-              text="De audit is bedoeld om snel bruikbare scherpte te geven. Geen lang traject vooraf, maar een duidelijke analyse, een heldere sessie en een besluitdocument waar je echt verder mee kunt."
+              title={
+                <>
+                  Van intake naar analyse naar prioriteiten.
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    Snel en zonder omwegen.
+                  </span>
+                </>
+              }
+              text="De audit is bedoeld om snel bruikbare scherpte te geven. Geen lang traject vooraf, maar een duidelijke analyse, een heldere sessie en een besluitdocument waar u echt verder mee kunt."
             />
           </div>
           <Reveal delay={0.18}>
@@ -149,7 +170,7 @@ export default function AuditPage() {
                     ["1. Intake en context", "We bespreken processen, huidige knelpunten, teams, systemen en wat er al is geprobeerd."],
                     ["2. Analyse van workflows", "We kijken waar handmatig werk, vertraging en overdrachtsmomenten onnodig veel tijd kosten."],
                     ["3. AI kansen en keuzes", "We bepalen welke toepassingen logisch zijn en wat nu vooral afleiding of te vroeg is."],
-                    ["4. Roadmap en advies", "Je krijgt een helder overzicht van prioriteiten, vervolgstappen en toolrichting."],
+                    ["4. Roadmap en advies", "U krijgt een helder overzicht van prioriteiten, vervolgstappen en toolrichting."],
                   ].map(([title, body]) => (
                     <div key={title}>
                       <div style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.84rem", fontWeight: 700 }}>{title}</div>
@@ -168,8 +189,15 @@ export default function AuditPage() {
           <div>
             <SectionHeading
               tag="Uitkomst"
-              title={<>Na de AI audit weet je waar je moet starten, wat je moet laten liggen en wat het kan opleveren</>}
-              text="Dat is precies waarom deze dienst los waarde heeft. Je koopt duidelijkheid, prioritering en een betere basis voor AI implementatie."
+              title={
+                <>
+                  Na de audit weet u precies waar te starten
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    en wat u kunt laten liggen.
+                  </span>
+                </>
+              }
+              text="Dat is precies waarom deze dienst los waarde heeft. U koopt duidelijkheid, prioritering en een betere basis voor AI implementatie."
             />
           </div>
           <Reveal delay={0.18}>
@@ -195,7 +223,14 @@ export default function AuditPage() {
             tag="Waarom eerst een AI audit"
             light
             centered
-            title={<>Eerst helderheid over waar AI waarde toevoegt, daarna implementatie</>}
+            title={
+              <>
+                Eerst helderheid over waar AI waarde toevoegt.
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  Daarna implementatie.
+                </span>
+              </>
+            }
             width={860}
           />
           <div className="card-grid-three" style={{ marginTop: 32 }}>
@@ -239,7 +274,7 @@ export default function AuditPage() {
                 >
                   <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
                     <div>
-                      <h3 style={{ color: C.lightText, fontFamily: BODY, fontSize: "1rem", fontWeight: 700 }}>{item.title}</h3>
+                      <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "1rem", fontWeight: 700 }}>{item.title}</h3>
                       <div
                         style={{
                           marginTop: 10,
@@ -275,7 +310,9 @@ export default function AuditPage() {
         title={
           <>
             Interesse in een AI audit?
-            <em style={{ color: C.primary, fontStyle: "italic" }}> Laat het ons weten.</em>
+            <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+              Laat het ons weten.
+            </span>
           </>
         }
         text="Vertel kort uw situatie. Dan bespreken we samen of een AI audit de juiste eerste stap is."

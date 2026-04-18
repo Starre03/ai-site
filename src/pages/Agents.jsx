@@ -70,8 +70,10 @@ export default function AgentsPage() {
             light
             title={
               <>
-                OpenClaw is geen losse demo,
-                <em style={{ color: C.primary, fontStyle: "italic" }}> maar een agent system dat werk doorzet en uitvoert</em>
+                OpenClaw is geen losse demo.
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  Een agent system dat werk doorzet en uitvoert.
+                </span>
               </>
             }
             text="Daarmee verschilt deze dienst fundamenteel van AI integraties. Integraties helpen medewerkers sneller werken. OpenClaw AI agents pakken werk op, routeren het door, verrijken context en zetten vervolgstappen klaar of voeren ze uit."
@@ -109,7 +111,7 @@ export default function AgentsPage() {
                   style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
                 >
                   <div style={{ padding: "1.35rem", height: "100%" }}>
-                    <h3 style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
                     <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
                       {item.body}
                     </p>
@@ -126,7 +128,14 @@ export default function AgentsPage() {
           <div>
             <SectionHeading
               tag="Wanneer dit past"
-              title={<>Kies AI agents zodra werk niet mag stoppen bij een antwoord, maar door moet naar actie</>}
+              title={
+                <>
+                  Kies AI agents als werk niet stopt bij een antwoord.
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    Het moet door naar actie.
+                  </span>
+                </>
+              }
               text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heeft u geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
             />
           </div>
@@ -153,7 +162,14 @@ export default function AgentsPage() {
             <SectionHeading
               light
               tag="Waarom OpenClaw"
-              title={<>OpenClaw voelt onderscheidend omdat meerdere agents tegelijk kunnen kijken, redeneren en handelen</>}
+              title={
+                <>
+                  Meerdere agents die tegelijk kijken, redeneren en handelen.
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    Dat is het verschil met een losse integratie.
+                  </span>
+                </>
+              }
               text="Dat maakt OpenClaw interessant voor bedrijven die nieuwsgierig zijn naar moderne AI agents voor bedrijven, AI automatisering en agent systems die samenwerken tussen inbox, CRM, routing en opvolging."
             />
           </div>
@@ -186,7 +202,9 @@ export default function AgentsPage() {
         title={
           <>
             Interesse in een OpenClaw setup?
-            <em style={{ color: C.primary, fontStyle: "italic" }}> Laat het ons weten.</em>
+            <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+              Laat het ons weten.
+            </span>
           </>
         }
         text="Vertel kort welk proces u wilt automatiseren. Dan kijken we samen of een OpenClaw setup past."

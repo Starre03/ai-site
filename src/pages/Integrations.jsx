@@ -64,7 +64,9 @@ export default function IntegrationsPage() {
             title={
               <>
                 Wat Claude en ChatGPT al kunnen doen
-                <em style={{ color: C.primary, fontStyle: "italic" }}> zonder iets te bouwen</em>
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  zonder iets te bouwen.
+                </span>
               </>
             }
             text="De kracht zit al in de tools zelf. Wij zorgen voor de juiste inrichting, de juiste context en de koppeling met uw processen — zodat het daadwerkelijk werkt voor uw team."
@@ -94,7 +96,7 @@ export default function IntegrationsPage() {
                   style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
                 >
                   <div style={{ padding: "1.35rem", height: "100%" }}>
-                    <h3 style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
                     <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
                       {item.body}
                     </p>
@@ -111,7 +113,14 @@ export default function IntegrationsPage() {
           <div>
             <SectionHeading
               tag="Waar dit goed werkt"
-              title={<>De juiste dienst als support, kenniswerk en documentprocessen slimmer moeten zonder agentlaag</>}
+              title={
+                <>
+                  Claude of ChatGPT goed inrichten is al genoeg.
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    Geen agentlaag, geen grote herbouw.
+                  </span>
+                </>
+              }
               text="Kies deze dienst als de tools er al zijn — of kunnen komen — maar de inrichting, context en koppeling aan uw processen nog ontbreekt. Geen softwareontwikkeling, maar slimme implementatie van wat er al is."
             />
           </div>
@@ -138,7 +147,14 @@ export default function IntegrationsPage() {
             <SectionHeading
               light
               tag="Maatwerk"
-              title={<>Heeft u iets specifieks in gedachten? <em style={{ color: C.primary, fontStyle: "italic" }}>We kijken eerlijk naar wat haalbaar is.</em></>}
+              title={
+                <>
+                  Heeft u iets specifieks in gedachten?
+                  <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                    We kijken eerlijk naar wat haalbaar is.
+                  </span>
+                </>
+              }
               text="Standaard implementaties zijn een goed startpunt. Maar elke situatie is anders. Als uw vraag verder gaat — een specifieke koppeling, een afwijkend proces of een idee dat u wilt verkennen — bespreken we graag wat realistisch is. Geen verkooppraatje, maar een eerlijk gesprek over haalbaarheid."
             />
           </div>
@@ -171,7 +187,9 @@ export default function IntegrationsPage() {
         title={
           <>
             Wilt u Claude of ChatGPT integreren?
-            <em style={{ color: C.primary, fontStyle: "italic" }}> We bespreken graag de mogelijkheden.</em>
+            <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+              We bespreken graag de mogelijkheden.
+            </span>
           </>
         }
         text="Beschrijf uw situatie kort. Dan kijken we samen welke integratie het meeste oplevert."
