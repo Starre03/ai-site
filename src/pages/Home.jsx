@@ -189,35 +189,31 @@ const STAR_COLORS = [
   "rgba(224, 231, 255, 0.8)",
 ];
 
-// Drift vectors per star — each follows its own diagonal path out of frame
-// so the night sky feels alive (stars slowly float across, fade at the edge,
-// next cycle re-enters at the start point). Varied per-index.
-const DRIFT_VECTORS = [
-  { x: 180, y: -220 },
-  { x: -200, y: -180 },
-  { x: 160, y: 200 },
-  { x: -170, y: 190 },
-  { x: 220, y: -90 },
-  { x: -140, y: -240 },
-];
+// One shared diagonal — all stars fall together like a meteor shower
+// (down and slightly to the left). Individual drift duration still varies
+// per star, so the flow feels natural instead of marching in lock-step.
+const STAR_DRIFT = { x: -180, y: 300 };
 
-// 18 stars drifting across the hero as a quiet sky: each has its own
-// twinkle cadence, drift duration and direction. Delays are spread across
-// the full drift cycle so they never all fade in or out together.
-const HERO_STARS = Array.from({ length: 18 }, (_, i) => {
-  const col = i % 4;
-  const row = Math.floor(i / 4);
-  const left = (col * 25 + 6 + ((i * 13) % 11)) % 100;
-  const top = (row * 22 + 4 + ((i * 7) % 11)) % 92;
+// 24 stars drifting across the hero in the same direction. Varied sizes,
+// twinkle speeds, drift durations and delays keep the flow continuous:
+// as one fades out past the edge another is already mid-flight — never a
+// moment where the sky looks empty or where they all disappear at once.
+const HERO_STARS = Array.from({ length: 24 }, (_, i) => {
+  // Spread start positions biased to the top half of the canvas so stars
+  // have room to travel down-left through the frame before fading.
+  const col = i % 5;
+  const row = Math.floor(i / 5);
+  const left = (col * 22 + 14 + ((i * 13) % 11)) % 100;
+  const top = (row * 18 + 2 + ((i * 7) % 9)) % 78;
   const size = [2, 2, 2.5, 3, 3, 3.5][i % 6];
   const twinkleDur = (4.5 + (i % 4) * 1.2).toFixed(2);
-  const driftDur = 60 + ((i * 11) % 45); // 60–105s per cycle
-  const vec = DRIFT_VECTORS[i % DRIFT_VECTORS.length];
-  // Spread delays across the full drift cycle so stars desync naturally.
+  const driftDur = 48 + ((i * 7) % 36); // 48–84s per cycle, varied
+  // Spread delays across the full drift cycle so at any moment stars are
+  // at all different points of their journey — producing a constant rain.
   const twinkleDelay = ((i * 0.67) % 6).toFixed(2);
-  const driftDelay = ((i * 13.3) % driftDur).toFixed(2);
+  const driftDelay = ((i * 3.7) % driftDur).toFixed(2);
   const color = STAR_COLORS[i % STAR_COLORS.length];
-  return { left, top, size, twinkleDur, driftDur, color, vec, twinkleDelay, driftDelay };
+  return { left, top, size, twinkleDur, driftDur, color, twinkleDelay, driftDelay };
 });
 
 function HeroBackground() {
@@ -239,14 +235,17 @@ function HeroBackground() {
               "--star-color": s.color,
               "--twinkle-dur": `${s.twinkleDur}s`,
               "--drift-dur": `${s.driftDur}s`,
-              "--drift-x": `${s.vec.x}px`,
-              "--drift-y": `${s.vec.y}px`,
+              "--drift-x": `${STAR_DRIFT.x}px`,
+              "--drift-y": `${STAR_DRIFT.y}px`,
               // Negative delays start the animation already in-flight so
               // nothing all pops into existence on page load.
               animationDelay: `${s.twinkleDelay}s, -${s.driftDelay}s`,
             }}
           />
         ))}
+        {/* One real shooting star — bigger, brighter, faster, with a trail.
+           Travels the same diagonal as the quiet drifters. */}
+        <span className="hero-shooting-star" aria-hidden="true" />
       </div>
       <div className="ambient-hero-tr" aria-hidden="true" />
       <div className="ambient-hero-bl" aria-hidden="true" />
@@ -254,6 +253,9 @@ function HeroBackground() {
       <div className="hero-bg-center-dim" aria-hidden="true" />
       <div className="hero-bg-noise" aria-hidden="true" />
       <div className="hero-bg-vignette" aria-hidden="true" />
+      {/* Top & bottom hard fade to solid #0b1120 — guarantees no seam
+         between hero and whatever sits above/below (banner, services). */}
+      <div className="hero-bg-edgefade" aria-hidden="true" />
     </>
   );
 }
@@ -643,14 +645,7 @@ function ServicesOverview() {
           {serviceCards.map((card, index) => (
             <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
               <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
-                <GlowCard
-                  light
-                  style={{
-                    background: C.lightCard,
-                    height: "100%",
-                    boxShadow: "0 12px 30px rgba(2, 8, 23, 0.35)",
-                  }}
-                >
+                <GlowCard style={{ background: C.bg2, height: "100%" }}>
                   <div
                     style={{
                       padding: "1.4rem 1.5rem",
@@ -664,7 +659,7 @@ function ServicesOverview() {
                     <h3 style={{ fontFamily: BODY, fontSize: "1.04rem", fontWeight: 700, color: C.primary, margin: 0 }}>
                       {card.title}
                     </h3>
-                    <p style={{ color: C.lightTextSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
+                    <p style={{ color: C.textSoft, fontSize: "0.89rem", lineHeight: 1.72, margin: 0, fontFamily: BODY }}>
                       {card.desc}
                     </p>
                   </div>
