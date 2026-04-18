@@ -452,7 +452,87 @@ export function PageHero({
   align = "end",
   minH,
   centerY = false,
+  fullCenter = false,
 }) {
+  if (fullCenter) {
+    return (
+      <PageSection pad={pad} minH={minH} centerY={centerY}>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <Reveal>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: C.primaryDim,
+                border: `1px solid ${C.primary}15`,
+                borderRadius: 100,
+                padding: "6px 16px",
+                fontSize: "0.72rem",
+                color: C.primaryLight,
+                fontWeight: 500,
+                fontFamily: BODY,
+              }}
+            >
+              <span
+                style={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: "50%",
+                  background: C.primary,
+                  boxShadow: `0 0 8px ${C.primary}`,
+                }}
+              />
+              {badge}
+            </span>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h1
+              style={{
+                fontFamily: BODY,
+                fontSize: titleSize,
+                lineHeight: 1.06,
+                fontWeight: 700,
+                margin: "22px auto 0",
+                letterSpacing: "-0.02em",
+                color: C.text,
+                maxWidth: titleMaxWidth,
+                textAlign: "center",
+              }}
+            >
+              {title}
+            </h1>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <p
+              style={{
+                ...shell.sectionText,
+                maxWidth: textMaxWidth,
+                margin: "20px auto 0",
+                fontSize: "1rem",
+                textAlign: "center",
+              }}
+            >
+              {text}
+            </p>
+          </Reveal>
+          {actions ? (
+            <Reveal delay={0.2}>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 28, justifyContent: "center" }}>
+                {actions}
+              </div>
+            </Reveal>
+          ) : null}
+          {aside ? (
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
+              <Reveal delay={0.28}>{aside}</Reveal>
+            </div>
+          ) : null}
+        </div>
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection pad={pad} minH={minH} centerY={centerY}>
       <div className="two-col" style={{ alignItems: align, gap: 24 }}>

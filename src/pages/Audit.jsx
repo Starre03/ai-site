@@ -20,7 +20,7 @@ export default function AuditPage() {
         titleSize="clamp(2.2rem, 5vw, 4.15rem)"
         titleMaxWidth={760}
         textMaxWidth={600}
-        align="center"
+        fullCenter
         title={
           <>
             AI audit voor bedrijven die eerst willen weten

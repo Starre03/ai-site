@@ -19,7 +19,7 @@ export default function IntegrationsPage() {
         titleSize="clamp(2.2rem, 5vw, 4.15rem)"
         titleMaxWidth={760}
         textMaxWidth={600}
-        align="center"
+        fullCenter
         title={
           <>
             Claude en ChatGPT integreren in uw bedrijf —
