@@ -345,18 +345,18 @@ function TrustedBannerSection() {
 
   return (
     <section
+      className="trusted-banner-section"
       style={{
         // Transparent bg: the white logo card becomes a floating island
         // between the dark hero above and the dark services section below.
         // Hero aurora bleeds through the top, dark body bg shows beneath.
-        // Heavy negative margin-top + small negative margin-bottom pull
-        // everything tight so neither side leaves a dark gap around the card.
+        // Margins tuned in global.css per breakpoint — desktop pulls tight,
+        // mobile gives breathing room so nothing overlaps the hero CTA or
+        // the services heading below.
         background: "transparent",
         padding: 0,
         position: "relative",
         zIndex: 3,
-        marginTop: "-260px",
-        marginBottom: "-40px",
       }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto", textAlign: "center", padding: "0 clamp(1.5rem, 5vw, 5rem)" }}>

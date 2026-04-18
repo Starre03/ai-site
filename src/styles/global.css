@@ -397,6 +397,23 @@ textarea::placeholder {
   background: radial-gradient(ellipse at 50% 45%, transparent 0%, transparent 45%, rgba(11, 17, 32, 0.55) 100%);
 }
 
+/* Trusted-banner overlap between hero and services.
+   Desktop: heavy negative margins so the white card floats on the hero's
+   fade-out with no visible gap or seam.
+   Mobile: much smaller overlap so the banner doesn't collide with the
+   hero CTA above or the services heading below. */
+.trusted-banner-section {
+  margin-top: -260px;
+  margin-bottom: -40px;
+}
+
+@media (max-width: 768px) {
+  .trusted-banner-section {
+    margin-top: -80px;
+    margin-bottom: 32px;
+  }
+}
+
 /* Hard fade to solid #0b1120 at hero's top & bottom edges — removes any
    visible seam between hero and whatever sits above/below it. */
 .hero-bg-edgefade {
