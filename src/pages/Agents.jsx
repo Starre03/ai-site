@@ -13,6 +13,12 @@ export default function AgentsPage() {
     <>
       <PageHero
         badge="OpenClaw setups · AI Agents"
+        minH="100vh"
+        centerY
+        titleSize="clamp(2.2rem, 5vw, 4.15rem)"
+        titleMaxWidth={760}
+        textMaxWidth={600}
+        align="center"
         title={
           <>
             OpenClaw AI agents voor inbox automation,
@@ -55,59 +61,65 @@ export default function AgentsPage() {
         }
       />
 
-      <PageSection bg={C.bg2}>
-        <SectionHeading
-          tag="Wat OpenClaw doet"
-          title={
-            <>
-              OpenClaw is geen losse demo,
-              <em style={{ color: C.primary, fontStyle: "italic" }}> maar een agent system dat werk doorzet en uitvoert</em>
-            </>
-          }
-          text="Daarmee verschilt deze dienst fundamenteel van AI integraties. Integraties helpen medewerkers sneller werken. OpenClaw AI agents pakken werk op, routeren het door, verrijken context en zetten vervolgstappen klaar of voeren ze uit."
-        />
-        <div className="card-grid-two" style={{ marginTop: 28 }}>
-          {[
-            {
-              title: "Mail checken en begrijpen",
-              body: "Een inbox-agent leest binnenkomende mails, herkent intentie en bepaalt of het gaat om support, sales, intake, opvolging of escalatie.",
-            },
-            {
-              title: "Conceptantwoorden voorbereiden",
-              body: "Een antwoord-agent verzamelt context uit documentatie of systemen en zet een passend antwoord klaar voor review of directe verzending.",
-            },
-            {
-              title: "Leads analyseren en intake starten",
-              body: "Een lead-agent beoordeelt fit, haalt context uit CRM, stuurt intakevragen uit en zet de juiste vervolgstappen klaar voor sales of operations.",
-            },
-            {
-              title: "Samenwerkende agents",
-              body: "Verschillende agents kunnen achter elkaar of parallel werken: inbox-agent, CRM-agent, support-agent en routing-agent binnen één flow.",
-            },
-            {
-              title: "Support categoriseren en routeren",
-              body: "Tickets of mails worden automatisch gelabeld, verrijkt en doorgestuurd naar de juiste queue, persoon of vervolgactie.",
-            },
-            {
-              title: "Acties voorstellen of uitvoeren",
-              body: "Afhankelijk van het proces kunnen agents taken klaarzetten, statussen updaten, workflows triggeren of voorstellen doen voordat een medewerker bevestigt.",
-            },
-          ].map((item, index) => (
-            <Reveal key={item.title} delay={0.12 + index * 0.04} fill>
-              <GlowCard style={{ background: C.bg, height: "100%" }}>
-                <div style={{ padding: "1.35rem", height: "100%" }}>
-                  <h3 style={{ color: C.text, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
-                  <p style={{ color: C.textSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
-                    {item.body}
-                  </p>
-                </div>
-              </GlowCard>
-            </Reveal>
-          ))}
+      <PageSection bg={C.lightBg} minH="100vh" centerY>
+        <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            tag="Wat OpenClaw doet"
+            light
+            title={
+              <>
+                OpenClaw is geen losse demo,
+                <em style={{ color: C.primary, fontStyle: "italic" }}> maar een agent system dat werk doorzet en uitvoert</em>
+              </>
+            }
+            text="Daarmee verschilt deze dienst fundamenteel van AI integraties. Integraties helpen medewerkers sneller werken. OpenClaw AI agents pakken werk op, routeren het door, verrijken context en zetten vervolgstappen klaar of voeren ze uit."
+          />
+          <div className="card-grid-two" style={{ marginTop: 28 }}>
+            {[
+              {
+                title: "Mail checken en begrijpen",
+                body: "Een inbox-agent leest binnenkomende mails, herkent intentie en bepaalt of het gaat om support, sales, intake, opvolging of escalatie.",
+              },
+              {
+                title: "Conceptantwoorden voorbereiden",
+                body: "Een antwoord-agent verzamelt context uit documentatie of systemen en zet een passend antwoord klaar voor review of directe verzending.",
+              },
+              {
+                title: "Leads analyseren en intake starten",
+                body: "Een lead-agent beoordeelt fit, haalt context uit CRM, stuurt intakevragen uit en zet de juiste vervolgstappen klaar voor sales of operations.",
+              },
+              {
+                title: "Samenwerkende agents",
+                body: "Verschillende agents kunnen achter elkaar of parallel werken: inbox-agent, CRM-agent, support-agent en routing-agent binnen één flow.",
+              },
+              {
+                title: "Support categoriseren en routeren",
+                body: "Tickets of mails worden automatisch gelabeld, verrijkt en doorgestuurd naar de juiste queue, persoon of vervolgactie.",
+              },
+              {
+                title: "Acties voorstellen of uitvoeren",
+                body: "Afhankelijk van het proces kunnen agents taken klaarzetten, statussen updaten, workflows triggeren of voorstellen doen voordat een medewerker bevestigt.",
+              },
+            ].map((item, index) => (
+              <Reveal key={item.title} delay={0.12 + index * 0.04} fill>
+                <GlowCard
+                  light
+                  style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                >
+                  <div style={{ padding: "1.35rem", height: "100%" }}>
+                    <h3 style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                    <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                      {item.body}
+                    </p>
+                  </div>
+                </GlowCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </PageSection>
 
-      <PageSection bg={C.bg}>
+      <PageSection bg={C.bg} minH="100vh" centerY>
         <div className="two-col" style={{ alignItems: "start" }}>
           <div>
             <SectionHeading
@@ -133,19 +145,22 @@ export default function AgentsPage() {
         </div>
       </PageSection>
 
-      <PageSection bg={C.bg2}>
+      <PageSection bg={C.lightBg} minH="100vh" centerY>
         <div className="two-col" style={{ alignItems: "start" }}>
           <div>
             <SectionHeading
+              light
               tag="Waarom OpenClaw"
               title={<>OpenClaw voelt onderscheidend omdat meerdere agents tegelijk kunnen kijken, redeneren en handelen</>}
               text="Dat maakt OpenClaw interessant voor bedrijven die nieuwsgierig zijn naar moderne AI agents voor bedrijven, AI automatisering en agent systems die samenwerken tussen inbox, CRM, routing en opvolging."
             />
           </div>
           <Reveal delay={0.18}>
-            <GlowCard style={{ background: C.bg }}>
+            <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
               <div style={{ padding: "1.35rem" }}>
+                <div style={{ color: C.lightTextSoft }}>
                 <BulletList
+                  light
                   items={[
                     "Een inbox-agent kan mail begrijpen terwijl een CRM-agent context ophaalt en een routing-agent de volgende stap voorbereidt",
                     "Lead qualification, intake automation en support routing kunnen binnen één OpenClaw setup samenkomen",
@@ -153,6 +168,7 @@ export default function AgentsPage() {
                     "Dit maakt OpenClaw krachtig voor AI workflow automatisering met echte bedrijfslogica",
                   ]}
                 />
+                </div>
               </div>
             </GlowCard>
           </Reveal>

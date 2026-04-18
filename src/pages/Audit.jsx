@@ -169,7 +169,7 @@ export default function AuditPage() {
             />
           </div>
           <Reveal delay={0.18}>
-            <GlowCard style={{ background: C.bg }}>
+            <GlowCard style={{ background: C.bg2 }}>
               <div style={{ padding: "1.35rem" }}>
                 <BulletList
                   items={[
