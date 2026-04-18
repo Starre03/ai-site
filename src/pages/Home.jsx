@@ -180,15 +180,27 @@ function FadeSwitcher() {
   );
 }
 
-const HERO_PARTICLES = Array.from({ length: 14 }, (_, i) => {
-  // Distribute horizontally with slight variance, varied sizes, delays, drifts.
-  const left = (i * 7.3 + (i % 3) * 4.1) % 100;
-  const size = 1.4 + ((i * 7) % 5) * 0.45;
-  const duration = 28 + ((i * 11) % 22);
-  const delay = (i * 2.8) % 30;
-  const drift = (((i % 5) - 2) * 26);
-  const opacity = 0.55 + ((i * 3) % 4) * 0.12;
-  return { left, size, duration, delay, drift, opacity };
+const STAR_COLORS = [
+  "rgba(255, 255, 255, 0.95)",
+  "rgba(186, 230, 253, 0.95)",
+  "rgba(196, 181, 253, 0.85)",
+  "rgba(147, 197, 253, 0.9)",
+  "rgba(255, 255, 255, 0.8)",
+  "rgba(224, 231, 255, 0.9)",
+];
+
+const HERO_STARS = Array.from({ length: 26 }, (_, i) => {
+  // Distribute in a loose 6-col grid with noise per star.
+  const col = i % 6;
+  const row = Math.floor(i / 6);
+  const left = (col * 16.5 + 3 + ((i * 11) % 9)) % 100;
+  const top = (row * 22 + 6 + ((i * 7) % 14)) % 94;
+  const size = [2.5, 3, 3.5, 4, 5, 6][i % 6];
+  const delay = ((i * 0.41) % 5).toFixed(2);
+  const twinkleDur = (2.2 + (i % 4) * 0.7).toFixed(2);
+  const driftDur = 60 + ((i * 13) % 50);
+  const color = STAR_COLORS[i % STAR_COLORS.length];
+  return { left, top, size, delay, twinkleDur, driftDur, color };
 });
 
 function HeroBackground() {
@@ -196,22 +208,21 @@ function HeroBackground() {
     <>
       <div className="hero-bg-liquid" aria-hidden="true" />
       <div className="hero-bg-conic" aria-hidden="true" />
-      <div className="hero-grid-overlay" aria-hidden="true" />
       <div className="hero-bg-beam" aria-hidden="true" />
       <div className="hero-bg-beam hero-bg-beam-2" aria-hidden="true" />
-      <div className="hero-bg-particles" aria-hidden="true">
-        {HERO_PARTICLES.map((p, i) => (
+      <div className="hero-bg-stars" aria-hidden="true">
+        {HERO_STARS.map((s, i) => (
           <span
             key={i}
-            className="hero-particle"
+            className="hero-star"
             style={{
-              left: `${p.left}%`,
-              width: `${p.size}px`,
-              height: `${p.size}px`,
-              animationDuration: `${p.duration}s`,
-              animationDelay: `${p.delay}s`,
-              "--drift": `${p.drift}px`,
-              opacity: p.opacity,
+              left: `${s.left}%`,
+              top: `${s.top}%`,
+              "--star-size": `${s.size}px`,
+              "--star-color": s.color,
+              "--twinkle-dur": `${s.twinkleDur}s`,
+              "--drift-dur": `${s.driftDur}s`,
+              animationDelay: `${s.delay}s, ${s.delay}s`,
             }}
           />
         ))}
@@ -230,6 +241,7 @@ function Hero() {
   return (
     <SmoothSection bg={C.bg} zIndex={1} minH="120vh" center bgLayer={heroBg}>
       <div style={{ maxWidth: 980, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <div className="hero-title-backlight" aria-hidden="true" />
         <Reveal delay={0.08}>
           <h1
             style={{
@@ -242,6 +254,8 @@ function Hero() {
               color: C.text,
               maxWidth: 1120,
               marginInline: "auto",
+              position: "relative",
+              textShadow: "0 2px 40px rgba(11, 17, 32, 0.5)",
             }}
           >
             Benut de kracht van AI

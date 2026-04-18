@@ -39,28 +39,43 @@ export function SmoothSection({
   const drift = exit * -30;
 
   return (
-    <section ref={ref} id={id} style={{ minHeight: minH, position: "relative", background: bg }}>
+    <section
+      ref={ref}
+      id={id}
+      style={{
+        minHeight: minH,
+        position: "relative",
+        background: bg,
+        overflow: bgLayer ? "hidden" : undefined,
+      }}
+    >
+      {bgLayer}
       <div
         style={{
           position: "sticky",
           top: 0,
+          height: "100vh",
           minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: center ? "center" : undefined,
-          textAlign: center ? "center" : undefined,
-          padding: "clamp(4rem, 9vw, 6rem) clamp(1.25rem, 5vw, 5rem)",
-          background: bg,
           zIndex,
-          opacity: fadeOut,
-          transform: `translateY(${drift}px) translateZ(0)`,
-          willChange: "transform, opacity",
-          overflow: bgLayer ? "hidden" : undefined,
         }}
       >
-        {bgLayer}
-        <div style={shell.content}>{children}</div>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: center ? "center" : undefined,
+            textAlign: center ? "center" : undefined,
+            padding: "clamp(4rem, 9vw, 6rem) clamp(1.25rem, 5vw, 5rem)",
+            opacity: fadeOut,
+            transform: `translateY(${drift}px) translateZ(0)`,
+            willChange: "transform, opacity",
+          }}
+        >
+          <div style={shell.content}>{children}</div>
+        </div>
       </div>
     </section>
   );

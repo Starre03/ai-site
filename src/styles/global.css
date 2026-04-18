@@ -137,37 +137,19 @@ textarea::placeholder {
   will-change: transform, opacity;
 }
 
-.hero-grid-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse at 50% 45%, #000 20%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 20%, transparent 75%);
-  opacity: 0.7;
-  animation: hero-grid-shift 60s linear infinite;
-  will-change: background-position;
-}
-
-@keyframes hero-grid-shift {
-  to { background-position: 56px 56px; }
-}
-
 /* === Hero premium moving background === */
 .hero-bg-liquid {
   position: absolute;
   inset: -25%;
   pointer-events: none;
   background:
-    radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.28), transparent 42%),
-    radial-gradient(circle at 78% 18%, rgba(99, 102, 241, 0.22), transparent 46%),
-    radial-gradient(circle at 62% 78%, rgba(56, 189, 248, 0.22), transparent 48%),
-    radial-gradient(circle at 22% 72%, rgba(125, 211, 252, 0.14), transparent 44%),
-    radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.08), transparent 60%);
-  filter: blur(50px);
+    radial-gradient(circle at 18% 28%, rgba(14, 165, 233, 0.30), transparent 42%),
+    radial-gradient(circle at 82% 20%, rgba(139, 92, 246, 0.22), transparent 48%),
+    radial-gradient(circle at 64% 76%, rgba(56, 189, 248, 0.24), transparent 48%),
+    radial-gradient(circle at 22% 74%, rgba(167, 139, 250, 0.18), transparent 46%),
+    radial-gradient(circle at 88% 58%, rgba(14, 165, 233, 0.14), transparent 44%),
+    radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.10), transparent 60%);
+  filter: blur(55px);
   animation: liquid-flow 34s ease-in-out infinite alternate;
   will-change: transform;
 }
@@ -252,29 +234,87 @@ textarea::placeholder {
   );
 }
 
-.hero-bg-particles {
+/* === Hero stars === */
+.hero-bg-stars {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
 }
 
-.hero-particle {
+.hero-star {
   position: absolute;
-  bottom: -8px;
+  width: var(--star-size, 3px);
+  height: var(--star-size, 3px);
+  background: var(--star-color, rgba(255, 255, 255, 0.92));
   border-radius: 50%;
-  background: rgba(186, 230, 253, 0.85);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.55), 0 0 22px rgba(14, 165, 233, 0.25);
+  box-shadow:
+    0 0 6px 1px var(--star-color, rgba(186, 230, 253, 0.65)),
+    0 0 14px 2px rgba(14, 165, 233, 0.22);
   opacity: 0;
-  animation: particle-rise linear infinite;
-  will-change: transform, opacity;
+  animation:
+    star-twinkle var(--twinkle-dur, 3s) ease-in-out infinite,
+    star-drift var(--drift-dur, 80s) ease-in-out infinite;
+  will-change: opacity, transform, translate;
 }
 
-@keyframes particle-rise {
-  0% { transform: translate3d(0, 0, 0); opacity: 0; }
-  8% { opacity: 0.9; }
-  92% { opacity: 0.7; }
-  100% { transform: translate3d(var(--drift, 0px), -115vh, 0); opacity: 0; }
+.hero-star::before,
+.hero-star::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.hero-star::before {
+  width: calc(var(--star-size, 3px) * 5);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--star-color, rgba(255, 255, 255, 0.8)) 50%,
+    transparent 100%
+  );
+  transform: translate(-50%, -50%);
+}
+
+.hero-star::after {
+  width: 1px;
+  height: calc(var(--star-size, 3px) * 5);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--star-color, rgba(255, 255, 255, 0.8)) 50%,
+    transparent 100%
+  );
+  transform: translate(-50%, -50%);
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@keyframes star-drift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 8px -10px; }
+}
+
+/* === Hero title backlight — keeps heading legible against richer bg === */
+.hero-title-backlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 118%;
+  height: 260%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(11, 17, 32, 0.65) 0%, rgba(11, 17, 32, 0.3) 40%, transparent 72%);
+  filter: blur(24px);
+  z-index: -1;
 }
 
 .hero-bg-noise {
@@ -466,44 +506,6 @@ textarea::placeholder {
   transition: transform 0.5s cubic-bezier(.22,1,.36,1), box-shadow 0.5s cubic-bezier(.22,1,.36,1);
 }
 
-.glowcard-border-anim {
-  position: absolute;
-  inset: -1px;
-  border-radius: 18px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  background:
-    conic-gradient(
-      from var(--angle, 0deg),
-      rgba(14, 165, 233, 0) 0deg,
-      rgba(14, 165, 233, 0.55) 80deg,
-      rgba(14, 165, 233, 0) 160deg,
-      rgba(14, 165, 233, 0) 360deg
-    );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  padding: 1px;
-  animation: gc-border-rotate 8s linear infinite;
-}
-
-.glowcard-hover-active .glowcard-border-anim {
-  opacity: 1;
-}
-
-@property --angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes gc-border-rotate {
-  to { --angle: 360deg; }
-}
-
 /* === Quickscan CTA breathing gradient === */
 .cta-breath {
   background-size: 180% 180% !important;
@@ -621,21 +623,12 @@ textarea:focus-visible {
     filter: blur(80px);
   }
 
-  .hero-grid-overlay {
-    background-size: 40px 40px;
-    opacity: 0.5;
-  }
-
   .hero-bg-liquid {
     filter: blur(40px);
   }
 
   .hero-bg-conic {
     filter: blur(40px);
-  }
-
-  .hero-particle {
-    display: none;
   }
 
   .hero-bg-noise {
