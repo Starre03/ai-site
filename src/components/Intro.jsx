@@ -1,29 +1,74 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BODY, C } from "../lib/theme";
 
-// "Stellar Birth" — a supernova collapses into existence, a 360° burst
-// of stardust crystallises into the StarLeo wordmark, and a lone meteor
-// sweeps across the sky to hand off into the hero. ~3.5s end-to-end.
+// "Stellar Birth" — a pin-sharp supernova collapses into existence, a 360°
+// firework burst of streaks + diffraction-spiked stars crystallises into
+// the StarLeo wordmark, and an anamorphic lens flare sweeps the horizon.
+// Zero `filter: blur` on primary elements — everything is rendered with
+// crisp 1px strokes and layered tight shadows so it reads as high-def /
+// cinematic rather than fuzzy.  ~3.5s end-to-end.
 
-const PARTICLE_COUNT = 72;
+const PARTICLE_COUNT = 96;
+const RAY_COUNT = 28;
+const BG_STAR_COUNT = 80;
 
 function buildParticles() {
   return Array.from({ length: PARTICLE_COUNT }, (_, i) => {
-    // Angular distribution with tiny jitter so the ring never feels mechanical.
-    const angle = (i / PARTICLE_COUNT) * Math.PI * 2 + ((i * 0.37) % 0.18);
-    // Varied final distances give the burst depth — near, mid, far.
-    const distance = 240 + ((i * 47) % 440);
-    const size = [1.5, 2, 2, 2.5, 3, 3.5][i % 6];
-    const duration = 0.85 + (((i * 13) % 55) / 100); // 0.85–1.40s
-    const delay = ((i * 7) % 15) / 100; // 0–0.15s
+    // Even angular distribution with tiny deterministic jitter.
+    const angle = (i / PARTICLE_COUNT) * Math.PI * 2 + ((i * 0.37) % 0.22);
+    // Three depth layers — near, mid, far — so the burst has perspective.
+    const layer = i % 3;
+    const base = layer === 0 ? 260 : layer === 1 ? 440 : 620;
+    const distance = base + ((i * 47) % 120);
+    // A few bright "hero" stars get diffraction spikes.  Keep this small
+    // — too many cross-rays turns into visual noise.
+    const bright = i % 7 === 0;
+    const size = bright ? 3.5 : [1.5, 1.5, 2, 2, 2.5][i % 5];
+    const duration = 0.9 + (((i * 13) % 60) / 100); // 0.90–1.50s
+    const delay = ((i * 7) % 16) / 100; // 0–0.16s
+    const accent = i % 5 === 0;
     return {
       dx: Math.cos(angle) * distance,
       dy: Math.sin(angle) * distance,
       size,
       duration,
       delay,
-      accent: i % 5 === 0,
+      bright,
+      accent,
     };
+  });
+}
+
+function buildRays() {
+  // Evenly distributed rays with tiny angular jitter + varied lengths so
+  // the burst has organic variance without looking mechanical.  Slight
+  // stagger in delay makes it read as a firework "launch", not a single
+  // synchronous flash.
+  return Array.from({ length: RAY_COUNT }, (_, i) => {
+    const baseAngle = (i / RAY_COUNT) * 360;
+    const jitter = ((i * 37) % 9) - 4; // -4..+4 deg
+    const angle = baseAngle + jitter;
+    // Three length tiers — variety keeps it lively.
+    const tier = i % 3;
+    const length = tier === 0 ? 360 : tier === 1 ? 460 : 560;
+    const duration = 0.85 + (((i * 19) % 35) / 100); // 0.85–1.20s
+    const delay = ((i * 11) % 14) / 100;              // 0–0.14s
+    return { angle, length, duration, delay };
+  });
+}
+
+function buildBackgroundStars() {
+  // Deterministic pseudo-random placement — consistent across renders,
+  // no hydration mismatch, no Math.random.
+  return Array.from({ length: BG_STAR_COUNT }, (_, i) => {
+    const top = ((i * 53) % 97) / 97;   // 0–1
+    const left = ((i * 131) % 101) / 101;
+    const size = [1, 1, 1, 1.25, 1.5, 1.5, 2, 2.5][i % 8];
+    const opacity = 0.35 + ((i * 11) % 45) / 100; // 0.35–0.80
+    const duration = 3 + ((i * 19) % 40) / 10;    // 3.0–7.0s
+    const delay = ((i * 29) % 30) / 10;           // 0–3s
+    const bright = i % 9 === 0;
+    return { top, left, size, opacity, duration, delay, bright };
   });
 }
 
@@ -33,6 +78,8 @@ export default function Intro({ onDone }) {
   const logoRef = useRef(null);
   const done = useRef(false);
   const particles = useMemo(buildParticles, []);
+  const rays = useMemo(buildRays, []);
+  const bgStars = useMemo(buildBackgroundStars, []);
 
   const finish = useCallback(() => {
     if (!done.current) {
@@ -47,10 +94,10 @@ export default function Intro({ onDone }) {
       ? 4
       : 1;
     const timers = [
-      setTimeout(() => setPhase(1), 100 * mult),   // core pulse
-      setTimeout(() => setPhase(2), 680 * mult),   // supernova burst
-      setTimeout(() => setPhase(3), 1420 * mult),  // logo letters materialise
-      setTimeout(() => setPhase(4), 2150 * mult),  // tagline + meteor streak
+      setTimeout(() => setPhase(1), 120 * mult),   // core pulse + starfield on
+      setTimeout(() => setPhase(2), 700 * mult),   // supernova burst + flare
+      setTimeout(() => setPhase(3), 1480 * mult),  // logo letters materialise
+      setTimeout(() => setPhase(4), 2180 * mult),  // tagline + meteor streak
       setTimeout(() => {
         // Capture nav position so the logo can fly home.
         const navLogo = document.getElementById("nav-logo");
@@ -65,9 +112,9 @@ export default function Intro({ onDone }) {
           });
         }
         setPhase(5);
-      }, 2800 * mult),
-      setTimeout(() => setPhase(6), 3300 * mult),
-      setTimeout(finish, 3750 * mult),
+      }, 2820 * mult),
+      setTimeout(() => setPhase(6), 3320 * mult),
+      setTimeout(finish, 3780 * mult),
     ];
     return () => timers.forEach(clearTimeout);
   }, [finish]);
@@ -87,7 +134,11 @@ export default function Intro({ onDone }) {
         inset: 0,
         zIndex: 10000,
         cursor: "pointer",
-        background: exiting ? "transparent" : C.bg,
+        // Solid near-black sky with a single subtle gradient — no diffuse
+        // washes over the whole frame (that's what reads as "blurry").
+        background: exiting
+          ? "transparent"
+          : "radial-gradient(ellipse 60% 50% at 50% 50%, #0f1a2e 0%, #080d1a 60%, #04070f 100%)",
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
@@ -98,76 +149,85 @@ export default function Intro({ onDone }) {
         transition: `opacity ${gone ? 0.45 : 0.3}s ease, background 0.9s ease`,
       }}
     >
-      {/* Self-contained keyframes — intro has no external CSS dependency. */}
+      {/* Self-contained keyframe — core pulse is local to the intro. */}
       <style>{`
         @keyframes intro-core-pulse {
-          0%   { transform: translate(-50%,-50%) scale(0.8); opacity: 0.7; }
-          55%  { transform: translate(-50%,-50%) scale(1.35); opacity: 1; }
-          100% { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
-        }
-        @keyframes intro-meteor {
-          0%   { transform: translate(0, 0) rotate(-32deg); opacity: 0; }
-          12%  { opacity: 1; }
-          100% { transform: translate(-120vw, 78vh) rotate(-32deg); opacity: 0; }
+          0%   { width: 4px;  height: 4px;  opacity: 0.65; }
+          55%  { width: 22px; height: 22px; opacity: 1; }
+          100% { width: 12px; height: 12px; opacity: 1; }
         }
       `}</style>
 
-      {/* Deep-space nebula wash — appears subtly, blooms on burst, fades on exit. */}
+      {/* Static depth starfield — grounds the frame in a real night sky
+          from the very first frame.  Fades slightly during the burst. */}
       <div
+        className="intro-starfield"
         aria-hidden
         style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            `radial-gradient(ellipse 62% 55% at 50% 50%, rgba(14,165,233,${burst ? 0.18 : 0.04}) 0%, transparent 70%),` +
-            `radial-gradient(circle at 22% 20%, rgba(124,58,237,${burst ? 0.12 : 0.02}) 0%, transparent 48%),` +
-            `radial-gradient(circle at 80% 80%, rgba(8,145,178,${burst ? 0.10 : 0.02}) 0%, transparent 48%)`,
-          transition: "background 1s cubic-bezier(.22,1,.36,1)",
-          opacity: exiting ? 0 : 1,
+          opacity: exiting ? 0 : burst ? 0.55 : 1,
+          transition: "opacity 0.9s ease",
+        }}
+      >
+        {bgStars.map((s, i) => (
+          <span
+            key={i}
+            className={`intro-bgstar${s.bright ? " is-bright" : ""}`}
+            style={{
+              top: `${s.top * 100}%`,
+              left: `${s.left * 100}%`,
+              "--s-size": `${s.size}px`,
+              "--s-opacity": s.opacity,
+              "--s-dur": `${s.duration}s`,
+              "--s-delay": `${s.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Core singularity — pin-sharp radial gradient, crisp edge, tight
+          layered shadows for glow (not a single diffuse halo). */}
+      <div
+        className="intro-core"
+        aria-hidden
+        style={{
+          "--core-size": burst ? "14px" : "8px",
+          animation: phase === 1 ? "intro-core-pulse 0.6s ease-out 1 both" : undefined,
+          opacity: gone || formed ? 0 : 1,
+          transition: "opacity 0.6s ease, box-shadow 0.6s ease",
         }}
       />
 
-      {/* Core singularity — the birth point. Pulses once, flashes, then settles. */}
+      {/* Anamorphic lens flare — the single cinematic "lens" moment.
+          Fires at burst; 1px horizontal streak that scales across the
+          viewport, then a shorter vertical companion. */}
       <div
+        className={`intro-flare${burst && !exiting ? " is-active" : ""}`}
         aria-hidden
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: burst ? 22 : 8,
-          height: burst ? 22 : 8,
-          borderRadius: "50%",
-          background: `radial-gradient(circle, #ffffff 0%, ${C.primaryLight} 35%, ${C.primary} 60%, transparent 82%)`,
-          boxShadow: `0 0 ${burst ? 90 : 22}px ${burst ? 36 : 8}px ${C.primary}cc, 0 0 ${burst ? 220 : 46}px ${burst ? 64 : 14}px rgba(14,165,233,0.42)`,
-          animation: phase === 1 ? "intro-core-pulse 0.58s ease-out 1 both" : undefined,
-          transform: "translate(-50%, -50%)",
-          opacity: gone ? 0 : exiting ? 0.25 : formed ? 0.55 : 1,
-          transition: "all 0.6s cubic-bezier(.22,1,.36,1)",
-        }}
+      />
+      <div
+        className={`intro-flare-v${burst && !exiting ? " is-active" : ""}`}
+        aria-hidden
       />
 
-      {/* Shockwave rings — three concentric waves expand on burst. */}
-      {[0, 1, 2].map((i) => (
-        <div
-          key={`ring-${i}`}
+      {/* Firework rays — pin-sharp streaks shoot radially outward from
+          the core with a bright leading tip and tapered trail.  Reads
+          as a cinematic firework launch, not a blurry ring. */}
+      {rays.map((r, i) => (
+        <span
+          key={`ray-${i}`}
+          className={`intro-ray${burst && !exiting ? " is-active" : ""}`}
           aria-hidden
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: 64,
-            height: 64,
-            borderRadius: "50%",
-            border: `1px solid ${C.primary}`,
-            transform: `translate(-50%,-50%) scale(${burst ? 20 + i * 7 : 0.15})`,
-            opacity: burst && !exiting ? 0.34 - i * 0.09 : 0,
-            transition: `transform ${1.05 + i * 0.18}s cubic-bezier(.18,.85,.32,1) ${i * 0.09}s, opacity ${0.9 + i * 0.12}s ease ${i * 0.09}s`,
-            pointerEvents: "none",
+            "--ray-angle": `${r.angle}deg`,
+            "--ray-len": `${r.length}px`,
+            "--ray-dur": `${r.duration}s`,
+            "--ray-delay": `${r.delay}s`,
           }}
         />
       ))}
 
-      {/* Supernova particle burst — 72 points fly 360° outward from the core. */}
+      {/* Supernova — 96 particles fly 360° outward.  Bright ones get
+          real diffraction spikes via CSS pseudo-elements. */}
       <div
         aria-hidden
         style={{
@@ -177,29 +237,36 @@ export default function Intro({ onDone }) {
           pointerEvents: "none",
         }}
       >
-        {particles.map((p, i) => (
-          <span
-            key={i}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: p.size,
-              height: p.size,
-              borderRadius: "50%",
-              background: p.accent ? C.primaryLight : "#ffffff",
-              boxShadow: `0 0 6px 1px rgba(255,255,255,0.55), 0 0 14px 2px ${C.primary}44`,
-              transform: burst
-                ? `translate(${p.dx}px, ${p.dy}px) scale(1)`
-                : "translate(0, 0) scale(0.15)",
-              opacity: burst && !gone ? (exiting ? 0.25 : formed ? 0.45 : 0.92) : 0,
-              transition: `transform ${p.duration}s cubic-bezier(.16,1,.3,1) ${p.delay}s, opacity ${exiting ? 0.9 : 0.5}s ease ${p.delay}s`,
-            }}
-          />
-        ))}
+        {particles.map((p, i) => {
+          const classes = [
+            "intro-particle",
+            p.bright ? "is-bright" : "",
+            burst ? "is-active" : "",
+            exiting ? "is-fading" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
+          return (
+            <span
+              key={i}
+              className={classes}
+              style={{
+                "--p-size": `${p.size}px`,
+                "--p-color": p.accent ? C.primaryLight : "#ffffff",
+                "--p-dur": `${p.duration}s`,
+                "--p-delay": `${p.delay}s`,
+                "--dx": `${p.dx}px`,
+                "--dy": `${p.dy}px`,
+              }}
+            />
+          );
+        })}
       </div>
 
-      {/* Wordmark — letters crystallise from the debris, stagger in, subtly glow. */}
+      {/* Wordmark — letters crystallise via opacity + translate + scale ONLY.
+          No `filter: blur()` (that was the main cause of the unsharp look).
+          Glow is produced by tightly-layered text-shadows that read as
+          defined light, not a diffuse halo. */}
       <div
         ref={logoRef}
         style={{
@@ -225,12 +292,17 @@ export default function Intro({ onDone }) {
               display: "inline-block",
               color: i >= 4 ? C.primary : C.text,
               opacity: formed ? 1 : 0,
-              transform: formed ? "translateY(0) scale(1)" : "translateY(14px) scale(0.72)",
-              filter: formed ? "blur(0)" : "blur(10px)",
-              transition: `opacity 0.55s cubic-bezier(.22,1,.36,1) ${i * 0.055}s, transform 0.55s cubic-bezier(.22,1,.36,1) ${i * 0.055}s, filter 0.55s cubic-bezier(.22,1,.36,1) ${i * 0.055}s`,
+              transform: formed
+                ? "translateY(0) scale(1)"
+                : "translateY(10px) scale(0.88)",
+              transition: `opacity 0.5s cubic-bezier(.22,1,.36,1) ${i * 0.055}s, transform 0.5s cubic-bezier(.22,1,.36,1) ${i * 0.055}s, text-shadow 0.6s ease ${i * 0.055}s`,
               textShadow: formed
-                ? `0 0 22px ${C.primary}55, 0 0 50px ${C.primary}22`
+                ? `0 0 1px rgba(255,255,255,0.85),
+                   0 0 6px rgba(186,230,253,0.55),
+                   0 0 18px ${C.primary}66,
+                   0 0 36px ${C.primary}33`
                 : "none",
+              willChange: "opacity, transform",
             }}
           >
             {char}
@@ -238,44 +310,27 @@ export default function Intro({ onDone }) {
         ))}
       </div>
 
-      {/* Tagline fades in underneath once the letters have landed. */}
+      {/* Tagline — crisp type, no blur, fades in after the wordmark. */}
       <div
         style={{
           position: "relative",
           zIndex: 2,
           marginTop: 22,
           fontSize: "0.95rem",
-          color: "#94A3B8",
-          letterSpacing: "0.02em",
+          color: "#cbd5e1",
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
           fontFamily: BODY,
           fontWeight: 500,
           opacity: tagline && !exiting ? 1 : 0,
-          transform: tagline ? "translateY(0)" : "translateY(10px)",
-          transition: "opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1)",
+          transform: tagline ? "translateY(0)" : "translateY(8px)",
+          transition: "opacity 0.45s cubic-bezier(.22,1,.36,1), transform 0.45s cubic-bezier(.22,1,.36,1)",
+          textShadow: "0 0 8px rgba(14,165,233,0.25)",
         }}
       >
         Benut de kracht van AI.
       </div>
 
-      {/* Meteor streak — brand callback to the hero's shooting star, same diagonal. */}
-      {tagline && !gone ? (
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: "22%",
-            left: "72%",
-            width: 210,
-            height: 2,
-            background: `linear-gradient(270deg, #ffffff 0%, ${C.primaryLight} 28%, rgba(14,165,233,0.2) 62%, transparent 100%)`,
-            borderRadius: 2,
-            boxShadow: `0 0 12px 2px ${C.primary}aa, 0 0 28px 4px ${C.primary}55`,
-            filter: "blur(0.5px)",
-            transformOrigin: "0% 50%",
-            animation: "intro-meteor 1.2s cubic-bezier(.55,.06,.68,.18) 1 both",
-          }}
-        />
-      ) : null}
     </div>
   );
 }
