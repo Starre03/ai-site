@@ -403,26 +403,33 @@ textarea::placeholder {
    Mobile: much smaller overlap so the banner doesn't collide with the
    hero CTA above or the services heading below. */
 .trusted-banner-section {
-  margin-top: -260px;
-  margin-bottom: -40px;
+  /* Always starts 20px below the initial viewport — never visible at scroll 0.
+     Hero is 120vh; 100vh is fold; 20vh gap minus 20px safety = just below fold. */
+  margin-top: calc(-20vh + 20px);
+  margin-bottom: 60px;
 }
 
 @media (max-width: 768px) {
   .trusted-banner-section {
-    margin-top: -60px;
-    margin-bottom: 160px;
+    margin-top: -80px;
+    margin-bottom: 140px;
   }
 }
 
 /* Hard fade to solid #0b1120 at hero's top & bottom edges — removes any
-   visible seam between hero and whatever sits above/below it. */
+   visible seam between hero and whatever sits above/below it.
+   Bottom: SOLID from 0–45% (= bottom 54vh is pure #0b1120). The banner
+   overlaps hero's bottom 20vh via negative margin, AND the ambient-hero-bl
+   glow has a ~110px blur reaching into that zone — so we need a deep
+   solid band to kill every last bleed. Transitions to transparent by 72%,
+   leaving top 28vh for hero aurora/stars. */
 .hero-bg-edgefade {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
     linear-gradient(180deg, #0b1120 0%, rgba(11, 17, 32, 0) 14%),
-    linear-gradient(0deg, #0b1120 0%, rgba(11, 17, 32, 0) 28%);
+    linear-gradient(0deg, #0b1120 60%, rgba(11, 17, 32, 0) 82%);
 }
 
 @keyframes aurora-drift-a {

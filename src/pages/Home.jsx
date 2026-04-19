@@ -361,7 +361,7 @@ function TrustedBannerSection() {
     >
       <div style={{ maxWidth: 1280, margin: "0 auto", textAlign: "center", padding: "0 clamp(1.5rem, 5vw, 5rem)" }}>
         <Reveal delay={0.06}>
-          <div style={{ paddingTop: 2 }}>
+          <div style={{ paddingTop: 56 }}>
             <div
               style={{
                 fontSize: "0.74rem",
@@ -381,12 +381,15 @@ function TrustedBannerSection() {
           <div
             style={{
               position: "relative",
-              marginTop: 16,
+              marginTop: 20,
+              maxWidth: 880,
+              marginLeft: "auto",
+              marginRight: "auto",
               overflow: "hidden",
               border: `1px solid ${C.lightBorder}`,
               borderRadius: 28,
               background: "linear-gradient(180deg, #FFFFFF 0%, #FBFDFE 100%)",
-              boxShadow: "0 10px 24px rgba(2, 8, 23, 0.06)",
+              boxShadow: "0 10px 40px rgba(2, 8, 23, 0.18), 0 2px 8px rgba(2,8,23,0.08)",
             }}
           >
             <div
