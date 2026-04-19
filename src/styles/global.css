@@ -126,7 +126,7 @@ textarea::placeholder {
 
 .ambient-hero-bl {
   position: absolute;
-  bottom: -8%;
+  bottom: 28%;
   left: -6%;
   width: 460px;
   height: 460px;
@@ -429,7 +429,7 @@ textarea::placeholder {
   pointer-events: none;
   background:
     linear-gradient(180deg, #0b1120 0%, rgba(11, 17, 32, 0) 14%),
-    linear-gradient(0deg, #0b1120 60%, rgba(11, 17, 32, 0) 82%);
+    linear-gradient(0deg, #0b1120 18%, rgba(11, 17, 32, 0) 52%);
 }
 
 @keyframes aurora-drift-a {
