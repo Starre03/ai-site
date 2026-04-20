@@ -8,6 +8,8 @@ export default function Faq({
   title,
   text,
   light = false,
+  centered = false,
+  contentWidth = 760,
 }) {
   const [openIndex, setOpenIndex] = useState(0);
   const colors = {
@@ -21,6 +23,7 @@ export default function Faq({
       <SectionHeading
         tag={tag}
         light={light}
+        centered={centered}
         title={
           title || (
             <>
@@ -31,7 +34,7 @@ export default function Faq({
         }
         text={text}
       />
-      <div style={{ marginTop: 28, maxWidth: 760 }}>
+      <div style={{ margin: "28px auto 0", maxWidth: contentWidth }}>
         {items.map((item, index) => (
           <Reveal key={item.q} delay={0.08 + index * 0.03}>
             <div style={{ borderBottom: `1px solid ${colors.border}` }}>

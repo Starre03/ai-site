@@ -40,7 +40,7 @@ const auditFaqItems = [
     a: "Een standaard audit duurt één tot twee weken, afhankelijk van de complexiteit van uw processen en het aantal documenten dat we bekijken.",
   },
   {
-    q: "Wat hebben jullie van ons nodig?",
+    q: "Wat hebben wij van u nodig?",
     a: "Toegang tot een aantal voorbeelddocumenten of procesbeschrijvingen en een intakegesprek van een uur. Meer hebben we niet nodig om te starten.",
   },
   {
@@ -364,15 +364,17 @@ export default function AuditPage() {
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <Faq
             items={auditFaqItems}
+            centered
+            contentWidth={800}
             title={
               <>
                 Veelgestelde vragen over
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  een AI audit.
+                  de AI audit.
                 </span>
               </>
             }
-            text="Heldere antwoorden over doorlooptijd, benodigde input en wat een audit toevoegt ten opzichte van zelf experimenteren."
+            text="Heldere antwoorden over doorlooptijd, benodigde input en wat een AI audit concreet toevoegt."
           />
         </div>
       </PageSection>
