@@ -2,24 +2,24 @@ import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
 import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
-import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
+import { GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
 
 const agentFaqItems = [
   {
     q: "Wat is precies een AI agent?",
-    a: "Een AI agent is software die zelfstandig taken uitvoert op basis van een trigger zoals een binnenkomende e-mail of een ingevuld formulier. Hij beslist, handelt en rapporteert zonder dat iemand elke stap hoeft te begeleiden.",
+    a: "Een AI agent voert zelfstandig taken uit op basis van een trigger, context en duidelijke regels. Denk aan content voorbereiden, inboxen opvolgen, informatie verzamelen of een volgende stap klaarzetten.",
   },
   {
     q: "Hoe lang duurt het om een agent te bouwen?",
-    a: "Een eenvoudige agent is in één tot drie weken live. Complexere workflows met meerdere stappen of koppelingen duren langer en dat bespreken we vooraf eerlijk met u.",
+    a: "Een eerste agent voor content, marketing of inboxwerk kan vaak binnen één tot drie weken live staan. Complexere flows met meerdere systemen of stappen vragen meer afstemming.",
   },
   {
     q: "Zijn onze gegevens veilig?",
     a: "Ja. We werken met de beveiligde API's van Anthropic en OpenAI zonder dat uw data wordt gebruikt voor training. We tekenen een verwerkingsovereenkomst waar dat nodig is.",
   },
   {
-    q: "Wat als de agent een fout maakt?",
-    a: "Agents worden altijd gebouwd met een escalatiepad: bij twijfel of een onverwachte situatie wordt een mens ingeschakeld. We bouwen geen systemen die volledig autonoom werken zonder menselijke controle.",
+    q: "Wat als onze situatie afwijkt van een standaard setup?",
+    a: "Dat bespreken we graag. We werken samen met ervaren software engineers die jarenlang hebben gebouwd bij innovatieve bedrijven, waardoor maatwerk ook mogelijk is als uw situatie daarom vraagt.",
   },
 ];
 
@@ -41,33 +41,34 @@ export default function AgentsPage() {
         fullCenter
         title={
           <>
-            Een digitale werknemer die uw werk
-            <span style={{ color: C.primary }}> zelfstandig overneemt.</span>
+            AI agents die processen
+            <span style={{ display: "block" }}>zelfstandig uitvoeren</span>
+            <span style={{ display: "block", color: C.primary }}>en laten doorlopen.</span>
           </>
         }
-        text="Wij bouwen AI agents die e-mails begrijpen, leads kwalificeren, support routeren en taken uitvoeren zonder dat iemand er elke keer bij hoeft te zijn. Geen losse AI antwoorden, maar een agent die echt werk afhandelt."
+        text="Wij bouwen AI agents voor content, marketing, inboxen, opvolging en andere terugkerende processen. Waar mogelijk automatisch, en waar gewenst met human in the loop."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
             document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}>
-            Bespreek OpenClaw setup →
+            Bespreek AI agents →
           </PrimaryButton>,
-          <PrimaryButton key="audit" secondary to="/ai-audit">
-            Start met AI audit
+          <PrimaryButton key="integrations" secondary to="/ai-integraties">
+            Bekijk AI integraties
           </PrimaryButton>,
         ]}
         aside={
-          <GlowCard style={{ background: C.bg2, maxWidth: 380 }}>
+          <GlowCard style={{ background: C.bg2, maxWidth: 500, width: "100%" }}>
             <div style={{ padding: "1.35rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
                 Wat een agent zelfstandig doet
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
                 {[
-                  "Triggert op een e-mail, formulier of event",
-                  "Voert taken uit: opzoeken, samenvatten, versturen",
-                  "Rapporteert terug of escaleert bij twijfel",
+                  "Verwerkt input uit briefing, inbox of formulier",
+                  "Maakt content, zet taken klaar of bereidt een volgende stap voor",
+                  "Stuurt door, rapporteert terug of vraagt om akkoord",
                 ].map((step, index) => (
                   <div key={step} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                     <div
@@ -105,39 +106,39 @@ export default function AgentsPage() {
             light
             title={
               <>
-                OpenClaw is geen losse demo.
+                OpenClaw helpt niet alleen met antwoorden.
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  Een agent system dat werk doorzet en uitvoert.
+                  Het voert werk ook echt uit.
                 </span>
               </>
             }
-            text="Daarmee verschilt deze dienst fundamenteel van AI integraties. Integraties helpen medewerkers sneller werken. OpenClaw AI agents pakken werk op, routeren het door, verrijken context en zetten vervolgstappen klaar of voeren ze uit."
+            text="Juist daardoor is deze dienst sterk voor terugkerende processen waarin meerdere stappen op elkaar aansluiten. Agents kunnen informatie ophalen, formats vullen, acties klaarzetten en werk tussen systemen en mensen laten doorlopen."
           />
           <div className="card-grid-two" style={{ marginTop: 28 }}>
             {[
               {
-                title: "Mail checken en begrijpen",
-                body: "Een inbox-agent leest binnenkomende mails, herkent intentie en bepaalt of het gaat om support, sales, intake, opvolging of escalatie.",
+                title: "Input omzetten in output",
+                body: "Een agent zet een briefing of ruwe input om in concrete invalshoeken, formats en voorstellen voor content.",
               },
               {
-                title: "Conceptantwoorden voorbereiden",
-                body: "Een antwoord-agent verzamelt context uit documentatie of systemen en zet een passend antwoord klaar voor review of directe verzending.",
+                title: "Concepten voorbereiden",
+                body: "Blogs, social posts, mailteksten of landingspagina's worden voorbereid in uw tone of voice, klaar voor review.",
               },
               {
-                title: "Leads analyseren en intake starten",
-                body: "Een lead-agent beoordeelt fit, haalt context uit CRM, stuurt intakevragen uit en zet de juiste vervolgstappen klaar voor sales of operations.",
+                title: "Planning bewaken",
+                body: "Een agent houdt onderwerpen, deadlines en opvolging bij, zodat contentproductie niet stilvalt.",
               },
               {
-                title: "Samenwerkende agents",
-                body: "Verschillende agents kunnen achter elkaar of parallel werken: inbox-agent, CRM-agent, support-agent en routing-agent binnen één flow.",
+                title: "Inbox en reacties opvolgen",
+                body: "Binnenkomende vragen, reacties of leads worden beoordeeld, beantwoord of doorgestuurd naar de juiste vervolgactie.",
               },
               {
-                title: "Support categoriseren en routeren",
-                body: "Tickets of mails worden automatisch gelabeld, verrijkt en doorgestuurd naar de juiste queue, persoon of vervolgactie.",
+                title: "Informatie verzamelen en verrijken",
+                body: "Een agent haalt context uit documenten, eerdere content of systemen en gebruikt die direct in het volgende werk.",
               },
               {
-                title: "Acties voorstellen of uitvoeren",
-                body: "Afhankelijk van het proces kunnen agents taken klaarzetten, statussen updaten, workflows triggeren of voorstellen doen voordat een medewerker bevestigt.",
+                title: "Taken tussen systemen doorzetten",
+                body: "OpenClaw kan acties klaarzetten of uitvoeren in CRM, planning, inbox of andere tools die in het proces meedraaien.",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.12 + index * 0.04} fill>
@@ -165,74 +166,105 @@ export default function AgentsPage() {
             tag="Wanneer dit past"
             title={
               <>
-                Kies AI agents als werk niet stopt bij een antwoord.
+                Kies AI agents zodra processen
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  Het moet door naar actie.
+                  zelfstandig moeten doorlopen.
                 </span>
               </>
             }
-            text="Zodra inbox, support, intake, leadopvolging of routing deels zelfstandig moeten verlopen, is dit de logische dienst. Dan heeft u geen losse integratie meer nodig, maar een OpenClaw setup met samenwerkende agents."
+            text="Deze dienst past wanneer werk niet mag blijven hangen in losse prompts of handmatig gedoe. Dan is het waardevol dat een agent niet alleen helpt, maar ook bewaakt, doorzet en afrondt."
           />
-          <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard style={{ background: C.bg2 }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <BulletList
-                    items={[
-                      "U wilt inbox, leads of supportstromen slimmer afhandelen",
-                      "Meerdere systemen moeten samenwerken in één flow",
-                      "Taken moeten worden doorgezet of uitgevoerd, niet alleen beoordeeld",
-                      "U zoekt een concrete OpenClaw setup in plaats van een losse AI demo",
-                    ]}
-                  />
-                </div>
-              </GlowCard>
-            </div>
-          </Reveal>
+          <div className="card-grid-two" style={{ marginTop: 32 }}>
+            {[
+              {
+                title: "Veel werk, weinig ritme",
+                body: "Voor teams die genoeg ideeën hebben, maar moeite hebben om content consequent uit te werken en te publiceren.",
+              },
+              {
+                title: "Van briefing naar output",
+                body: "Voor processen waarin input steeds opnieuw moet worden omgezet in teksten, formats, analyses of vervolgstappen.",
+              },
+              {
+                title: "Inbox en leads blijven liggen",
+                body: "Voor organisaties waar aanvragen, reacties of opvolging te veel blijven wachten op handmatig werk.",
+              },
+              {
+                title: "Werk moet doorlopen",
+                body: "Voor situaties waarin taken automatisch naar de juiste persoon, tool of volgende stap moeten worden gestuurd.",
+              },
+            ].map((item, index) => (
+              <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
+                <GlowCard style={{ background: C.bg2, height: "100%" }}>
+                  <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.35 }}>{item.title}</h3>
+                    <p style={{ color: C.text, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                      {item.body}
+                    </p>
+                  </div>
+                </GlowCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </PageSection>
 
       <PageSection bg={C.lightBg} minH="100vh" centerY>
-        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+        <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
             centered
             light
             tag="Waarom OpenClaw"
             title={
               <>
-                Meerdere agents die tegelijk kijken, redeneren en handelen.
+                Niet één prompt, maar agents die
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  Dat is het verschil met een losse integratie.
+                  samen werk laten doorlopen.
                 </span>
               </>
             }
-            text="Dat maakt OpenClaw interessant voor bedrijven die nieuwsgierig zijn naar moderne AI agents voor bedrijven, AI automatisering en agent systems die samenwerken tussen inbox, CRM, routing en opvolging."
+            text="OpenClaw wordt krachtig zodra meerdere stappen op elkaar moeten aansluiten. De ene agent verzamelt context, de volgende maakt output klaar en een derde bewaakt opvolging of publicatie."
           />
-          <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <div style={{ color: C.lightTextSoft }}>
-                  <BulletList
-                    light
-                    items={[
-                      "Een inbox-agent kan mail begrijpen terwijl een CRM-agent context ophaalt en een routing-agent de volgende stap voorbereidt",
-                      "Lead qualification, intake automation en support routing kunnen binnen één OpenClaw setup samenkomen",
-                      "Agents kunnen acties klaarzetten of uitvoeren in plaats van alleen suggesties teruggeven",
-                      "Dit maakt OpenClaw krachtig voor AI workflow automatisering met echte bedrijfslogica",
-                    ]}
-                  />
+          <div className="card-grid-two" style={{ marginTop: 32 }}>
+            {[
+              {
+                title: "Vaste structuur en tone of voice",
+                body: "Agents kunnen werken met formats, richtlijnen en merkregels, zodat output consistenter wordt.",
+              },
+              {
+                title: "Planning en opvolging",
+                body: "Een agent kan deadlines bewaken, vervolgacties klaarzetten en signaleren wanneer iets blijft liggen.",
+              },
+              {
+                title: "Samenwerking tussen tools",
+                body: "Inbox, planning, documenten en CRM kunnen logisch op elkaar aansluiten binnen één flow.",
+              },
+              {
+                title: "Maatwerk altijd bespreekbaar",
+                body: "Als uw situatie afwijkt, kijken we samen wat slim is. Waar nodig werken we met ervaren engineers om maatwerk goed uit te voeren.",
+              },
+            ].map((item, index) => (
+              <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
+                <GlowCard
+                  light
+                  style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                >
+                  <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.35 }}>{item.title}</h3>
+                    <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                      {item.body}
+                    </p>
                   </div>
-                </div>
-              </GlowCard>
-            </div>
-          </Reveal>
+                </GlowCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </PageSection>
 
       <PageSection bg={C.bg} minH="100vh" centerY>
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <Faq
+            centered
             items={agentFaqItems}
             title={
               <>
