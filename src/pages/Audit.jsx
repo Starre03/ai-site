@@ -33,19 +33,19 @@ function AuditFlow() {
 const auditFaqItems = [
   {
     q: "Wat levert een AI audit concreet op?",
-    a: "Een audit laat zien waar AI direct tijd of kosten bespaart in uw processen. U krijgt een helder rapport met prioriteiten, geen abstracte aanbevelingen maar concrete stappen die u morgen kunt zetten.",
+    a: "Een AI audit geeft helder inzicht in waar AI in uw bedrijf waarde toevoegt, welke processen de meeste aandacht verdienen en welke vervolgstap logisch is. U ontvangt een concreet rapport met analyse, prioriteiten en aanbevelingen.",
   },
   {
     q: "Hoe lang duurt een audit?",
-    a: "Een standaard audit duurt één tot twee weken, afhankelijk van de complexiteit van uw processen en het aantal documenten dat we bekijken.",
+    a: "De audit start met een gesprek van één tot twee uur, waarin we uw processen, knelpunten en huidige situatie bespreken. Binnen een week ontvangt u een concreet rapport met analyse en aanbevelingen.",
   },
   {
     q: "Wat hebben wij van u nodig?",
-    a: "Toegang tot een aantal voorbeelddocumenten of procesbeschrijvingen en een intakegesprek van een uur. Meer hebben we niet nodig om te starten.",
+    a: "Een aantal voorbeelddocumenten of procesbeschrijvingen, en openheid over hoe uw processen nu lopen. Zo kunnen we scherp analyseren waar AI wel en niet logisch is.",
   },
   {
-    q: "Wat is het verschil met zelf ChatGPT gebruiken?",
-    a: "ChatGPT gebruiken is een goed begin. Een audit kijkt verder: welke processen lenen zich écht voor AI, wat zijn de risico's en hoe zorgt u dat uw team het structureel gebruikt in plaats van incidenteel.",
+    q: "Wat is het verschil met zelf Claude of ChatGPT gebruiken?",
+    a: "Zelf Claude of ChatGPT gebruiken is een goed begin. Een AI audit kijkt verder: welke processen in uw bedrijf zijn echt geschikt, waar zitten risico's of beperkingen en welke aanpak levert het meeste op. Zo krijgt u geen losse experimenten, maar een onderbouwde keuze voor wat wel en niet zinvol is.",
   },
 ];
 
