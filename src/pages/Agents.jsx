@@ -33,7 +33,6 @@ export default function AgentsPage() {
   return (
     <>
       <PageHero
-        badge="OpenClaw setups · AI Agents"
         minH="100vh"
         centerY
         titleSize="clamp(2.2rem, 5vw, 4.15rem)"
@@ -42,11 +41,11 @@ export default function AgentsPage() {
         fullCenter
         title={
           <>
-            OpenClaw AI agents voor inbox automation,
-            <span style={{ color: C.primary }}> lead qualification en support routing.</span>
+            Een digitale werknemer die uw werk
+            <span style={{ color: C.primary }}> zelfstandig overneemt.</span>
           </>
         }
-        text="StarLeo bouwt OpenClaw setups en AI agents voor bedrijven die meer willen dan losse AI antwoorden. Dit gaat over mail begrijpen, intake automation, leads analyseren, support routeren en acties klaarzetten of uitvoeren via moderne agent systems."
+        text="Wij bouwen AI agents die e-mails begrijpen, leads kwalificeren, support routeren en taken uitvoeren zonder dat iemand er elke keer bij hoeft te zijn. Geen losse AI antwoorden, maar een agent die echt werk afhandelt."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();

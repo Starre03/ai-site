@@ -33,7 +33,6 @@ export default function AuditPage() {
   return (
     <>
       <PageHero
-        badge="Zelfstandige dienst · AI audit"
         pad="clamp(5.75rem, 10vw, 7.4rem) clamp(1.5rem, 5vw, 5rem) clamp(4rem, 8vw, 4.6rem)"
         minH="100vh"
         centerY
@@ -43,8 +42,7 @@ export default function AuditPage() {
         fullCenter
         title={
           <>
-            AI audit voor bedrijven die eerst willen weten
-            <span style={{ color: C.primary }}> waar AI het meeste oplevert.</span>
+            Weet waar <span style={{ color: C.primary }}>AI</span> in uw bedrijf direct iets oplevert.
           </>
         }
         text="Krijg scherp waar AI in uw bedrijf direct waarde toevoegt, welke processen eerst aandacht verdienen en welke volgende stap logisch is. Zonder direct een implementatietraject in te hoeven."
@@ -56,7 +54,7 @@ export default function AuditPage() {
             Plan AI audit →
           </PrimaryButton>,
           <PrimaryButton key="services" secondary to="/ai-integraties">
-            Vergelijk met implementatie
+            Bekijk implementatie
           </PrimaryButton>,
         ]}
         aside={
@@ -68,7 +66,7 @@ export default function AuditPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
                 {[
                   "Intake: uw processen en documenten in kaart brengen",
-                  "Analyse: Claude beoordeelt risico's en kansen",
+                  "Analyse: wij brengen kansen en risico's in kaart",
                   "Rapport: concreet advies, direct toepasbaar",
                 ].map((step, index) => (
                   <div key={step} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
@@ -113,7 +111,7 @@ export default function AuditPage() {
                 </span>
               </>
             }
-            text="Het resultaat moet bruikbaar zijn voor directie, operations en teams die echt met AI aan de slag willen. Daarom is deze AI consultancy bewust concreet, zakelijk en gericht op uitvoerbare keuzes."
+            text="Het resultaat is bruikbaar en concreet: prioriteiten, haalbare stappen en een heldere richting voor uw volgende keuze."
           />
           <div className="card-grid-two" style={{ marginTop: 28 }}>
             {[

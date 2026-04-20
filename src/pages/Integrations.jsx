@@ -33,7 +33,6 @@ export default function IntegrationsPage() {
   return (
     <>
       <PageHero
-        badge="AI implementatie · Claude · ChatGPT · OpenAI"
         minH="100vh"
         centerY
         titleSize="clamp(2.2rem, 5vw, 4.15rem)"
