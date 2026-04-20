@@ -115,17 +115,17 @@ const heroLines = [
 const serviceCards = [
   {
     title: "AI Audit",
-    desc: "Wij brengen in kaart waar AI waarde toevoegt, waar bottlenecks zitten en wat de slimste eerste stap is.",
+    desc: "Wij brengen in kaart waar AI waarde toevoegt, waar de winst het grootst is en wat de logische eerste stap is.",
     to: "/ai-audit",
   },
   {
     title: "AI Implementatie",
-    desc: "Wij integreren AI in bestaande support-, document- en kennisprocessen.",
+    desc: "AI direct werkend in uw bestaande processen. Geen software bouwen, maar de juiste tool goed ingericht op uw situatie.",
     to: "/ai-integraties",
   },
   {
-    title: "OpenClaw Agents",
-    desc: "Wij zetten agentflows op voor inbox, intake, opvolging en taken die niet handmatig hoeven te blijven.",
+    title: "AI Agents",
+    desc: "Laat processen volledig automatisch verlopen. Van inbox en leadopvolging tot contentcreatie en marketingflows.",
     to: "/ai-agents",
   },
 ];
