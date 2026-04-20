@@ -2,24 +2,24 @@ import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
 import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
-import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
+import { GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
 
 const integrationsFaqItems = [
   {
-    q: "Wat is het verschil met custom software laten bouwen?",
-    a: "Wij bouwen geen software. We richten bestaande tools als Claude en ChatGPT in op uw situatie. Dat is sneller, goedkoper en minder risicovol dan maatwerksoftware laten ontwikkelen.",
+    q: "Wat is het verschil met maatwerksoftware laten bouwen?",
+    a: "Bij deze dienst richten we bestaande tools als Claude en ChatGPT slim in op uw situatie. Dat is sneller, lichter en vaak effectiever dan direct maatwerksoftware laten ontwikkelen.",
   },
   {
     q: "Welke systemen kunnen worden gekoppeld?",
-    a: "De meeste gangbare tools hebben een API of webhook die we kunnen gebruiken: e-mail, CRM, Google Workspace, SharePoint en meer. We kijken per situatie wat haalbaar is.",
+    a: "Dat hangt af van uw situatie. Denk aan e mail, CRM, documentomgevingen, interne kennisbronnen of andere tools met een API of webhook. We kijken per geval welke koppelingen praktisch, haalbaar en waardevol zijn.",
   },
   {
     q: "Hoe lang duurt een implementatie?",
-    a: "Een standaard integratie is in één week ingericht. Bij complexere situaties met meerdere koppelingen spreken we de doorlooptijd vooraf met u af.",
+    a: "Een standaard implementatie kan vaak snel worden ingericht. Bij complexere wensen of meerdere koppelingen stemmen we vooraf af wat realistisch is qua aanpak en doorlooptijd.",
   },
   {
     q: "Wat als medewerkers het niet gebruiken?",
-    a: "Adoptie is onderdeel van onze aanpak. We trainen het team, maken het zo laagdrempelig mogelijk en evalueren na twee weken of er bijsturing nodig is.",
+    a: "Adoptie hoort bij de implementatie. We zorgen dat de inrichting logisch aansluit op het dagelijkse werk, zodat de drempel laag blijft en het gebruik vanzelfsprekend wordt.",
   },
 ];
 
@@ -219,31 +219,50 @@ export default function IntegrationsPage() {
               <>
                 Heeft u iets specifieks in gedachten?
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  We kijken eerlijk naar wat haalbaar is.
+                  Maatwerk is altijd bespreekbaar.
                 </span>
               </>
             }
-            text="Standaard implementaties zijn een goed startpunt. Maar elke situatie is anders. Als uw vraag verder gaat — een specifieke koppeling, een afwijkend proces of een idee dat u wilt verkennen — bespreken we graag wat realistisch is. Geen verkooppraatje, maar een eerlijk gesprek over haalbaarheid."
+            text="Naast standaard implementaties werken we samen met ervaren software engineers die jarenlang hebben gebouwd bij innovatieve bedrijven. Daardoor is maatwerk ook mogelijk als uw situatie daarom vraagt. In overleg kijken we wat slim, haalbaar en waardevol is."
           />
-          <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <div style={{ color: C.lightTextSoft }}>
-                  <BulletList
-                    light
-                    items={[
-                      "Specifieke koppeling met uw bestaande systemen",
-                      "Inrichting op uw eigen documenten of kennisbank",
-                      "Begeleiding bij adoptie en gebruik in uw team",
-                      "Verkenning van wat verder mogelijk is",
-                    ]}
-                  />
+          <div className="card-grid-two" style={{ marginTop: 32 }}>
+            {[
+              {
+                title: "Specifieke koppelingen",
+                body: "Wanneer uw situatie daarom vraagt, kunnen we bestaande systemen gericht met Claude of ChatGPT laten samenwerken.",
+              },
+              {
+                title: "Werken op uw eigen informatie",
+                body: "We kunnen de inrichting afstemmen op uw documenten, data, kennisbank en bestaande werkwijze.",
+              },
+              {
+                title: "Ervaren engineers beschikbaar",
+                body: "We werken samen met sterke software engineers met jaren ervaring bij innovatieve bedrijven, zodat maatwerk ook echt uitvoerbaar is.",
+              },
+              {
+                title: "Samen bepalen wat zinvol is",
+                body: "In overleg kijken we wat haalbaar is, waar maatwerk waarde toevoegt en wat beter standaard kan blijven.",
+              },
+            ].map((item, index) => (
+              <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
+                <GlowCard
+                  light
+                  style={{
+                    background: C.lightCard,
+                    height: "100%",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.35 }}>{item.title}</h3>
+                    <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                      {item.body}
+                    </p>
                   </div>
-                </div>
-              </GlowCard>
-            </div>
-          </Reveal>
+                </GlowCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </PageSection>
 
@@ -251,11 +270,12 @@ export default function IntegrationsPage() {
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <Faq
             items={integrationsFaqItems}
+            centered
             title={
               <>
                 Veelgestelde vragen over
-                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  AI implementatie met Claude en ChatGPT.
+                <span style={{ display: "block", fontStyle: "italic" }}>
+                  <span style={{ color: C.primary }}>AI</span> implementatie met <span style={{ color: C.primary }}>Claude</span> en <span style={{ color: C.primary }}>ChatGPT</span>.
                 </span>
               </>
             }
