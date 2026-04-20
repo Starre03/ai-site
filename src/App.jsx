@@ -5,6 +5,7 @@ import Intro from "./components/Intro";
 import Nav from "./components/Nav";
 import RequireAuth from "./components/RequireAuth.jsx";
 import { C, shell } from "./lib/theme";
+import { PageFade } from "./components/ui";
 import AgentsPage from "./pages/Agents";
 import AdminPage from "./pages/Admin";
 import AboutPage from "./pages/About";
@@ -60,28 +61,30 @@ export default function App() {
       {!ready ? <Intro onDone={() => setReady(true)} /> : null}
       <Nav />
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/ai-audit" element={<AuditPage />} />
-          <Route path="/ai-integraties" element={<IntegrationsPage />} />
-          <Route path="/ai-agents" element={<AgentsPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/callback" element={<AuthCallbackPage />} />
-          <Route
-            path="/admin"
-            element={(
-              <RequireAuth>
-                <AdminPage />
-              </RequireAuth>
-            )}
-          />
-          <Route path="/over" element={<AboutPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/quickscan" element={<QuickscanPage />} />
-          <Route path="/voorwaarden" element={<TermsPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <PageFade>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/ai-audit" element={<AuditPage />} />
+            <Route path="/ai-integraties" element={<IntegrationsPage />} />
+            <Route path="/ai-agents" element={<AgentsPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
+            <Route
+              path="/admin"
+              element={(
+                <RequireAuth>
+                  <AdminPage />
+                </RequireAuth>
+              )}
+            />
+            <Route path="/over" element={<AboutPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/quickscan" element={<QuickscanPage />} />
+            <Route path="/voorwaarden" element={<TermsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </PageFade>
       </main>
       <Footer />
     </div>

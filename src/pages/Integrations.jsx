@@ -1,7 +1,27 @@
 import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
+import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
 import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
+
+const integrationsFaqItems = [
+  {
+    q: "Wat is het verschil met custom software laten bouwen?",
+    a: "Wij bouwen geen software. We richten bestaande tools als Claude en ChatGPT in op uw situatie. Dat is sneller, goedkoper en minder risicovol dan maatwerksoftware laten ontwikkelen.",
+  },
+  {
+    q: "Welke systemen kunnen worden gekoppeld?",
+    a: "De meeste gangbare tools hebben een API of webhook die we kunnen gebruiken: e-mail, CRM, Google Workspace, SharePoint en meer. We kijken per situatie wat haalbaar is.",
+  },
+  {
+    q: "Hoe lang duurt een implementatie?",
+    a: "Een standaard integratie is in één week ingericht. Bij complexere situaties met meerdere koppelingen spreken we de doorlooptijd vooraf met u af.",
+  },
+  {
+    q: "Wat als medewerkers het niet gebruiken?",
+    a: "Adoptie is onderdeel van onze aanpak. We trainen het team, maken het zo laagdrempelig mogelijk en evalueren na twee weken of er bijsturing nodig is.",
+  },
+];
 
 export default function IntegrationsPage() {
   usePageSeo({
@@ -42,14 +62,37 @@ export default function IntegrationsPage() {
           <GlowCard style={{ background: C.bg2, maxWidth: 360 }}>
             <div style={{ padding: "1.35rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                Wat Claude en ChatGPT al kunnen
+                Van idee naar werkende integratie
               </div>
-              <p style={{ color: C.text, fontFamily: BODY, fontWeight: 600, marginTop: 12 }}>
-                Zonder iets te bouwen: documenten samenvatten, vragen beantwoorden op basis van uw eigen kennisbank, support-antwoorden voorbereiden en interne informatie snel vindbaar maken.
-              </p>
-              <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.75, fontSize: "0.82rem", marginTop: 10 }}>
-                Wij zorgen dat het aansluit op uw situatie.
-              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
+                {[
+                  "Intake: welk proces wilt u verbeteren?",
+                  "Inrichting: Claude of ChatGPT correct instellen",
+                  "Live: uw team werkt er de volgende dag al mee",
+                ].map((step, index) => (
+                  <div key={step} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div
+                      style={{
+                        minWidth: 22,
+                        height: 22,
+                        borderRadius: 999,
+                        background: C.primary,
+                        color: "#fff",
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 1,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {index + 1}
+                    </div>
+                    <div style={{ fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.6, color: C.textSoft }}>{step}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </GlowCard>
         }
@@ -177,6 +220,23 @@ export default function IntegrationsPage() {
               </GlowCard>
             </div>
           </Reveal>
+        </div>
+      </PageSection>
+
+      <PageSection bg={C.bg} minH="100vh" centerY>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <Faq
+            items={integrationsFaqItems}
+            title={
+              <>
+                Veelgestelde vragen over
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  AI implementatie met Claude en ChatGPT.
+                </span>
+              </>
+            }
+            text="Korte antwoorden over koppelingen, doorlooptijd en hoe wij bestaande tools praktisch werkend maken."
+          />
         </div>
       </PageSection>
 

@@ -1,7 +1,27 @@
 import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
+import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
 import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
+
+const auditFaqItems = [
+  {
+    q: "Wat levert een AI audit concreet op?",
+    a: "Een audit laat zien waar AI direct tijd of kosten bespaart in uw processen. U krijgt een helder rapport met prioriteiten, geen abstracte aanbevelingen maar concrete stappen die u morgen kunt zetten.",
+  },
+  {
+    q: "Hoe lang duurt een audit?",
+    a: "Een standaard audit duurt één tot twee weken, afhankelijk van de complexiteit van uw processen en het aantal documenten dat we bekijken.",
+  },
+  {
+    q: "Wat hebben jullie van ons nodig?",
+    a: "Toegang tot een aantal voorbeelddocumenten of procesbeschrijvingen en een intakegesprek van een uur. Meer hebben we niet nodig om te starten.",
+  },
+  {
+    q: "Wat is het verschil met zelf ChatGPT gebruiken?",
+    a: "ChatGPT gebruiken is een goed begin. Een audit kijkt verder: welke processen lenen zich écht voor AI, wat zijn de risico's en hoe zorgt u dat uw team het structureel gebruikt in plaats van incidenteel.",
+  },
+];
 
 export default function AuditPage() {
   usePageSeo({
@@ -43,19 +63,36 @@ export default function AuditPage() {
           <GlowCard style={{ background: C.bg2, maxWidth: 360 }}>
             <div style={{ padding: "1.25rem 1.25rem 1.1rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                Direct helder
+                Hoe een audit werkt
               </div>
-              <p style={{ color: C.text, fontFamily: BODY, fontWeight: 650, lineHeight: 1.45, marginTop: 12 }}>
-                Geen lang voortraject, maar snel zicht op waar AI bruikbaar is en wat het kan opleveren.
-              </p>
-              <div style={{ marginTop: 16 }}>
-                <BulletList
-                  items={[
-                    "Waar AI direct tijd of capaciteit terugwint",
-                    "Welke processen eerst prioriteit moeten krijgen",
-                    "Welke volgende stap logisch is zonder vervolgverplichting",
-                  ]}
-                />
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
+                {[
+                  "Intake: uw processen en documenten in kaart brengen",
+                  "Analyse: Claude beoordeelt risico's en kansen",
+                  "Rapport: concreet advies, direct toepasbaar",
+                ].map((step, index) => (
+                  <div key={step} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div
+                      style={{
+                        minWidth: 22,
+                        height: 22,
+                        borderRadius: 999,
+                        background: C.primary,
+                        color: "#fff",
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 1,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {index + 1}
+                    </div>
+                    <div style={{ fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.6, color: C.textSoft }}>{step}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </GlowCard>
@@ -301,6 +338,23 @@ export default function AuditPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </PageSection>
+
+      <PageSection bg={C.bg} minH="100vh" centerY>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <Faq
+            items={auditFaqItems}
+            title={
+              <>
+                Veelgestelde vragen over
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  een AI audit.
+                </span>
+              </>
+            }
+            text="Heldere antwoorden over doorlooptijd, benodigde input en wat een audit toevoegt ten opzichte van zelf experimenteren."
+          />
         </div>
       </PageSection>
 

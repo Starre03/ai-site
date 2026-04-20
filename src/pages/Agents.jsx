@@ -1,7 +1,27 @@
 import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
+import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
-import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, TyperText, usePageSeo } from "../components/ui";
+import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
+
+const agentFaqItems = [
+  {
+    q: "Wat is precies een AI agent?",
+    a: "Een AI agent is software die zelfstandig taken uitvoert op basis van een trigger zoals een binnenkomende e-mail of een ingevuld formulier. Hij beslist, handelt en rapporteert zonder dat iemand elke stap hoeft te begeleiden.",
+  },
+  {
+    q: "Hoe lang duurt het om een agent te bouwen?",
+    a: "Een eenvoudige agent is in één tot drie weken live. Complexere workflows met meerdere stappen of koppelingen duren langer en dat bespreken we vooraf eerlijk met u.",
+  },
+  {
+    q: "Zijn onze gegevens veilig?",
+    a: "Ja. We werken met de beveiligde API's van Anthropic en OpenAI zonder dat uw data wordt gebruikt voor training. We tekenen een verwerkingsovereenkomst waar dat nodig is.",
+  },
+  {
+    q: "Wat als de agent een fout maakt?",
+    a: "Agents worden altijd gebouwd met een escalatiepad: bij twijfel of een onverwachte situatie wordt een mens ingeschakeld. We bouwen geen systemen die volledig autonoom werken zonder menselijke controle.",
+  },
+];
 
 export default function AgentsPage() {
   usePageSeo({
@@ -42,21 +62,37 @@ export default function AgentsPage() {
           <GlowCard style={{ background: C.bg2, maxWidth: 380 }}>
             <div style={{ padding: "1.35rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                OpenClaw concreet
+                Wat een agent zelfstandig doet
               </div>
-              <p style={{ color: C.text, fontFamily: BODY, fontWeight: 600, marginTop: 12 }}>
-                Inbox lezen, mail begrijpen, intake starten, CRM checken en opvolging klaarzetten.
-              </p>
-              <p style={{ color: C.textSoft, fontFamily: BODY, lineHeight: 1.75, fontSize: "0.82rem", marginTop: 10 }}>
-                <TyperText
-                  items={[
-                    "Mail begrijpen en routing starten",
-                    "Leads analyseren en intake automation starten",
-                    "Support routeren en opvolging klaarzetten",
-                  ]}
-                  primaryCursor={false}
-                />
-              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
+                {[
+                  "Triggert op een e-mail, formulier of event",
+                  "Voert taken uit: opzoeken, samenvatten, versturen",
+                  "Rapporteert terug of escaleert bij twijfel",
+                ].map((step, index) => (
+                  <div key={step} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div
+                      style={{
+                        minWidth: 22,
+                        height: 22,
+                        borderRadius: 999,
+                        background: C.primary,
+                        color: "#fff",
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 1,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {index + 1}
+                    </div>
+                    <div style={{ fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.6, color: C.textSoft }}>{step}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </GlowCard>
         }
@@ -192,6 +228,23 @@ export default function AgentsPage() {
               </GlowCard>
             </div>
           </Reveal>
+        </div>
+      </PageSection>
+
+      <PageSection bg={C.bg} minH="100vh" centerY>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <Faq
+            items={agentFaqItems}
+            title={
+              <>
+                Veelgestelde vragen over
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  AI agents en OpenClaw setups.
+                </span>
+              </>
+            }
+            text="Heldere antwoorden over bouwtijd, veiligheid en hoe een agent zich gedraagt in de praktijk."
+          />
         </div>
       </PageSection>
 

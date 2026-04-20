@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSectionProgress, useVisible } from "../lib/hooks";
 import { BODY, C, DISPLAY, shell } from "../lib/theme";
 
@@ -103,6 +103,21 @@ export function PageSection({
     >
       <div style={{ ...shell.content, width: "100%" }}>{children}</div>
     </section>
+  );
+}
+
+export function PageFade({ children }) {
+  const location = useLocation();
+
+  return (
+    <div
+      key={location.pathname}
+      style={{
+        animation: "pageFadeIn 220ms ease-out both",
+      }}
+    >
+      {children}
+    </div>
   );
 }
 
