@@ -2,7 +2,33 @@ import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
 import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
+import { useVisible } from "../lib/hooks";
 import { BulletList, GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
+
+const auditFlowSteps = [
+  { title: "Intake en context", body: "We bespreken processen, knelpunten, teams, systemen en wat er al is geprobeerd." },
+  { title: "Analyse van workflows", body: "We kijken waar handmatig werk, vertraging en overdrachten onnodig veel tijd kosten." },
+  { title: "AI kansen en keuzes", body: "We bepalen welke toepassingen logisch zijn en wat nu vooral afleiding of te vroeg is." },
+  { title: "Roadmap en advies", body: "U krijgt een helder overzicht van prioriteiten, vervolgstappen en toolrichting." },
+];
+
+function AuditFlow() {
+  const [ref, visible] = useVisible(0.12);
+  return (
+    <div ref={ref} className={`audit-flow ${visible ? "is-visible" : ""}`}>
+      <div className="audit-flow-line" />
+      {auditFlowSteps.map((step, index) => (
+        <div key={step.title} className="audit-flow-step">
+          <div className="audit-flow-circle">{index + 1}</div>
+          <div className="audit-flow-text">
+            <div className="audit-flow-title">{step.title}</div>
+            <p className="audit-flow-body">{step.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const auditFaqItems = [
   {
@@ -45,7 +71,7 @@ export default function AuditPage() {
             Weet waar <span style={{ color: C.primary }}>AI</span> in uw bedrijf direct iets oplevert.
           </>
         }
-        text="Krijg scherp waar AI in uw bedrijf direct waarde toevoegt, welke processen eerst aandacht verdienen en welke volgende stap logisch is. Zonder direct een implementatietraject in te hoeven."
+        text="Krijg helder waar AI in uw bedrijf direct rendeert, welke processen prioriteit verdienen en welke vervolgstap logisch is. Zonder direct een implementatietraject te hoeven starten."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
@@ -58,7 +84,7 @@ export default function AuditPage() {
           </PrimaryButton>,
         ]}
         aside={
-          <GlowCard style={{ background: C.bg2, maxWidth: 360 }}>
+          <GlowCard style={{ background: C.bg2, maxWidth: 520, width: "100%" }}>
             <div style={{ padding: "1.25rem 1.25rem 1.1rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
                 Hoe een audit werkt
@@ -105,31 +131,31 @@ export default function AuditPage() {
             centered
             title={
               <>
-                Geen inspiratiesessie, maar een audit die eindigt
+                Een AI audit die eindigt in
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  in prioriteiten en uitvoerbare keuzes.
+                  analyse, rapportage en concrete prioriteiten.
                 </span>
               </>
             }
-            text="Het resultaat is bruikbaar en concreet: prioriteiten, haalbare stappen en een heldere richting voor uw volgende keuze."
+            text="U krijgt een heldere analyse van uw processen, een concrete rapportage van kansen en knelpunten, en duidelijke prioriteiten voor de meest logische vervolgstap."
           />
           <div className="card-grid-two" style={{ marginTop: 28 }}>
             {[
               {
                 title: "Workflow analyse",
-                body: "We brengen in kaart waar werk blijft hangen, waar teamleden handmatig herhalen en waar beslissingen of overdrachten vertraging veroorzaken.",
+                body: "We brengen in kaart waar werk blijft hangen, waar handmatig wordt herhaald en waar overdrachten onnodige vertraging veroorzaken.",
               },
               {
                 title: "Bottleneck inzicht",
-                body: "U krijgt concreet zicht op welke processen vertragen, hoeveel ruis er zit in intake, support, documentverwerking of interne kennisvragen en waar de meeste winst haalbaar is.",
+                body: "U ziet welke processen vertragen, waar ruis ontstaat en waar met AI de meeste winst haalbaar is.",
               },
               {
                 title: "Concrete AI kansen",
-                body: "Geen inspiratiesessie, maar praktische kansen per proces: wat kan met een kennisassistent, wat vraagt om integraties en wat hoort eerder bij agents.",
+                body: "U ziet per proces waar AI direct waarde toevoegt, welke tooling daarbij past en of een kennisassistent, integratie of agent de juiste aanpak is.",
               },
               {
                 title: "Roadmap en prioriteiten",
-                body: "We sluiten af met een nuchtere volgorde: wat eerst doen, wat later doen, wat niet doen en welke tools of modellen logisch zijn.",
+                body: "U krijgt een heldere volgorde: wat eerst aandacht verdient, wat later kan volgen en welke stappen de meeste impact maken.",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.12 + index * 0.05} fill>
@@ -160,22 +186,39 @@ export default function AuditPage() {
                 </span>
               </>
             }
-            text="Deze dienst past wanneer de urgentie er al is, maar er nog onvoldoende zekerheid is over welke AI implementatie eerst moet, welke tools logisch zijn en waar de grootste winst ligt."
+            text="Deze dienst past wanneer de urgentie er al is, maar er nog onvoldoende zekerheid is over waar AI het meeste oplevert en welke stap logisch is om eerst te zetten."
           />
           <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard style={{ background: C.bg2 }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <BulletList
-                    items={[
-                      "U hebt meerdere ideeën, maar geen duidelijke volgorde",
-                      "Uw team ziet kansen, maar niemand wil gokken op de verkeerde tool",
-                      "Er is behoefte aan een onderbouwde AI roadmap",
-                      "U wilt later zelf of met iemand anders implementeren",
-                    ]}
-                  />
-                </div>
-              </GlowCard>
+            <div className="card-grid-two" style={{ marginTop: 32 }}>
+              {[
+                {
+                  title: "Duidelijke volgorde",
+                  body: "U ziet meerdere kansen, maar mist nog een heldere volgorde.",
+                },
+                {
+                  title: "Eerste prioriteit",
+                  body: "U wilt gericht kiezen waar AI als eerste moet bijdragen.",
+                },
+                {
+                  title: "Onderbouwde roadmap",
+                  body: "U heeft behoefte aan duidelijke prioriteiten en een onderbouwde roadmap.",
+                },
+                {
+                  title: "Gerichte implementatie",
+                  body: "U wilt later zelf of met een partner gericht implementeren.",
+                },
+              ].map((item, index) => (
+                <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
+                  <GlowCard style={{ background: C.bg2, height: "100%" }}>
+                    <div style={{ padding: "1.35rem", height: "100%" }}>
+                      <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                      <p style={{ color: C.text, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                        {item.body}
+                      </p>
+                    </div>
+                  </GlowCard>
+                </Reveal>
+              ))}
             </div>
           </Reveal>
         </div>
@@ -197,27 +240,9 @@ export default function AuditPage() {
             }
             text="De audit is bedoeld om snel bruikbare scherpte te geven. Geen lang traject vooraf, maar een duidelijke analyse, een heldere sessie en een besluitdocument waar u echt verder mee kunt."
           />
-          <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard light style={{ background: C.lightCard, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <div style={{ display: "grid", gap: 14 }}>
-                    {[
-                      ["1. Intake en context", "We bespreken processen, huidige knelpunten, teams, systemen en wat er al is geprobeerd."],
-                      ["2. Analyse van workflows", "We kijken waar handmatig werk, vertraging en overdrachtsmomenten onnodig veel tijd kosten."],
-                      ["3. AI kansen en keuzes", "We bepalen welke toepassingen logisch zijn en wat nu vooral afleiding of te vroeg is."],
-                      ["4. Roadmap en advies", "U krijgt een helder overzicht van prioriteiten, vervolgstappen en toolrichting."],
-                    ].map(([title, body]) => (
-                      <div key={title}>
-                        <div style={{ color: C.lightText, fontFamily: BODY, fontSize: "0.84rem", fontWeight: 700 }}>{title}</div>
-                        <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.8rem", lineHeight: 1.72, marginTop: 6 }}>{body}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </GlowCard>
-            </div>
-          </Reveal>
+          <div style={{ marginTop: 40 }}>
+            <AuditFlow />
+          </div>
         </div>
       </PageSection>
 
@@ -234,22 +259,39 @@ export default function AuditPage() {
                 </span>
               </>
             }
-            text="Dat is precies waarom deze dienst los waarde heeft. U koopt duidelijkheid, prioritering en een betere basis voor AI implementatie."
+            text="U krijgt duidelijke keuzes, concrete prioriteiten en een heldere basis om gericht met AI verder te gaan."
           />
           <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard style={{ background: C.bg2 }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <BulletList
-                    items={[
-                      "Een overzicht van bottlenecks en processen waar AI impact maakt",
-                      "Een shortlist van haalbare use-cases voor AI audit, integraties of agents",
-                      "Tooladvies voor Claude, ChatGPT / OpenAI of OpenClaw waar relevant",
-                      "Een implementatie roadmap met prioriteiten, volgorde en realistische volgende stap",
-                    ]}
-                  />
-                </div>
-              </GlowCard>
+            <div className="card-grid-two" style={{ marginTop: 32 }}>
+              {[
+                {
+                  title: "Bottlenecks en processen",
+                  body: "U krijgt overzicht van waar processen vertragen en waar AI direct impact kan maken.",
+                },
+                {
+                  title: "Kansrijke use-cases",
+                  body: "U ziet welke toepassingen logisch zijn voor een audit, integratie of agent-aanpak.",
+                },
+                {
+                  title: "Tool- en modeladvies",
+                  body: "U krijgt advies over welke tooling of modellen passen bij uw situatie en doelen.",
+                },
+                {
+                  title: "Roadmap en vervolgstap",
+                  body: "U krijgt een concrete volgorde van prioriteiten en de meest logische volgende stap.",
+                },
+              ].map((item, index) => (
+                <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
+                  <GlowCard style={{ background: C.bg2, height: "100%" }}>
+                    <div style={{ padding: "1.35rem", height: "100%" }}>
+                      <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
+                      <p style={{ color: C.text, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                        {item.body}
+                      </p>
+                    </div>
+                  </GlowCard>
+                </Reveal>
+              ))}
             </div>
           </Reveal>
         </div>
@@ -274,17 +316,15 @@ export default function AuditPage() {
           <div className="card-grid-three" style={{ marginTop: 32 }}>
             {[
               {
-                title: "Lage instap zonder verplicht vervolg",
-                intro: "U hoeft niet eerst een implementatietraject in. De audit is los af te nemen en geeft eerst helderheid over waar AI in uw bedrijf logisch is.",
+                title: "Los inzetbaar als eerste stap",
                 points: [
                   "Geen verplicht vervolgtraject",
-                  "Eerst duidelijkheid voordat u verder investeert",
+                  "Eerst duidelijkheid, daarna keuzes",
                   "Sterk als onafhankelijke eerste stap",
                 ],
               },
               {
-                title: "Sterk als eerste stap in oriëntatie",
-                intro: "Juist in de oriëntatiefase helpt een audit om sneller te zien waar AI relevant is en waar u nog niet mee hoeft te beginnen.",
+                title: "Sterk in de oriëntatiefase",
                 points: [
                   "Brengt prioriteiten en focus aan",
                   "Maakt interne gesprekken concreter",
@@ -293,11 +333,10 @@ export default function AuditPage() {
               },
               {
                 title: "Waar AI echt waarde toevoegt",
-                intro: "U krijgt helder waar AI in uw bedrijf bruikbaar is en welke processen het meeste kunnen opleveren.",
                 points: [
                   "Inzicht in waar AI direct tijd kan terugwinnen",
                   "Duidelijk welke processen de meeste winst opleveren",
-                  "Sneller zien waar automatisering, integratie of agents logisch zijn",
+                  "Sneller zien waar integratie of agents logisch zijn",
                 ],
               },
             ].map((item, index) => (
@@ -310,26 +349,8 @@ export default function AuditPage() {
                     boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                   }}
                 >
-                  <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
-                    <div>
-                      <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "1rem", fontWeight: 700 }}>{item.title}</h3>
-                      <div
-                        style={{
-                          marginTop: 10,
-                          color: C.primary,
-                          fontFamily: BODY,
-                          fontSize: "0.72rem",
-                          letterSpacing: "0.12em",
-                          textTransform: "uppercase",
-                          fontWeight: 700,
-                        }}
-                      >
-                        Voordeel
-                      </div>
-                      <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.84rem", lineHeight: 1.75, marginTop: 10 }}>
-                        {item.intro}
-                      </p>
-                    </div>
+                  <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: 14, height: "100%", textAlign: "left" }}>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "1rem", fontWeight: 700, lineHeight: 1.35 }}>{item.title}</h3>
                     <BulletList items={item.points} light />
                   </div>
                 </GlowCard>

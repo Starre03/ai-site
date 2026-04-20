@@ -473,34 +473,36 @@ export function PageHero({
     return (
       <PageSection pad={pad} minH={minH} centerY={centerY}>
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
-          <Reveal>
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: C.primaryDim,
-                border: `1px solid ${C.primary}15`,
-                borderRadius: 100,
-                padding: "6px 16px",
-                fontSize: "0.72rem",
-                color: C.primaryLight,
-                fontWeight: 500,
-                fontFamily: BODY,
-              }}
-            >
+          {badge ? (
+            <Reveal>
               <span
                 style={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: "50%",
-                  background: C.primary,
-                  boxShadow: `0 0 8px ${C.primary}`,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: C.primaryDim,
+                  border: `1px solid ${C.primary}15`,
+                  borderRadius: 100,
+                  padding: "6px 16px",
+                  fontSize: "0.72rem",
+                  color: C.primaryLight,
+                  fontWeight: 500,
+                  fontFamily: BODY,
                 }}
-              />
-              {badge}
-            </span>
-          </Reveal>
+              >
+                <span
+                  style={{
+                    width: 5,
+                    height: 5,
+                    borderRadius: "50%",
+                    background: C.primary,
+                    boxShadow: `0 0 8px ${C.primary}`,
+                  }}
+                />
+                {badge}
+              </span>
+            </Reveal>
+          ) : null}
           <Reveal delay={0.08}>
             <h1
               style={{
@@ -552,34 +554,36 @@ export function PageHero({
     <PageSection pad={pad} minH={minH} centerY={centerY}>
       <div className="two-col" style={{ alignItems: align, gap: 24 }}>
         <div style={{ maxWidth: titleMaxWidth }}>
-          <Reveal>
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: C.primaryDim,
-                border: `1px solid ${C.primary}15`,
-                borderRadius: 100,
-                padding: "6px 16px",
-                fontSize: "0.72rem",
-                color: C.primaryLight,
-                fontWeight: 500,
-                fontFamily: BODY,
-              }}
-            >
+          {badge ? (
+            <Reveal>
               <span
                 style={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: "50%",
-                  background: C.primary,
-                  boxShadow: `0 0 8px ${C.primary}`,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: C.primaryDim,
+                  border: `1px solid ${C.primary}15`,
+                  borderRadius: 100,
+                  padding: "6px 16px",
+                  fontSize: "0.72rem",
+                  color: C.primaryLight,
+                  fontWeight: 500,
+                  fontFamily: BODY,
                 }}
-              />
-              {badge}
-            </span>
-          </Reveal>
+              >
+                <span
+                  style={{
+                    width: 5,
+                    height: 5,
+                    borderRadius: "50%",
+                    background: C.primary,
+                    boxShadow: `0 0 8px ${C.primary}`,
+                  }}
+                />
+                {badge}
+              </span>
+            </Reveal>
+          ) : null}
           <Reveal delay={0.08}>
             <h1
               style={{
