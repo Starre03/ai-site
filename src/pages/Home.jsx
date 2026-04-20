@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import IntakeForm from "../components/IntakeForm";
 import { contactSteps } from "../content/siteContent";
 import { BODY, C, shell } from "../lib/theme";
+import { useVisible } from "../lib/hooks";
 import {
   GlowCard,
   PageSection,
@@ -14,6 +15,91 @@ import {
   Tag,
   usePageSeo,
 } from "../components/ui";
+
+function ProcessFlow({ steps }) {
+  const [ref, visible] = useVisible(0.15);
+  return (
+    <div ref={ref} className={`process-flow ${visible ? "is-visible" : ""}`} style={{ marginTop: 30 }}>
+      <div className="process-flow-line" />
+      {steps.map((label, i) => (
+        <div key={label} className="process-flow-step">
+          <div className="process-flow-circle">{i + 1}</div>
+          <div className="process-flow-label">{label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const SERVICES_DOT_POS = ["16.66%", "50%", "83.33%"];
+const SERVICES_DOT_TRANSITION =
+  "left 1300ms cubic-bezier(0.33, 1, 0.68, 1), transform 420ms cubic-bezier(0.33, 1, 0.68, 1), opacity 360ms ease";
+
+function ServicesFlow({ steps, activeIndex }) {
+  const [ref, visible] = useVisible(0.15);
+  const dotRef = useRef(null);
+  const isActive = activeIndex !== null && activeIndex !== undefined;
+
+  useLayoutEffect(() => {
+    const dot = dotRef.current;
+    if (!dot) return;
+
+    if (isActive) {
+      const wasActive = dot.dataset.active === "true";
+      if (!wasActive) {
+        // First hover: freeze the dot at its current animated position
+        const computed = getComputedStyle(dot);
+        const currentLeft = computed.left;
+        const currentOpacity = computed.opacity;
+        dot.style.animation = "none";
+        dot.style.transition = "none";
+        dot.style.left = currentLeft;
+        dot.style.opacity = currentOpacity;
+        dot.style.transform = "translate(-50%, -50%) scale(1)";
+        // Force reflow so the next style change triggers a transition
+        void dot.offsetWidth;
+      }
+      dot.style.transition = SERVICES_DOT_TRANSITION;
+      dot.style.left = SERVICES_DOT_POS[activeIndex];
+      dot.style.opacity = "1";
+      dot.style.transform = "translate(-50%, -50%) scale(1.5)";
+      dot.dataset.active = "true";
+      return;
+    }
+
+    if (dot.dataset.active === "true") {
+      // Released: fade out in place, then let the CSS loop take over
+      dot.style.transition = "opacity 420ms ease, transform 420ms ease";
+      dot.style.opacity = "0";
+      dot.style.transform = "translate(-50%, -50%) scale(1)";
+      const timer = setTimeout(() => {
+        dot.style.animation = "";
+        dot.style.transition = "";
+        dot.style.left = "";
+        dot.style.opacity = "";
+        dot.style.transform = "";
+        dot.dataset.active = "false";
+      }, 420);
+      return () => clearTimeout(timer);
+    }
+  }, [isActive, activeIndex]);
+
+  return (
+    <div ref={ref} className={`services-flow ${visible ? "is-visible" : ""}`} style={{ marginTop: 34 }}>
+      <div className="services-flow-line" />
+      <div className="services-flow-dot" ref={dotRef} />
+      {steps.map((label, i) => (
+        <div
+          key={label}
+          className={`services-flow-step ${isActive && activeIndex === i ? "is-active" : ""}`.trim()}
+        >
+          <div className="services-flow-circle">{i + 1}</div>
+          <div className="services-flow-label">{label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const heroLines = [
   "voor rapportages, marktonderzoek en documentwerk",
@@ -557,7 +643,8 @@ function HowWeWorkSection() {
           </div>
         </Reveal>
 
-        <div className="card-grid-three" style={{ marginTop: 28 }}>
+        {isProcess && <ProcessFlow steps={["Inzicht", "Keuze", "Uitvoering"]} />}
+        <div className="card-grid-three" style={{ marginTop: isProcess ? 8 : 28 }}>
           {cards.map((item, index) => (
             <Reveal key={item.title} delay={0.28 + index * 0.05} fill>
               <GlowCard
@@ -605,6 +692,7 @@ function HowWeWorkSection() {
 }
 
 function ServicesOverview() {
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   return (
     <SmoothSection id="diensten" bg={C.bg} zIndex={2} minH="108vh" center>
       <div style={{ maxWidth: 1160, margin: "0 auto", textAlign: "center" }}>
@@ -644,10 +732,18 @@ function ServicesOverview() {
             U kunt starten met een audit, direct kiezen voor implementatie of een agentflow laten bouwen.
           </p>
         </Reveal>
-        <div className="card-grid-three" style={{ marginTop: 28 }}>
+        <ServicesFlow steps={["Audit", "Implementatie", "Agents"]} activeIndex={hoveredIndex} />
+        <div className="card-grid-three" style={{ marginTop: 8 }}>
           {serviceCards.map((card, index) => (
             <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
-              <Link to={card.to} style={{ textDecoration: "none", display: "block", height: "100%" }}>
+              <Link
+                to={card.to}
+                style={{ textDecoration: "none", display: "block", height: "100%" }}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onFocus={() => setHoveredIndex(index)}
+                onBlur={() => setHoveredIndex(null)}
+              >
                 <GlowCard style={{ background: C.bg2, height: "100%" }}>
                   <div
                     style={{

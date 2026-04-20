@@ -41,11 +41,14 @@ export default function IntegrationsPage() {
         fullCenter
         title={
           <>
-            Claude en ChatGPT integreren in uw bedrijf —
-            <span style={{ color: C.primary }}> zodat het direct iets oplevert.</span>
+            Claude en ChatGPT integreren
+            <span style={{ display: "block" }}>
+              zodat <span style={{ color: C.primary }}>AI</span> in uw bedrijf
+            </span>
+            <span style={{ display: "block", color: C.primary }}>direct waarde oplevert.</span>
           </>
         }
-        text="Wij richten Claude en ChatGPT in voor uw support, documentprocessen of interne kenniswerk. Geen software bouwen — maar de juiste tool, goed ingericht op uw situatie, zodat uw team er morgen al mee kan werken."
+        text="Wij richten Claude en ChatGPT zo in dat analyses, rapportages en antwoorden sneller beschikbaar komen en direct bruikbaar zijn in uw dagelijkse werk. Geen maatwerksoftware, maar een slimme inrichting die meteen waarde toevoegt."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
@@ -54,7 +57,7 @@ export default function IntegrationsPage() {
             Bespreek AI integraties →
           </PrimaryButton>,
           <PrimaryButton key="agents" secondary to="/ai-agents">
-            Vergelijk met AI agents
+            Bekijk AI agents
           </PrimaryButton>,
         ]}
         aside={
@@ -105,37 +108,44 @@ export default function IntegrationsPage() {
             light
             title={
               <>
-                Wat Claude en ChatGPT al kunnen doen
+                Wat <span style={{ color: C.primary }}>Claude</span> en <span style={{ color: C.primary }}>ChatGPT</span>
+                <span style={{ display: "block" }}>nu al voor uw bedrijf</span>
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  zonder iets te bouwen.
+                  kunnen betekenen.
                 </span>
               </>
             }
-            text="De kracht zit al in de tools zelf. Wij zorgen voor de juiste inrichting, de juiste context en de koppeling met uw processen — zodat het daadwerkelijk werkt voor uw team."
+            text="De kracht zit al in de tools zelf. Wij zorgen voor de juiste inrichting, context en toepassing, zodat uw team er direct waarde uit haalt."
           />
           <div className="card-grid-two" style={{ marginTop: 28 }}>
             {[
               {
-                title: "Documenten samenvatten en analyseren",
-                body: "Claude leest contracten, rapporten, dossiers of handleidingen en geeft direct een samenvatting, actiepunten of antwoord op een specifieke vraag. Bespaart uren per week.",
+                title: "Documenten sneller analyseren",
+                body: "Claude leest contracten, rapporten, dossiers en handleidingen en zet de kern direct om in een heldere samenvatting, actiepunten of een concreet antwoord.",
               },
               {
-                title: "Vragen beantwoorden op uw eigen kennisbank",
-                body: "Koppel uw documentatie, FAQ of procedures aan Claude — en uw team of klanten krijgen direct het juiste antwoord, zonder te zoeken of collega's lastig te vallen.",
+                title: "Analyses en rapportages voorbereiden",
+                body: "Claude en ChatGPT helpen bij het opstellen van kwartaalrapportages, managementsamenvattingen en analyses van cijfers, zodat inzichten sneller beschikbaar komen en minder handmatig werk vragen.",
               },
               {
                 title: "Support consistenter en sneller maken",
-                body: "ChatGPT of Claude bereidt antwoorden voor op binnenkomende vragen, op basis van uw eigen documentatie. Uw team controleert en verstuurt — sneller, consistenter.",
+                body: "Claude of ChatGPT bereidt antwoorden voor op vragen van klanten of collega's, op basis van uw eigen informatie. Uw team controleert en verstuurt, met meer snelheid en meer consistentie.",
               },
               {
-                title: "Interne informatie toegankelijk maken",
-                body: "Beleid, procedures, eerdere projecten — Claude maakt het doorzoekbaar en begrijpelijk. Nieuwe medewerkers vinden antwoorden zelf, zonder steeds te hoeven vragen.",
+                title: "Interne kennis direct bruikbaar maken",
+                body: "Procedures, beleid en eerdere documenten worden sneller vindbaar en begrijpelijk, zodat medewerkers minder hoeven te zoeken en sneller met de juiste informatie verder kunnen.",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.12 + index * 0.05} fill>
                 <GlowCard
                   light
-                  style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                  className="card-sweep"
+                  style={{
+                    background: C.lightCard,
+                    height: "100%",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+                    "--sweep-offset": `${index * 3}s`,
+                  }}
                 >
                   <div style={{ padding: "1.35rem", height: "100%" }}>
                     <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600 }}>{item.title}</h3>
@@ -157,30 +167,45 @@ export default function IntegrationsPage() {
             tag="Waar dit goed werkt"
             title={
               <>
-                Claude of ChatGPT goed inrichten is al genoeg.
+                Claude of ChatGPT goed inrichten,
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  Geen agentlaag, geen grote herbouw.
+                  hiervoor is geen grote herstructurering nodig.
                 </span>
               </>
             }
-            text="Kies deze dienst als de tools er al zijn — of kunnen komen — maar de inrichting, context en koppeling aan uw processen nog ontbreekt. Geen softwareontwikkeling, maar slimme implementatie van wat er al is."
+            text="Deze aanpak werkt goed wanneer Claude of ChatGPT snel waarde kan toevoegen binnen uw bestaande werkwijze. Met de juiste inrichting, context en toepassing wordt AI direct bruikbaar in het dagelijkse werk van uw team."
           />
-          <Reveal delay={0.18}>
-            <div style={{ marginTop: 32 }}>
-              <GlowCard style={{ background: C.bg2 }}>
-                <div style={{ padding: "1.35rem" }}>
-                  <BulletList
-                    items={[
-                      "Supportteams met veel terugkerende vragen of documentchecks",
-                      "Kennisintensieve teams die werken met policies, contracten of dossiers",
-                      "Interne processen waar informatie uit meerdere bronnen samenkomt",
-                      "Organisaties die AI in hun bestaande stack willen opnemen zonder grote herbouw",
-                    ]}
-                  />
-                </div>
-              </GlowCard>
-            </div>
-          </Reveal>
+          <div className="card-grid-two" style={{ marginTop: 32 }}>
+            {[
+              {
+                title: "Veel terugkerende vragen",
+                body: "Voor teams die vaak dezelfde vragen beantwoorden of steeds opnieuw dezelfde informatie opzoeken.",
+              },
+              {
+                title: "Veel documenten en inhoud",
+                body: "Voor organisaties die werken met contracten, rapportages, dossiers, beleid of andere kennisintensieve documenten.",
+              },
+              {
+                title: "Informatie uit meerdere bronnen",
+                body: "Voor situaties waarin informatie verspreid staat en sneller samengebracht en bruikbaar moet worden gemaakt.",
+              },
+              {
+                title: "Wel implementeren, niet herbouwen",
+                body: "Voor bedrijven die AI willen inzetten binnen hun bestaande werkwijze, zonder direct een groot traject te starten.",
+              },
+            ].map((item, index) => (
+              <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
+                <GlowCard style={{ background: C.bg2, height: "100%" }}>
+                  <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.35 }}>{item.title}</h3>
+                    <p style={{ color: C.text, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                      {item.body}
+                    </p>
+                  </div>
+                </GlowCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </PageSection>
 
