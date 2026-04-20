@@ -16,14 +16,14 @@ import {
 } from "../components/ui";
 
 const heroLines = [
-  "voor contracten die automatisch op risico's worden gecontroleerd",
-  "voor support die zichzelf beantwoordt op basis van uw kennisbank",
-  "voor offertes en rapporten die zichzelf schrijven",
-  "voor een inbox die zelf prioriteert, routeert en opvolgt",
-  "voor klantvragen die 24/7 worden beantwoord zonder extra personeel",
-  "voor documenten die in seconden worden samengevat en geanalyseerd",
-  "voor processen die doorlopen terwijl uw team slaapt",
-  "voor data die zichzelf omzet in bruikbare inzichten",
+  "voor rapportages, marktonderzoek en documentwerk",
+  "voor teams die wekelijks uren willen terugwinnen",
+  "voor een agent die uw inbox beheert en prioriteert",
+  "voor contracten die AI direct op risico's controleert",
+  "voor kwartaalcijfers die AI automatisch analyseert en samenvat",
+  "voor leadopvolging die volledig automatisch verloopt",
+  "voor social content die automatisch wordt gemaakt en geplaatst",
+  "voor marketingcampagnes die automatisch draaien",
 ];
 
 const serviceCards = [
