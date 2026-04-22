@@ -859,15 +859,264 @@ function WhyNowSection() {
   );
 }
 
+const QUICKSCAN_MOCKUP_STEPS = [
+  "Bedrijfsprofiel",
+  "Knelpunten",
+  "Tools in gebruik",
+  "AI volwassenheid",
+  "Resultaat",
+];
+
+const QUICKSCAN_MOCKUP_OPPORTUNITIES = [
+  "Procesautomatisering",
+  "Slimme documentanalyse",
+  "Geautomatiseerde opvolging",
+];
+
+const QUICKSCAN_MOCKUP_TARGET_PCT = 78;
+const QUICKSCAN_MOCKUP_CIRCUMFERENCE = 2 * Math.PI * 48; // ≈ 301.59
+
+function QuickscanMockup() {
+  const [ref, visible] = useVisible(0.25);
+  const [pct, setPct] = useState(0);
+  const activeIndex = 3;
+
+  useEffect(() => {
+    if (!visible) return;
+    let raf;
+    let start;
+    const duration = 1400;
+    const target = QUICKSCAN_MOCKUP_TARGET_PCT;
+    const tick = (now) => {
+      if (!start) start = now;
+      const elapsed = now - start;
+      const p = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setPct(Math.round(eased * target));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [visible]);
+
+  const dashOffset = visible
+    ? QUICKSCAN_MOCKUP_CIRCUMFERENCE * (1 - QUICKSCAN_MOCKUP_TARGET_PCT / 100)
+    : QUICKSCAN_MOCKUP_CIRCUMFERENCE;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        background: "linear-gradient(180deg, rgba(11,17,32,0.96), rgba(11,17,32,0.99))",
+        border: "1px solid rgba(14,165,233,0.22)",
+        borderRadius: 16,
+        padding: "1.15rem 1.2rem 1.3rem",
+        boxShadow:
+          "0 24px 56px rgba(2, 8, 23, 0.35), 0 0 0 1px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.04)",
+        width: "100%",
+        maxWidth: 480,
+      }}
+    >
+      {/* Window header */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          paddingBottom: 14,
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          marginBottom: 16,
+        }}
+      >
+        <div style={{ display: "flex", gap: 5 }}>
+          {["#ef4444", "#fbbf24", "#10b981"].map((color) => (
+            <span
+              key={color}
+              style={{ width: 8, height: 8, borderRadius: 999, background: color, opacity: 0.6 }}
+            />
+          ))}
+        </div>
+        <div
+          style={{
+            marginLeft: 6,
+            fontFamily: BODY,
+            fontSize: "0.7rem",
+            letterSpacing: "0.12em",
+            color: "rgba(255,255,255,0.48)",
+            textTransform: "uppercase",
+            fontWeight: 600,
+          }}
+        >
+          AI Quickscan
+        </div>
+      </div>
+
+      {/* Steps + Result */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "center" }}>
+        {/* Steps */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+          {QUICKSCAN_MOCKUP_STEPS.map((label, i) => {
+            const done = i < activeIndex;
+            const active = i === activeIndex;
+            const reached = done || active;
+            return (
+              <div
+                key={label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  fontFamily: BODY,
+                  fontSize: "0.78rem",
+                  color: active ? C.text : done ? "rgba(255,255,255,0.72)" : "rgba(255,255,255,0.35)",
+                  fontWeight: active ? 600 : 500,
+                }}
+              >
+                <span
+                  style={{
+                    width: 20,
+                    height: 20,
+                    minWidth: 20,
+                    borderRadius: 999,
+                    background: reached ? C.primary : "rgba(255,255,255,0.08)",
+                    color: reached ? "#fff" : "rgba(255,255,255,0.4)",
+                    fontSize: "0.64rem",
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: active ? `0 0 12px ${C.primary}88` : "none",
+                    fontFamily: BODY,
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <span>{label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Result gauge */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          <div
+            style={{
+              fontFamily: BODY,
+              fontSize: "0.7rem",
+              color: "rgba(255,255,255,0.6)",
+              letterSpacing: "0.05em",
+            }}
+          >
+            Jouw AI potentieel
+          </div>
+          <svg width="108" height="108" viewBox="0 0 120 120" style={{ display: "block" }}>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(14,165,233,0.14)" strokeWidth="10" />
+            <circle
+              cx="60"
+              cy="60"
+              r="48"
+              fill="none"
+              stroke={C.primary}
+              strokeWidth="10"
+              strokeLinecap="round"
+              strokeDasharray={QUICKSCAN_MOCKUP_CIRCUMFERENCE}
+              strokeDashoffset={dashOffset}
+              transform="rotate(-90 60 60)"
+              style={{
+                transition: "stroke-dashoffset 1400ms cubic-bezier(0.22, 1, 0.36, 1) 200ms",
+                filter: `drop-shadow(0 0 6px ${C.primary}55)`,
+              }}
+            />
+            <text
+              x="60"
+              y="68"
+              textAnchor="middle"
+              fontSize="22"
+              fontWeight="700"
+              fill="#ffffff"
+              fontFamily="Space Grotesk, DM Sans, sans-serif"
+            >
+              {pct}%
+            </text>
+          </svg>
+          <div
+            style={{
+              fontFamily: BODY,
+              fontSize: "0.75rem",
+              color: C.primary,
+              fontWeight: 600,
+              letterSpacing: "0.01em",
+            }}
+          >
+            Hoog potentieel
+          </div>
+        </div>
+      </div>
+
+      {/* Top kansen */}
+      <div
+        style={{
+          marginTop: 18,
+          paddingTop: 14,
+          borderTop: "1px solid rgba(255,255,255,0.07)",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: BODY,
+            fontSize: "0.7rem",
+            color: "rgba(255,255,255,0.6)",
+            letterSpacing: "0.05em",
+            marginBottom: 9,
+            fontWeight: 500,
+          }}
+        >
+          Top kansen voor uw organisatie
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+          {QUICKSCAN_MOCKUP_OPPORTUNITIES.map((opp, i) => (
+            <div
+              key={opp}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 9,
+                fontFamily: BODY,
+                fontSize: "0.8rem",
+                color: "rgba(255,255,255,0.85)",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateX(0)" : "translateX(-6px)",
+                transition: `opacity 520ms ease ${900 + i * 120}ms, transform 520ms ease ${900 + i * 120}ms`,
+              }}
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 999,
+                  background: C.primary,
+                  flexShrink: 0,
+                  boxShadow: `0 0 6px ${C.primary}99`,
+                }}
+              />
+              {opp}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function IntakeCtaSection() {
   return (
     <section
       style={{
         background: C.lightBg,
-        padding: "clamp(3.25rem, 7vw, 4rem) clamp(1.5rem, 5vw, 5rem) clamp(3.25rem, 7vw, 4.1rem)",
+        padding: "clamp(3.5rem, 7vw, 5rem) clamp(1.5rem, 5vw, 5rem) clamp(3.5rem, 7vw, 5rem)",
       }}
     >
-      <div style={{ maxWidth: 980, margin: "0 auto", width: "100%" }}>
+      <div style={{ maxWidth: 1160, margin: "0 auto", width: "100%" }}>
         <Reveal delay={0.06}>
           <GlowCard
             className="cta-breath"
@@ -878,37 +1127,59 @@ function IntakeCtaSection() {
             }}
           >
             <div
+              className="quickscan-cta-grid"
               style={{
-                padding: "clamp(1.25rem, 1.9vw, 1.7rem) clamp(1.2rem, 1.8vw, 1.8rem)",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
+                padding: "clamp(1.5rem, 2.8vw, 2.4rem)",
+                display: "grid",
+                gridTemplateColumns: "minmax(0, 1fr) minmax(0, 480px)",
+                gap: "clamp(1.5rem, 3vw, 3rem)",
                 alignItems: "center",
               }}
             >
-              <Reveal delay={0.14}>
-                <Tag>Gratis quickscan</Tag>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <h2
-                  style={{
-                    fontFamily: BODY,
-                    fontSize: "clamp(1.3rem, 2.5vw, 2.15rem)",
-                    lineHeight: 1.12,
-                    fontWeight: 700,
-                    margin: "0 auto",
-                    letterSpacing: "-0.03em",
-                    color: C.text,
-                  maxWidth: 620,
-                }}
-                >
-                  Benieuwd waar <span style={{ color: C.primary }}>AI</span> uw bedrijf tijd en kosten kan besparen?
-                </h2>
-              </Reveal>
-              <Reveal delay={0.34}>
-                <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
-                  <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
+              <div style={{ textAlign: "left" }}>
+                <Reveal delay={0.14}>
+                  <Tag>Gratis quickscan</Tag>
+                </Reveal>
+                <Reveal delay={0.2}>
+                  <h2
+                    style={{
+                      fontFamily: BODY,
+                      fontSize: "clamp(1.35rem, 2.5vw, 2.2rem)",
+                      lineHeight: 1.12,
+                      fontWeight: 700,
+                      margin: "14px 0 0",
+                      letterSpacing: "-0.03em",
+                      color: C.text,
+                      maxWidth: 520,
+                    }}
+                  >
+                    Benieuwd waar <span style={{ color: C.primary }}>AI</span> uw bedrijf tijd en kosten kan besparen?
+                  </h2>
+                </Reveal>
+                <Reveal delay={0.28}>
+                  <p
+                    style={{
+                      color: C.textSoft,
+                      fontFamily: BODY,
+                      fontSize: "0.95rem",
+                      lineHeight: 1.75,
+                      marginTop: 14,
+                      maxWidth: 520,
+                    }}
+                  >
+                    Beantwoord een paar korte vragen over uw processen en ontdek direct hoeveel tijd en kosten uw bedrijf kan besparen met AI, inclusief de meest kansrijke stappen voor uw situatie.
+                  </p>
+                </Reveal>
+                <Reveal delay={0.36}>
+                  <div style={{ marginTop: 22 }}>
+                    <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
+                  </div>
+                </Reveal>
+              </div>
+
+              <Reveal delay={0.32} fill>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <QuickscanMockup />
                 </div>
               </Reveal>
             </div>

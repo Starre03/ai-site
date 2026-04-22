@@ -406,6 +406,13 @@ textarea::placeholder {
   .services-flow { display: none; }
 }
 
+/* === Quickscan CTA grid — collapse to single column on narrow viewports === */
+@media (max-width: 860px) {
+  .quickscan-cta-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* === Card aurora sweep (Integrations features) === */
 .card-sweep::after {
   content: "";
