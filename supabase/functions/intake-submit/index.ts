@@ -1,10 +1,19 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Vary": "Origin",
 };
+const MAX_PAYLOAD_BYTES = 64 * 1024;
+const ALLOWED_ORIGINS = new Set([
+  "https://starreai.com",
+  "https://www.starreai.com",
+  "https://starre.ai",
+  "https://www.starre.ai",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+]);
 
 const DASHBOARD_URL = "https://starreai.com/admin";
 const QUICKSCAN_URL = "https://starreai.com/quickscan";
@@ -22,11 +31,34 @@ const CTA_STYLE = [
   "text-decoration:none",
 ].join(";");
 
-function jsonResponse(body: unknown, status = 200) {
+function isAllowedOrigin(origin: string | null) {
+  if (!origin) return true;
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+
+  try {
+    const url = new URL(origin);
+    if (url.hostname === "localhost" || url.hostname === "127.0.0.1") {
+      return ["http:", "https:"].includes(url.protocol);
+    }
+    return url.protocol === "https:" && url.hostname.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+}
+
+function corsForRequest(req: Request) {
+  const origin = req.headers.get("origin");
+  return {
+    ...corsHeaders,
+    "Access-Control-Allow-Origin": origin && isAllowedOrigin(origin) ? origin : "https://starreai.com",
+  };
+}
+
+function jsonResponse(req: Request, body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
-      ...corsHeaders,
+      ...corsForRequest(req),
       "Content-Type": "application/json",
     },
   });
@@ -193,6 +225,7 @@ function isValidEmail(value: string) {
 }
 
 function validatePayload(payload: any) {
+  const email = String(payload?.contact?.email || "").trim();
   const missing = [
     !payload?.contact?.name?.trim() && "contact.name",
     !payload?.contact?.companyName?.trim() && "contact.companyName",
@@ -200,13 +233,22 @@ function validatePayload(payload: any) {
     !payload?.answers && "answers",
   ].filter(Boolean);
 
-  if (payload?.contact?.email && !isValidEmail(String(payload.contact.email).trim())) {
+  if (email && !isValidEmail(email)) {
     missing.push("contact.email_invalid");
   }
 
   if (payload?.formKind === "contact" && !String(payload?.answers?.message || "").trim()) {
     missing.push("answers.message");
   }
+
+  if (String(payload?.contact?.name || "").length > 120) missing.push("contact.name_too_long");
+  if (String(payload?.contact?.companyName || "").length > 160) missing.push("contact.companyName_too_long");
+  if (email.length > 254) missing.push("contact.email_too_long");
+  if (String(payload?.contact?.phone || "").length > 40) missing.push("contact.phone_too_long");
+  if (String(payload?.answers?.message || payload?.answers?.notes || "").length > 4000) {
+    missing.push("answers.message_too_long");
+  }
+  if (String(payload?.answers?.website || "").trim()) missing.push("spam_honeypot");
 
   return {
     valid: missing.length === 0,
@@ -245,20 +287,33 @@ function mapPayloadToRow(payload: any) {
 }
 
 Deno.serve(async (req) => {
+  if (!isAllowedOrigin(req.headers.get("origin"))) {
+    return new Response(JSON.stringify({ error: "Origin not allowed" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: corsForRequest(req) });
   }
 
   if (req.method !== "POST") {
-    return jsonResponse({ error: "Method not allowed" }, 405);
+    return jsonResponse(req, { error: "Method not allowed" }, 405);
   }
 
   try {
+    const contentLength = Number(req.headers.get("content-length") || 0);
+    if (contentLength > MAX_PAYLOAD_BYTES) {
+      return jsonResponse(req, { error: "Payload too large" }, 413);
+    }
+
     const payload = await req.json();
     const validation = validatePayload(payload);
 
     if (!validation.valid) {
       return jsonResponse(
+        req,
         {
           error: "Invalid payload",
           missing: validation.missing,
@@ -272,7 +327,7 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || Deno.env.get("LOCAL_SUPABASE_SERVICE_ROLE_KEY");
 
     if (!supabaseUrl || !serviceRoleKey) {
-      return jsonResponse({ error: "Missing Supabase function environment" }, 500);
+      return jsonResponse(req, { error: "Missing Supabase function environment" }, 500);
     }
 
     const serviceClient = createClient(supabaseUrl, serviceRoleKey, {
@@ -287,17 +342,17 @@ Deno.serve(async (req) => {
 
     if (error) {
       console.error("[intake-submit] insert failed", error);
-      return jsonResponse({ error: "Insert failed" }, 500);
+      return jsonResponse(req, { error: "Insert failed" }, 500);
     }
 
     await sendIntakeEmails(row);
 
-    return jsonResponse({
+    return jsonResponse(req, {
       ok: true,
       id: data?.id || null,
     });
   } catch (error) {
     console.error("[intake-submit] unexpected error", error);
-    return jsonResponse({ error: "Unexpected function error" }, 500);
+    return jsonResponse(req, { error: "Unexpected function error" }, 500);
   }
 });

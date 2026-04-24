@@ -593,6 +593,7 @@ export default function AdminPage() {
   usePageSeo({
     title: "StarLeo | Dashboard",
     description: "Intern dashboard voor quickscan- en contactinzendingen.",
+    noindex: true,
   });
 
   const navigate = useNavigate();

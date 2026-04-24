@@ -20,6 +20,7 @@ export default function AuthCallbackPage() {
   usePageSeo({
     title: "StarLeo | Auth callback",
     description: "Afronden van de loginflow voor de interne StarLeo-omgeving.",
+    noindex: true,
   });
 
   const navigate = useNavigate();

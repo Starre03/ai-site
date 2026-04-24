@@ -15,6 +15,7 @@ import {
   TOOL_LABELS,
   URGENCY_LABELS,
 } from "./config.js";
+import { trackEvent } from "../analytics.js";
 
 const MONTH_FACTOR = 4.33;
 
@@ -853,6 +854,7 @@ function getHourlyValueInput(answers) {
 }
 
 export function quickscanLog(event, payload = {}) {
+  trackEvent(event, payload);
   console.log(
     JSON.stringify({
       event,
@@ -1193,6 +1195,7 @@ export function buildSubmissionPayload(result, contact) {
       companyName: contact.companyName?.trim() || result.answers.companyName || "",
       email: contact.email.trim(),
       marketingOptIn: contact.marketingOptIn,
+      website: contact.website || "",
     },
     meta: {
       submittedAt,

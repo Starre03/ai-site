@@ -1,4 +1,5 @@
 import { BODY, C } from "../lib/theme";
+import { siteConfig } from "../lib/site";
 import { PageSection, Reveal, SectionHeading, usePageSeo } from "../components/ui";
 
 export default function PrivacyPage() {
@@ -10,11 +11,11 @@ export default function PrivacyPage() {
   const sections = [
     {
       title: "1. Wie is verantwoordelijk?",
-      text: "StarLeo is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Voor vragen over deze verklaring kun je contact opnemen via info@starleo.ai.",
+      text: `${siteConfig.legalName} is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Voor vragen over deze verklaring kun je contact opnemen via ${siteConfig.contactEmail}.`,
     },
     {
       title: "2. Welke gegevens verzamelen wij?",
-      text: "Via het intakeformulier verzamelen wij: naam, bedrijfsnaam, e-mailadres, telefoonnummer (optioneel), bedrijfsgrootte, AI use-cases, huidige tools en eventuele extra context die je zelf invult. Daarnaast verwerken wij standaard webstatistieken zoals paginabezoeken.",
+      text: "Via het intakeformulier en de quickscan verzamelen wij: naam, bedrijfsnaam, e-mailadres, telefoonnummer (optioneel), bedrijfsgrootte, AI use-cases, huidige tools, quickscan-antwoorden en eventuele extra context die je zelf invult. Daarnaast kunnen wij privacyvriendelijke webstatistieken en funnel-events verwerken, zoals paginabezoeken en formulierstappen, zonder advertentiecookies.",
     },
     {
       title: "3. Waarvoor gebruiken wij deze gegevens?",
@@ -30,11 +31,11 @@ export default function PrivacyPage() {
     },
     {
       title: "6. Jouw rechten",
-      text: "Je hebt het recht om je gegevens in te zien, te corrigeren of te laten verwijderen. Ook kun je bezwaar maken tegen de verwerking of verzoeken om gegevensoverdracht. Neem hiervoor contact op via info@starleo.ai.",
+      text: `Je hebt het recht om je gegevens in te zien, te corrigeren of te laten verwijderen. Ook kun je bezwaar maken tegen de verwerking of verzoeken om gegevensoverdracht. Neem hiervoor contact op via ${siteConfig.contactEmail}.`,
     },
     {
       title: "7. Cookies",
-      text: "Deze website gebruikt geen tracking cookies. Wij maken geen gebruik van advertentiecookies of third-party analytics die persoonsgegevens verwerken.",
+      text: "Deze website gebruikt geen advertentiecookies. Eventuele analytics worden privacyvriendelijk ingericht en gebruikt om de website, quickscan en formulieren betrouwbaarder te maken.",
     },
     {
       title: "8. Wijzigingen",

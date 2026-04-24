@@ -19,7 +19,17 @@ const fieldStyle = {
   fontSize: "clamp(0.92rem, min(1.5vw, 2vh), 0.96rem)",
 };
 
-export default function GateForm({ contact, errors, assessment, onChange, onToggleOptIn, onBack, onSubmit }) {
+export default function GateForm({
+  contact,
+  errors,
+  assessment,
+  onChange,
+  onToggleOptIn,
+  onBack,
+  onSubmit,
+  submitting = false,
+  submitError = "",
+}) {
   const teaserLabel = PAIN_POINT_LABELS[assessment?.answers?.painPoint] || "Meerdere dingen tegelijk";
   const name = assessment?.answers?.name || "je";
   const companyName = assessment?.answers?.companyName || "je bedrijf";
@@ -128,6 +138,16 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
             textAlign: "left",
           }}
         >
+          <input
+            type="text"
+            name="website"
+            value={contact.website || ""}
+            onChange={(event) => onChange("website", event.target.value)}
+            autoComplete="off"
+            tabIndex={-1}
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }}
+          />
           <div style={{ display: "grid", gap: "clamp(6px, 0.9vh, 8px)" }}>
             <label htmlFor="quickscan-email" style={{ color: C.textMuted, fontFamily: BODY, fontSize: "clamp(0.84rem, min(1.2vw, 1.7vh), 0.88rem)" }}>
               E-mailadres
@@ -138,9 +158,11 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
               placeholder="naam@bedrijf.nl"
               value={contact.email}
               onChange={(event) => onChange("email", event.target.value)}
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? "quickscan-email-error" : undefined}
               style={fieldStyle}
             />
-            {errors.email ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.email}</span> : null}
+            {errors.email ? <span id="quickscan-email-error" style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.email}</span> : null}
           </div>
 
           <label
@@ -163,14 +185,47 @@ export default function GateForm({ contact, errors, assessment, onChange, onTogg
           </label>
 
           <div style={{ display: "flex", gap: "clamp(10px, 1.4vh, 12px)", flexWrap: "wrap", justifyContent: "center" }}>
-            <button type="button" style={getSecondaryButtonStyle()} onClick={onBack}>
+            <button type="button" style={getSecondaryButtonStyle()} onClick={onBack} disabled={submitting}>
               Vorige
             </button>
-            <button type="submit" style={getPrimaryButtonStyle(false)}>
-              Toon analyse
+            <button type="submit" style={{ ...getPrimaryButtonStyle(false), opacity: submitting ? 0.72 : 1 }} disabled={submitting}>
+              {submitting ? (
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <span
+                    style={{
+                      width: 14,
+                      height: 14,
+                      border: "2px solid rgba(255,255,255,0.3)",
+                      borderTopColor: "#fff",
+                      borderRadius: "50%",
+                      animation: "spin 0.7s linear infinite",
+                      display: "inline-block",
+                    }}
+                  />
+                  Analyse opslaan...
+                </span>
+              ) : (
+                "Toon analyse"
+              )}
             </button>
           </div>
         </form>
+
+        {submitError ? (
+          <p
+            role="alert"
+            style={{
+              color: "#FCA5A5",
+              fontFamily: BODY,
+              fontSize: "clamp(0.82rem, min(1.2vw, 1.7vh), 0.88rem)",
+              lineHeight: 1.55,
+              margin: 0,
+              textAlign: "center",
+            }}
+          >
+            {submitError}
+          </p>
+        ) : null}
 
         <p
           style={{

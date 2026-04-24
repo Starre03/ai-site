@@ -88,9 +88,11 @@ export default function QuestionStep({
                 placeholder="Je naam"
                 value={answers.name || ""}
                 onChange={(event) => onProfileChange("name", event.target.value)}
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? "quickscan-profile-name-error" : undefined}
                 style={fieldStyle}
               />
-              {errors.name ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.name}</span> : null}
+              {errors.name ? <span id="quickscan-profile-name-error" style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.name}</span> : null}
             </div>
 
             <div style={{ display: "grid", gap: "clamp(6px, 0.9vh, 8px)" }}>
@@ -103,9 +105,11 @@ export default function QuestionStep({
                 placeholder="Bedrijfsnaam"
                 value={answers.companyName || ""}
                 onChange={(event) => onProfileChange("companyName", event.target.value)}
+                aria-invalid={Boolean(errors.companyName)}
+                aria-describedby={errors.companyName ? "quickscan-profile-company-error" : undefined}
                 style={fieldStyle}
               />
-              {errors.companyName ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.companyName}</span> : null}
+              {errors.companyName ? <span id="quickscan-profile-company-error" style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.companyName}</span> : null}
             </div>
           </div>
         ) : null}
@@ -125,6 +129,7 @@ export default function QuestionStep({
                   width: isLastOddItem ? "calc(50% - 7px)" : "100%",
                   justifySelf: isLastOddItem ? "center" : "stretch",
                 }}
+                aria-pressed={answers[question.id] === option.value}
                 onClick={() => onSingleSelect(question.id, option.value)}
               >
                 {option.label}
@@ -142,6 +147,7 @@ export default function QuestionStep({
                   key={option.value}
                   type="button"
                   style={getChipStyle({ active: selectedHourlyRange === option.value && !manualHourlyValue })}
+                  aria-pressed={selectedHourlyRange === option.value && !manualHourlyValue}
                   onClick={() => onHourlyValueRangeSelect(option.value)}
                 >
                   {option.label}
@@ -174,6 +180,8 @@ export default function QuestionStep({
                   placeholder="Bijvoorbeeld 65"
                   value={manualHourlyValue}
                   onChange={(event) => onHourlyValueManualChange(event.target.value)}
+                  aria-invalid={Boolean(errors.hourlyValue)}
+                  aria-describedby={errors.hourlyValue ? "quickscan-hourly-error" : undefined}
                   style={{
                     ...fieldStyle,
                     paddingLeft: 34,
@@ -181,7 +189,7 @@ export default function QuestionStep({
                   }}
                 />
               </div>
-              {errors.hourlyValue ? <span style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.hourlyValue}</span> : null}
+              {errors.hourlyValue ? <span id="quickscan-hourly-error" style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.hourlyValue}</span> : null}
             </div>
           </div>
         ) : null}
@@ -200,6 +208,7 @@ export default function QuestionStep({
                     type="button"
                     style={getChipStyle({ active, disabled })}
                     disabled={disabled}
+                    aria-pressed={active}
                     onClick={() => onToolToggle(question.id, option.value)}
                   >
                     {option.label}

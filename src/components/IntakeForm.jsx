@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { intakeSteps } from "../content/siteContent";
+import { trackEvent } from "../lib/analytics";
 import { buildIntakeSubmissionPayload } from "../lib/intake/index.js";
 import { saveIntakeSubmission } from "../lib/supabase/intake.js";
 import { BODY, C } from "../lib/theme";
@@ -33,6 +34,7 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
               key={option}
               className={isSelected ? undefined : "chip-hover"}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onChange(field.id, option)}
               style={chipStyle(isSelected)}
             >
@@ -54,6 +56,7 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
               key={option}
               className={isSelected ? undefined : "chip-hover"}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onToggle(field.id, option)}
               style={chipStyle(isSelected)}
             >
@@ -69,11 +72,14 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
   if (field.type === "textarea") {
     return (
       <textarea
+        id={field.id}
         value={value}
         onChange={(event) => onChange(field.id, event.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder={field.placeholder}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${field.id}-error` : undefined}
         rows={4}
         style={{
           width: "100%",
@@ -93,12 +99,15 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
 
   return (
     <input
+      id={field.id}
       type={field.type}
       value={value}
       onChange={(event) => onChange(field.id, event.target.value)}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       placeholder={field.placeholder}
+      aria-invalid={Boolean(error)}
+      aria-describedby={error ? `${field.id}-error` : undefined}
       style={{
         width: "100%",
         padding: "11px 14px",
@@ -206,7 +215,13 @@ export default function IntakeForm({
   const submit = async () => {
     if (!validate()) return;
 
+    if (data.website) {
+      trackEvent("spam_honeypot_blocked", { formId: id, formKind: submissionKind });
+      return;
+    }
+
     setSubmitting(true);
+    trackEvent("form_submit_attempt", { formId: id, formKind: submissionKind });
     try {
       setSubmitError("");
       const payload = buildIntakeSubmissionPayload({
@@ -223,10 +238,16 @@ export default function IntakeForm({
           console.error("Intake submission failed", submission.error);
         }
 
+        trackEvent("form_submit_failed", {
+          formId: id,
+          formKind: submissionKind,
+          skipped: Boolean(submission.skipped),
+        });
         setSubmitError("Er ging iets mis bij het versturen. Probeer het nog een keer.");
         return;
       }
 
+      trackEvent("form_submit_success", { formId: id, formKind: submissionKind });
       setDone(true);
     } finally {
       setSubmitting(false);
@@ -436,6 +457,16 @@ export default function IntakeForm({
                   transition: "all 0.18s ease",
                 }}
               >
+                <input
+                  type="text"
+                  name="website"
+                  value={data.website || ""}
+                  onChange={(event) => update("website", event.target.value)}
+                  autoComplete="off"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }}
+                />
                 {current.fields.map((field) => (
                   <div key={field.id}>
                     <label
@@ -461,7 +492,7 @@ export default function IntakeForm({
                       error={errors[field.id]}
                     />
                     {errors[field.id] ? (
-                      <div style={{ fontSize: "0.72rem", color: C.danger, marginTop: 4, fontFamily: BODY }}>
+                      <div id={`${field.id}-error`} style={{ fontSize: "0.72rem", color: C.danger, marginTop: 4, fontFamily: BODY }}>
                         {errors[field.id]}
                       </div>
                     ) : null}

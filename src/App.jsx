@@ -43,6 +43,7 @@ export default function App() {
     // iterate on the animation; otherwise localhost skips it for fast reloads.
     const forceIntro = typeof window !== "undefined" && window.location.search.includes("intro");
     if (forceIntro) return false;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return true;
     return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   });
 

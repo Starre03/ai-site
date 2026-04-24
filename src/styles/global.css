@@ -1045,6 +1045,28 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .hero-bg-liquid,
+  .hero-bg-conic,
+  .hero-bg-beam,
+  .hero-star,
+  .hero-shooting-star,
+  .ambient,
+  .ambient-hero-tr,
+  .ambient-hero-bl {
+    animation: none !important;
+  }
+}
+
 @media (min-width: 769px) {
   .mobile-nav {
     display: none !important;

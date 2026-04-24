@@ -51,6 +51,7 @@ export default function LoginPage() {
   usePageSeo({
     title: "StarLeo | Inloggen",
     description: "Beveiligde login voor de interne StarLeo-omgeving.",
+    noindex: true,
   });
 
   const location = useLocation();

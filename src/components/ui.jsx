@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSectionProgress, useVisible } from "../lib/hooks";
+import { trackEvent } from "../lib/analytics";
+import { getCurrentCanonicalUrl, siteConfig } from "../lib/site";
 import { BODY, C, DISPLAY, shell } from "../lib/theme";
 
 export function Reveal({ children, delay = 0, y = 28, fill = false }) {
@@ -248,7 +250,7 @@ function renderBtnChildren(children) {
   );
 }
 
-export function PrimaryButton({ children, to, href, onClick, secondary = false }) {
+export function PrimaryButton({ children, to, href, onClick, secondary = false, analyticsEvent, analyticsPayload }) {
   const style = {
     display: "inline-flex",
     alignItems: "center",
@@ -270,10 +272,17 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false }
 
   const className = secondary ? "lift-on-hover" : "btn-premium";
   const rendered = renderBtnChildren(children);
+  const handleClick = (event) => {
+    if (analyticsEvent) {
+      trackEvent(analyticsEvent, analyticsPayload);
+    }
+
+    onClick?.(event);
+  };
 
   if (to) {
     return (
-      <Link className={className} to={to} style={style}>
+      <Link className={className} to={to} style={style} onClick={handleClick}>
         {rendered}
       </Link>
     );
@@ -281,23 +290,25 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false }
 
   if (href) {
     return (
-      <a className={className} href={href} onClick={onClick} style={style}>
+      <a className={className} href={href} onClick={handleClick} style={style}>
         {rendered}
       </a>
     );
   }
 
   return (
-    <button className={className} onClick={onClick} style={style}>
+    <button className={className} type="button" onClick={handleClick} style={style}>
       {rendered}
     </button>
   );
 }
 
-export function usePageSeo({ title, description }) {
+export function usePageSeo({ title, description, noindex = false, canonicalPath }) {
   useEffect(() => {
-    const normalizedTitle = title.replace(/starre\.ai/gi, "StarLeo");
-    const currentUrl = window.location.href;
+    const normalizedTitle = title
+      .replace(/STARRE\.AI/gi, siteConfig.brandName)
+      .replace(/starre\.ai/gi, siteConfig.brandName);
+    const currentUrl = canonicalPath ? new URL(canonicalPath, siteConfig.productionOrigin).toString() : getCurrentCanonicalUrl();
 
     const upsertMeta = (selector, attribute, value) => {
       let meta = document.querySelector(selector);
@@ -322,13 +333,15 @@ export function usePageSeo({ title, description }) {
     document.title = normalizedTitle;
 
     upsertMeta('meta[name="description"]', "name", "description").setAttribute("content", description);
+    upsertMeta('meta[name="robots"]', "name", "robots").setAttribute("content", noindex ? "noindex, nofollow" : "index, follow");
     upsertMeta('meta[property="og:title"]', "property", "og:title").setAttribute("content", normalizedTitle);
     upsertMeta('meta[property="og:description"]', "property", "og:description").setAttribute("content", description);
     upsertMeta('meta[property="og:url"]', "property", "og:url").setAttribute("content", currentUrl);
+    upsertMeta('meta[property="og:site_name"]', "property", "og:site_name").setAttribute("content", siteConfig.brandName);
     upsertMeta('meta[name="twitter:title"]', "name", "twitter:title").setAttribute("content", normalizedTitle);
     upsertMeta('meta[name="twitter:description"]', "name", "twitter:description").setAttribute("content", description);
     upsertLink('link[rel="canonical"]', "canonical").setAttribute("href", currentUrl);
-  }, [description, title]);
+  }, [canonicalPath, description, noindex, title]);
 }
 
 export function TyperText({

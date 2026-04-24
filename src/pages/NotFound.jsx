@@ -6,6 +6,7 @@ export default function NotFoundPage() {
   usePageSeo({
     title: "StarLeo | Pagina niet gevonden",
     description: "Deze pagina bestaat niet. Ga terug naar de homepage van StarLeo.",
+    noindex: true,
   });
 
   return (
