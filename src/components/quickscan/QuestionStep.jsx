@@ -11,6 +11,7 @@ export default function QuestionStep({
   question,
   answers,
   errors = {},
+  goingBack = false,
   onProfileChange,
   onSingleSelect,
   onHourlyValueRangeSelect,
@@ -49,6 +50,7 @@ export default function QuestionStep({
 
   return (
     <section
+      className={`quickscan-question-slide${goingBack ? " is-back" : ""}`}
       style={{
         ...pageCardStyle,
         display: "grid",
@@ -123,11 +125,13 @@ export default function QuestionStep({
               <button
                 key={option.value}
                 type="button"
+                className="quickscan-option"
                 style={{
                   ...getChipStyle({ active: answers[question.id] === option.value }),
                   gridColumn: isLastOddItem ? "1 / -1" : undefined,
                   width: isLastOddItem ? "calc(50% - 7px)" : "100%",
                   justifySelf: isLastOddItem ? "center" : "stretch",
+                  animationDelay: `${260 + index * 70}ms`,
                 }}
                 aria-pressed={answers[question.id] === option.value}
                 onClick={() => onSingleSelect(question.id, option.value)}
@@ -142,11 +146,12 @@ export default function QuestionStep({
         {question.kind === "hourly-value" ? (
           <div style={{ display: "grid", gap: "clamp(14px, 2vh, 16px)", justifyItems: "center" }}>
             <div style={answerGridStyle}>
-              {question.options.map((option) => (
+              {question.options.map((option, index) => (
                 <button
                   key={option.value}
                   type="button"
-                  style={getChipStyle({ active: selectedHourlyRange === option.value && !manualHourlyValue })}
+                  className="quickscan-option"
+                  style={{ ...getChipStyle({ active: selectedHourlyRange === option.value && !manualHourlyValue }), animationDelay: `${260 + index * 70}ms` }}
                   aria-pressed={selectedHourlyRange === option.value && !manualHourlyValue}
                   onClick={() => onHourlyValueRangeSelect(option.value)}
                 >
@@ -197,7 +202,7 @@ export default function QuestionStep({
         {isMulti ? (
           <>
             <div style={answerGridStyle}>
-              {question.options.map((option) => {
+              {question.options.map((option, index) => {
                 const active = selectedValues.includes(option.value);
                 const disabled =
                   Boolean(question.maxSelections) && !active && selectedValues.length >= question.maxSelections;
@@ -206,7 +211,8 @@ export default function QuestionStep({
                   <button
                     key={option.value}
                     type="button"
-                    style={getChipStyle({ active, disabled })}
+                    className="quickscan-option"
+                    style={{ ...getChipStyle({ active, disabled }), animationDelay: `${260 + index * 55}ms` }}
                     disabled={disabled}
                     aria-pressed={active}
                     onClick={() => onToolToggle(question.id, option.value)}
