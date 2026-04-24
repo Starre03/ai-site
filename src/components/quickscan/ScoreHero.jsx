@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useVisible } from "../../lib/hooks";
 import { BODY, C } from "../../lib/theme";
 import { SERVICE_LABELS } from "../../lib/quickscan/config.js";
 import { getPrimaryButtonStyle, getSecondaryButtonStyle, pageCardStyle } from "./styles.js";
@@ -11,11 +12,174 @@ function formatCurrency(value) {
   }).format(value);
 }
 
-function SummaryCard({ label, value, note, details, accent = false }) {
+function parseNumericToken(token) {
+  if (token.includes(",")) {
+    return parseFloat(token.replace(/\./g, "").replace(",", "."));
+  }
+  return parseInt(token.replace(/\./g, ""), 10);
+}
+
+function formatNumericLike(value, original) {
+  if (original.includes(",")) {
+    const decimals = original.split(",")[1]?.length ?? 0;
+    return value.toLocaleString("nl-NL", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  if (original.includes(".")) {
+    return Math.round(value).toLocaleString("nl-NL");
+  }
+  return String(Math.round(value));
+}
+
+function useCountUpNumber(target, active, duration = 1200) {
+  const [value, setValue] = useState(active ? 0 : target);
+
+  useEffect(() => {
+    if (!active) return undefined;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion || typeof target !== "number" || !Number.isFinite(target)) {
+      setValue(target);
+      return undefined;
+    }
+
+    const start = performance.now();
+    let frame = 0;
+
+    const tick = (now) => {
+      const elapsed = now - start;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+
+      if (t >= 1) {
+        setValue(target);
+        return;
+      }
+
+      setValue(target * eased);
+      frame = requestAnimationFrame(tick);
+    };
+
+    setValue(0);
+    frame = requestAnimationFrame(tick);
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [target, active, duration]);
+
+  return value;
+}
+
+function useCountUpString(finalValue, active, duration = 1200) {
+  const [display, setDisplay] = useState(finalValue);
+
+  useEffect(() => {
+    if (typeof finalValue !== "string") {
+      setDisplay(finalValue);
+      return undefined;
+    }
+
+    if (!active) {
+      return undefined;
+    }
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      setDisplay(finalValue);
+      return undefined;
+    }
+
+    const regex = /(\d+(?:[.,]\d+)*)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(finalValue)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({ type: "text", value: finalValue.slice(lastIndex, match.index) });
+      }
+      const target = parseNumericToken(match[0]);
+      parts.push({
+        type: "number",
+        target: Number.isFinite(target) ? target : 0,
+        original: match[0],
+      });
+      lastIndex = match.index + match[0].length;
+    }
+    if (lastIndex < finalValue.length) {
+      parts.push({ type: "text", value: finalValue.slice(lastIndex) });
+    }
+
+    const hasNumeric = parts.some((part) => part.type === "number");
+    if (!hasNumeric) {
+      setDisplay(finalValue);
+      return undefined;
+    }
+
+    const start = performance.now();
+    let frame = 0;
+
+    const tick = (now) => {
+      const elapsed = now - start;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+
+      if (t >= 1) {
+        setDisplay(finalValue);
+        return;
+      }
+
+      const next = parts
+        .map((part) =>
+          part.type === "text" ? part.value : formatNumericLike(part.target * eased, part.original),
+        )
+        .join("");
+      setDisplay(next);
+      frame = requestAnimationFrame(tick);
+    };
+
+    setDisplay(
+      parts
+        .map((part) => (part.type === "text" ? part.value : formatNumericLike(0, part.original)))
+        .join(""),
+    );
+    frame = requestAnimationFrame(tick);
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [finalValue, active, duration]);
+
+  return display;
+}
+
+function SummaryCard({ label, value, note, details, accent = false, animationDelay = "0ms" }) {
   const [showDetails, setShowDetails] = useState(false);
+  const [cardRef, visible] = useVisible(0.1);
+  const hasAnimatedRef = useRef(false);
+  const shouldAnimate = visible || hasAnimatedRef.current;
+  useEffect(() => {
+    if (visible) {
+      hasAnimatedRef.current = true;
+    }
+  }, [visible]);
+  const animatedValue = useCountUpString(value, shouldAnimate);
 
   return (
     <div
+      ref={cardRef}
+      className="quickscan-pop"
       style={{
         padding: "clamp(14px, 1.9vh, 16px) clamp(15px, 1.8vw, 18px)",
         borderRadius: 20,
@@ -29,6 +193,7 @@ function SummaryCard({ label, value, note, details, accent = false }) {
         alignContent: "space-between",
         textAlign: "center",
         boxShadow: accent ? "0 18px 36px rgba(14,165,233,0.1)" : "none",
+        animationDelay,
       }}
     >
       <span
@@ -108,7 +273,7 @@ function SummaryCard({ label, value, note, details, accent = false }) {
           </span>
         ) : null}
       </span>
-      <strong style={{ color: C.text, fontFamily: BODY, fontSize: "clamp(1.05rem, min(2vw, 2.8vh), 1.28rem)", lineHeight: 1.15 }}>{value}</strong>
+      <strong style={{ color: C.text, fontFamily: BODY, fontSize: "clamp(1.05rem, min(2vw, 2.8vh), 1.28rem)", lineHeight: 1.15 }}>{animatedValue}</strong>
       {note ? (
         <span
           style={{
@@ -311,15 +476,27 @@ function getLargestOpportunityLine(score) {
 }
 
 function ScoreSection({ score, benchmark }) {
+  const [sectionRef, visible] = useVisible(0.1);
+  const hasAnimatedRef = useRef(false);
+  const shouldAnimate = visible || hasAnimatedRef.current;
+  useEffect(() => {
+    if (visible) hasAnimatedRef.current = true;
+  }, [visible]);
+
+  const totalTarget = score ? Math.max(0, Math.min(100, score.total_score)) : 0;
+  const animatedTotal = useCountUpNumber(totalTarget, shouldAnimate, 1400);
+
   if (!score) {
     return null;
   }
 
   const largestOpportunity = getLargestOpportunityLine(score).replace(/^Grootste kans:\s*/i, "");
-  const progress = `${Math.max(0, Math.min(100, score.total_score))}%`;
+  const progress = `${animatedTotal.toFixed(1)}%`;
+  const displayedTotal = Math.round(animatedTotal);
 
   return (
     <div
+      ref={sectionRef}
       style={{
         width: "min(920px, 100%)",
         padding: "clamp(14px, 1.9vh, 16px) clamp(15px, 1.8vw, 18px)",
@@ -361,6 +538,7 @@ function ScoreSection({ score, benchmark }) {
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div
               aria-hidden="true"
+              className="quickscan-gauge-glow"
               style={{
                 width: 92,
                 height: 92,
@@ -391,7 +569,7 @@ function ScoreSection({ score, benchmark }) {
                     lineHeight: 1,
                   }}
                 >
-                  {score.total_score}
+                  {displayedTotal}
                 </strong>
               </div>
             </div>
@@ -405,7 +583,7 @@ function ScoreSection({ score, benchmark }) {
                   lineHeight: 1.05,
                 }}
               >
-                {score.total_score} / 100
+                {displayedTotal} / 100
               </strong>
               <span
                 style={{
@@ -465,18 +643,21 @@ function ScoreSection({ score, benchmark }) {
           gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
         }}
       >
-        {SCORE_DIMENSIONS.map((dimension) => {
+        {SCORE_DIMENSIONS.map((dimension, index) => {
           const value = score[dimension.key];
-          const progress = `${Math.max(0, Math.min(100, (value / 25) * 100))}%`;
+          const targetPct = Math.max(0, Math.min(100, (value / 25) * 100));
+          const progress = shouldAnimate ? `${targetPct}%` : "0%";
           const level = getDimensionLevel(value);
           const explanation = getDimensionExplanation(dimension.key, value);
 
           return (
             <div
               key={dimension.key}
+              className="quickscan-reveal"
               style={{
                 display: "grid",
                 gap: 6,
+                animationDelay: `${600 + index * 120}ms`,
               }}
             >
               <div
@@ -527,12 +708,14 @@ function ScoreSection({ score, benchmark }) {
                 }}
               >
                 <div
+                  className="quickscan-bar-fill"
                   style={{
                     width: progress,
                     height: "100%",
                     borderRadius: 999,
                     background: "linear-gradient(90deg, rgba(56,189,248,0.88), rgba(125,211,252,0.96))",
                     boxShadow: "0 0 18px rgba(56,189,248,0.18)",
+                    transitionDelay: `${700 + index * 140}ms`,
                   }}
                 />
               </div>
@@ -618,11 +801,13 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)", width: "min(920px, 100%)", justifyItems: "center" }}>
         {scoreSummary ? (
           <div
+            className="quickscan-reveal"
             style={{
               display: "grid",
               gap: 4,
               justifyItems: "center",
               textAlign: "center",
+              animationDelay: "0ms",
             }}
           >
             <span
@@ -651,6 +836,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
           </div>
         ) : null}
         <h2
+          className="quickscan-reveal"
           style={{
             fontSize: "clamp(1.8rem, min(4.6vw, 8vh), 4rem)",
             lineHeight: 0.98,
@@ -658,12 +844,14 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
             margin: 0,
             fontFamily: BODY,
             maxWidth: 900,
+            animationDelay: "120ms",
           }}
         >
           {titleText}
         </h2>
         {result.hero?.summary ? (
           <p
+            className="quickscan-reveal"
             style={{
               color: C.textSoft,
               fontFamily: BODY,
@@ -671,6 +859,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
               lineHeight: 1.65,
               margin: 0,
               maxWidth: 760,
+              animationDelay: "240ms",
             }}
           >
             {result.hero.summary}
@@ -691,6 +880,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
           value={result.savings.weeklySavingsLabel}
           note="Mogelijke ruimte per week"
           accent
+          animationDelay="360ms"
         />
         <SummaryCard
           label="Geld"
@@ -698,8 +888,15 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
           note={`${result.savings.yearlyLabel}\nDit is een indicatie op basis van jouw antwoorden en inschattingen.`}
           details={result.savings.timeInfoText}
           accent
+          animationDelay="460ms"
         />
-        <SummaryCard label="Kans" value={result.opportunityLabel} note="Waar de meeste AI-kans zit" accent />
+        <SummaryCard
+          label="Kans"
+          value={result.opportunityLabel}
+          note="Waar de meeste AI-kans zit"
+          accent
+          animationDelay="560ms"
+        />
       </div>
 
       <div
@@ -710,6 +907,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         }}
       >
         <div
+          className="quickscan-reveal"
           style={{
             padding: "clamp(14px, 1.9vh, 16px) clamp(15px, 1.8vw, 18px)",
             borderRadius: 20,
@@ -719,6 +917,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
             gap: "clamp(10px, 1.5vh, 12px)",
             textAlign: "center",
             boxShadow: "0 18px 36px rgba(14,165,233,0.06)",
+            animationDelay: "680ms",
           }}
         >
           <div style={{ display: "grid", gap: 4, justifyItems: "center" }}>
@@ -736,6 +935,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
             {recommendations.slice(0, 3).map((item, index) => (
               <div
                 key={`${item.title}-${index}`}
+                className="quickscan-reveal"
                 style={{
                   display: "grid",
                   gap: "clamp(5px, 0.8vh, 6px)",
@@ -744,6 +944,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
                   background: "rgba(7,17,31,0.42)",
                   border: "1px solid rgba(125,211,252,0.1)",
                   textAlign: "center",
+                  animationDelay: `${760 + index * 110}ms`,
                 }}
               >
                 <details style={{ color: C.textSoft, fontFamily: BODY }}>
@@ -773,6 +974,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         </div>
 
         <div
+          className="quickscan-reveal"
           style={{
             padding: "clamp(14px, 1.9vh, 16px) clamp(15px, 1.8vw, 18px)",
             borderRadius: 20,
@@ -783,6 +985,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
             alignContent: "start",
             textAlign: "center",
             boxShadow: "0 18px 36px rgba(14,165,233,0.07)",
+            animationDelay: "820ms",
           }}
         >
           <div

@@ -617,11 +617,11 @@ export function PageHero({
 
 export function BrandMark() {
   return (
-    <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1 }}>
-      <span style={{ fontFamily: BODY, fontSize: "1.02rem", fontWeight: 700, letterSpacing: "-0.04em", color: C.text }}>
-        Star<span style={{ color: C.primary }}>Leo</span>
-      </span>
-    </span>
+    <img
+      src="/starlion-logo.png"
+      alt="StarLion"
+      style={{ height: 38, width: "auto", display: "block" }}
+    />
   );
 }
 

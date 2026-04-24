@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import CalculatingScreen from "../components/quickscan/CalculatingScreen.jsx";
 import GateForm from "../components/quickscan/GateForm.jsx";
 import ProgressBar from "../components/quickscan/ProgressBar.jsx";
 import QuestionStep from "../components/quickscan/QuestionStep.jsx";
@@ -123,7 +124,16 @@ export default function QuickscanPage() {
   });
   const [errors, setErrors] = useState({});
   const [submittedContact, setSubmittedContact] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const [goingBack, setGoingBack] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
   const lastStepRef = useRef(null);
+  const CALCULATION_DURATION_MS = 9600;
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setIsMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const flowStepIds = useMemo(() => getFlowStepIds(answers), [answers]);
   const currentStepId = flowStepIds[Math.min(screenIndex, flowStepIds.length - 1)];
@@ -145,11 +155,13 @@ export default function QuickscanPage() {
 
   function handleStart() {
     quickscanLog("scan_start", { version: QUICKSCAN_VERSION });
+    setGoingBack(false);
     setScreenIndex(1);
   }
 
   function handleBack() {
     setErrors({});
+    setGoingBack(true);
     setScreenIndex((current) => Math.max(0, current - 1));
   }
 
@@ -195,6 +207,7 @@ export default function QuickscanPage() {
     }
 
     setErrors({});
+    setGoingBack(false);
     setScreenIndex((current) => Math.min(flowStepIds.length - 1, current + 1));
   }
 
@@ -228,6 +241,7 @@ export default function QuickscanPage() {
       return nextAnswers;
     });
     setErrors({});
+    setGoingBack(false);
     setScreenIndex((current) => Math.min(getFlowStepIds({ ...answers, [key]: value }).length - 1, current + 1));
   }
 
@@ -335,9 +349,16 @@ export default function QuickscanPage() {
     };
     const payload = buildSubmissionPayload(assessment, nextContact);
 
-    await submitQuickscanPreview(payload);
+    setIsCalculating(true);
+    const minDelay = new Promise((resolve) => setTimeout(resolve, CALCULATION_DURATION_MS));
+    const submission = submitQuickscanPreview(payload).catch((error) => {
+      console.error("[quickscan] submit error", error);
+      return null;
+    });
+    await Promise.all([submission, minDelay]);
     setSubmittedContact(nextContact);
     setScreenIndex(flowStepIds.length - 1);
+    setIsCalculating(false);
   }
 
   function handleReset() {
@@ -366,7 +387,7 @@ export default function QuickscanPage() {
   const progressIndex = currentQuestion ? QUESTIONS.findIndex((question) => question.stepId === currentStepId) + 1 : 0;
   const progressQuestionStepIds = flowStepIds.filter((stepId) => QUESTIONS.some((question) => question.stepId === stepId));
   const dynamicProgressIndex = currentQuestion ? progressQuestionStepIds.indexOf(currentStepId) + 1 : 0;
-  const showProgress = Boolean(currentQuestion);
+  const showProgress = Boolean(currentQuestion) && !isCalculating;
 
   const pageStyle = {
     minHeight: "100vh",
@@ -389,7 +410,14 @@ export default function QuickscanPage() {
       <div style={frameStyle}>
         {showProgress ? <ProgressBar currentIndex={dynamicProgressIndex || progressIndex} totalSteps={progressQuestionStepIds.length} /> : null}
 
-        {currentStepId === "intro" ? (
+        {isCalculating ? (
+          <CalculatingScreen
+            durationMs={CALCULATION_DURATION_MS}
+            companyName={answers.companyName}
+          />
+        ) : null}
+
+        {!isCalculating && currentStepId === "intro" ? (
           <section
             style={{
               ...pageCardStyle,
@@ -423,12 +451,14 @@ export default function QuickscanPage() {
               }}
             >
               <h1
+                className={`quickscan-stagger${isMounted ? " is-mounted" : ""}`}
                 style={{
                   fontSize: "clamp(2.15rem, min(6vw, 10.5vh), 4.6rem)",
                   lineHeight: 0.96,
                   letterSpacing: "-0.04em",
                   margin: 0,
                   maxWidth: 1320,
+                  animationDelay: "0ms",
                 }}
               >
                 <span style={{ display: "block" }}>
@@ -438,19 +468,29 @@ export default function QuickscanPage() {
                 <span style={{ display: "block" }}>tijd en geld laat liggen.</span>
               </h1>
               <p
+                className={`quickscan-stagger${isMounted ? " is-mounted" : ""}`}
                 style={{
                   color: C.textSoft,
                   fontSize: "clamp(0.96rem, min(1.6vw, 2.4vh), 1rem)",
                   lineHeight: 1.7,
                   margin: 0,
                   maxWidth: 620,
+                  animationDelay: "120ms",
                 }}
               >
                 Je ziet waar tijd en geld te winnen valt, welke kansen er liggen en welke stap nu logisch is.
               </p>
             </div>
 
-            <div style={{ display: "grid", gap: "clamp(8px, 1.2vh, 10px)", justifyItems: "center" }}>
+            <div
+              className={`quickscan-stagger${isMounted ? " is-mounted" : ""}`}
+              style={{
+                display: "grid",
+                gap: "clamp(8px, 1.2vh, 10px)",
+                justifyItems: "center",
+                animationDelay: "260ms",
+              }}
+            >
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
                 <button type="button" onClick={handleStart} style={getPrimaryButtonStyle(false)}>
                   Start quickscan
@@ -459,12 +499,14 @@ export default function QuickscanPage() {
             </div>
 
             <div
+              className={`quickscan-stagger${isMounted ? " is-mounted" : ""}`}
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
                 gap: "clamp(10px, 1.8vh, 14px)",
                 width: "min(580px, 100%)",
                 margin: "0 auto",
+                animationDelay: "380ms",
               }}
             >
               {[
@@ -512,11 +554,13 @@ export default function QuickscanPage() {
           </section>
         ) : null}
 
-        {currentQuestion ? (
+        {!isCalculating && currentQuestion ? (
           <QuestionStep
+            key={currentQuestion.id}
             question={currentQuestion}
             answers={answers}
             errors={errors}
+            goingBack={goingBack}
             onProfileChange={handleProfileChange}
             onSingleSelect={handleSingleSelect}
             onHourlyValueRangeSelect={handleHourlyValueRangeSelect}
@@ -528,7 +572,7 @@ export default function QuickscanPage() {
           />
         ) : null}
 
-        {currentStepId === "gate" ? (
+        {!isCalculating && currentStepId === "gate" ? (
           <GateForm
             contact={contact}
             errors={errors}
@@ -540,7 +584,7 @@ export default function QuickscanPage() {
           />
         ) : null}
 
-        {currentStepId === "resultaat" && submittedContact && submissionPayload ? (
+        {!isCalculating && currentStepId === "resultaat" && submittedContact && submissionPayload ? (
           <section style={{ display: "grid", gap: "clamp(14px, 2vh, 18px)" }}>
             <ScoreHero result={assessment} recommendations={assessment.recommendations} onCtaClick={handleCtaClick} />
 
