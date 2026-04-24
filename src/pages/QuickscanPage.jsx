@@ -21,6 +21,7 @@ import {
   STEP_IDS,
 } from "../lib/quickscan/config.js";
 import { buildSubmissionPayload, createQuickscanResult, quickscanLog } from "../lib/quickscan/index.js";
+import { siteConfig } from "../lib/site.js";
 import { saveQuickscanSubmission } from "../lib/supabase/quickscan.js";
 
 function createInitialAnswers() {
@@ -54,7 +55,7 @@ async function submitQuickscanPreview(payload) {
     attempts: submission.attempts || null,
   });
 
-  return payload;
+  return submission;
 }
 
 function getDynamicQuestion(stepId, answers) {
@@ -111,7 +112,7 @@ function getFlowStepIds(answers) {
 
 export default function QuickscanPage() {
   usePageSeo({
-    title: "STARRE.AI | Quickscan",
+    title: "StarLeo | Quickscan",
     description: "Quickscan voor een eerste indicatie van tijdlekken, proceskansen en mogelijke vervolgstappen.",
   });
 
@@ -120,8 +121,11 @@ export default function QuickscanPage() {
   const [contact, setContact] = useState({
     email: "",
     marketingOptIn: false,
+    website: "",
   });
   const [errors, setErrors] = useState({});
+  const [gateSubmitting, setGateSubmitting] = useState(false);
+  const [gateSubmitError, setGateSubmitError] = useState("");
   const [submittedContact, setSubmittedContact] = useState(null);
   const lastStepRef = useRef(null);
 
@@ -327,17 +331,38 @@ export default function QuickscanPage() {
       return;
     }
 
+    if (contact.website) {
+      quickscanLog("spam_honeypot_blocked", { form: "quickscan" });
+      return;
+    }
+
+    setGateSubmitting(true);
+    setGateSubmitError("");
+
     const nextContact = {
       name: answers.name.trim(),
       companyName: answers.companyName.trim(),
       email: contact.email.trim(),
       marketingOptIn: contact.marketingOptIn,
+      website: "",
     };
     const payload = buildSubmissionPayload(assessment, nextContact);
 
-    await submitQuickscanPreview(payload);
-    setSubmittedContact(nextContact);
-    setScreenIndex(flowStepIds.length - 1);
+    try {
+      const submission = await submitQuickscanPreview(payload);
+
+      const localConfigSkip = submission.skipped && payload.meta?.source === "quickscan-local";
+
+      if (!submission.ok && !localConfigSkip) {
+        setGateSubmitError(`We konden je analyse nog niet opslaan. Probeer het opnieuw of neem direct contact op via ${siteConfig.contactEmail}.`);
+        return;
+      }
+
+      setSubmittedContact(nextContact);
+      setScreenIndex(flowStepIds.length - 1);
+    } finally {
+      setGateSubmitting(false);
+    }
   }
 
   function handleReset() {
@@ -345,6 +370,7 @@ export default function QuickscanPage() {
     setContact({
       email: "",
       marketingOptIn: false,
+      website: "",
     });
     setSubmittedContact(null);
     setErrors({});
@@ -537,6 +563,8 @@ export default function QuickscanPage() {
             onToggleOptIn={handleOptInToggle}
             onBack={handleBack}
             onSubmit={handleGateSubmit}
+            submitting={gateSubmitting}
+            submitError={gateSubmitError}
           />
         ) : null}
 

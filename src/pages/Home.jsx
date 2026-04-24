@@ -312,7 +312,13 @@ function Hero() {
         <Reveal delay={0.22}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 22 }}>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-              <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
+              <PrimaryButton
+                to="/quickscan"
+                analyticsEvent="home_hero_quickscan_click"
+                analyticsPayload={{ location: "hero" }}
+              >
+                Start de gratis quickscan →
+              </PrimaryButton>
             </div>
             <a
               href="#diensten"
@@ -809,7 +815,13 @@ function IntakeCtaSection() {
               </Reveal>
               <Reveal delay={0.34}>
                 <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
-                  <PrimaryButton to="/quickscan">Start de gratis quickscan →</PrimaryButton>
+                  <PrimaryButton
+                    to="/quickscan"
+                    analyticsEvent="home_cta_quickscan_click"
+                    analyticsPayload={{ location: "midpage_cta" }}
+                  >
+                    Start de gratis quickscan →
+                  </PrimaryButton>
                 </div>
               </Reveal>
             </div>

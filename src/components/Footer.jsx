@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { trackEvent } from "../lib/analytics";
+import { siteConfig } from "../lib/site";
 import { BODY, C } from "../lib/theme";
 import { BrandMark } from "./ui";
 
@@ -46,6 +48,7 @@ export default function Footer() {
           <Link
             to="/quickscan"
             className="lift-on-hover"
+            onClick={() => trackEvent("footer_quickscan_click", { location: "footer_cta" })}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -77,13 +80,13 @@ export default function Footer() {
               KvK: 42033972
             </div>
             <a
-              href="mailto:info@starleo.ai"
+              href={`mailto:${siteConfig.contactEmail}`}
               style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.76rem", lineHeight: 1.7, fontFamily: BODY }}
             >
-              info@starleo.ai
+              {siteConfig.contactEmail}
             </a>
             <div style={{ color: C.textMuted, fontSize: "0.72rem", lineHeight: 1.7, fontFamily: BODY }}>
-              © 2026 · StarLeo
+              © 2026 · {siteConfig.brandName}
             </div>
           </div>
 
@@ -115,7 +118,7 @@ export default function Footer() {
                 </Link>
               ))}
               <a
-                href="https://linkedin.com/company/starleo-ai"
+                href={siteConfig.linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: C.textMuted, textDecoration: "none", fontSize: "0.78rem", fontFamily: BODY }}

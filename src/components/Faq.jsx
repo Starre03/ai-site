@@ -37,6 +37,8 @@ export default function Faq({
             <div style={{ borderBottom: `1px solid ${colors.border}` }}>
               <button
                 onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+                aria-expanded={openIndex === index}
+                aria-controls={`faq-panel-${index}`}
                 style={{
                   width: "100%",
                   textAlign: "left",
@@ -76,6 +78,7 @@ export default function Faq({
                 }}
               >
                 <p
+                  id={`faq-panel-${index}`}
                   style={{
                     color: colors.textSoft,
                     fontSize: "0.82rem",

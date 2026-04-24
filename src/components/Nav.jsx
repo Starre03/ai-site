@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { serviceMenuLinks } from "../content/siteContent";
+import { trackEvent } from "../lib/analytics";
 import { BODY, C } from "../lib/theme";
 import { BrandMark } from "./ui";
 
@@ -85,6 +86,8 @@ export default function Nav() {
             >
               <button
                 onClick={() => setDesktopMenu((current) => (current === group.label ? null : group.label))}
+                aria-haspopup="menu"
+                aria-expanded={isOpen}
                 style={{
                   background: "none",
                   border: "none",
@@ -106,6 +109,7 @@ export default function Nav() {
               </button>
               {isOpen ? (
                 <div
+                  role="menu"
                   style={{
                     position: "absolute",
                     top: 34,
@@ -173,6 +177,7 @@ export default function Nav() {
         })}
         <Link
           to="/quickscan"
+          onClick={() => trackEvent("nav_quickscan_click", { location: "desktop_nav" })}
           style={{
             textDecoration: "none",
             background: C.primary,
@@ -279,6 +284,7 @@ export default function Nav() {
           ))}
           <Link
             to="/quickscan"
+            onClick={() => trackEvent("nav_quickscan_click", { location: "mobile_nav" })}
             style={{
               textDecoration: "none",
               background: C.primary,
