@@ -82,7 +82,7 @@ function AutomationRoutePreview() {
   return (
     <GlowCard style={{ background: C.bg2, maxWidth: 540, width: "100%" }}>
       <div style={{ padding: "1.35rem" }}>
-        <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
+        <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY, textAlign: "left" }}>
           Kies uw route
         </div>
 
@@ -163,6 +163,7 @@ function AutomationRoutePreview() {
               boxShadow: `0 0 18px ${C.primary}88`,
               transform: "translateX(-50%)",
               transition: "left 520ms cubic-bezier(.22,1,.36,1)",
+              zIndex: 2,
             }}
           />
           <div
@@ -176,6 +177,9 @@ function AutomationRoutePreview() {
               border: `1px solid ${C.primary}66`,
               background: C.bg2,
               transform: "translateX(-50%)",
+              zIndex: activeIndex === 0 ? 1 : 2,
+              opacity: activeIndex === 0 ? 0 : 1,
+              transition: "opacity 220ms ease",
             }}
           />
           <div
@@ -189,11 +193,14 @@ function AutomationRoutePreview() {
               border: `1px solid ${C.primary}66`,
               background: C.bg2,
               transform: "translateX(50%)",
+              zIndex: activeIndex === 1 ? 1 : 2,
+              opacity: activeIndex === 1 ? 0 : 1,
+              transition: "opacity 220ms ease",
             }}
           />
         </div>
 
-        <div style={{ marginTop: 16, minHeight: 214 }}>
+        <div style={{ marginTop: 16, minHeight: 214, textAlign: "left" }}>
           <p
             key={`${active.id}-summary`}
             style={{
@@ -283,7 +290,7 @@ export default function AgentsPage() {
             <span style={{ display: "block", color: C.primary }}>Met AI-agenten, koppelingen en maatwerkcode.</span>
           </>
         }
-        text="Wij automatiseren terugkerende processen met AI-agenten, bestaande tools en waar nodig maatwerkcode. Soms is een losse AI-agent genoeg. Soms bouwen we de volledige workflow, inclusief koppelingen, dashboards en controlepunten."
+        text="Wij automatiseren terugkerende processen met AI-agenten, koppelingen en maatwerkcode. Van losse taak tot volledige workflow."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
