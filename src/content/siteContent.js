@@ -10,9 +10,9 @@ export const serviceMenuLinks = [
     description: "Claude, ChatGPT en OpenAI integraties voor support, documenten en kenniswerk.",
   },
   {
-    label: "OpenClaw Agents",
-    to: "/ai-agents",
-    description: "Agent systems voor inbox, intake, opvolging en routing die echt werk uitvoeren.",
+    label: "AI Automatisering",
+    to: "/ai-automatisering",
+    description: "AI agents, koppelingen en maatwerkcode voor processen die zelfstandig doorlopen.",
   },
 ];
 
@@ -44,16 +44,16 @@ export const serviceCards = [
     ],
   },
   {
-    slug: "/ai-agents",
+    slug: "/ai-automatisering",
     eyebrow: "Dienst 03",
-    title: "OpenClaw Agents",
+    title: "AI Automatisering",
     summary:
-      "OpenClaw setup en AI agents voor inbox automation, lead qualification, intake automation en support routing die echt werk uitvoeren.",
+      "AI automatisering voor terugkerende processen. Van losse OpenClaw agent tot volledige workflow met koppelingen en maatwerkcode.",
     points: [
-      "Inbox-, intake- en lead agents",
-      "Multi-agent samenwerking",
-      "CRM, inbox en routing koppelingen",
-      "Acties klaarzetten of uitvoeren",
+      "AI agents voor losse processtappen",
+      "Volledige workflows met maatwerkcode",
+      "CRM, inbox, documenten en dashboards koppelen",
+      "Human-in-the-loop waar controle nodig blijft",
     ],
   },
 ];
@@ -64,24 +64,24 @@ export const homeFaq = [
     a: "Een AI audit brengt in kaart waar AI in jouw bedrijf het meeste oplevert. StarLeo kijkt naar workflows, bottlenecks, AI kansen, tooladvies en een logische implementatie roadmap. De audit is een zelfstandige dienst en hoeft niet gevolgd te worden door implementatie.",
   },
   {
-    q: "Wanneer kies je voor AI integraties en wanneer voor AI agents?",
-    a: "AI integraties zijn geschikt voor Claude of ChatGPT in support, kenniswerk, documentanalyse en interne workflows. AI agents zijn geschikt wanneer werk moet worden doorgezet, gerouteerd, opgevolgd of deels uitgevoerd via OpenClaw.",
+    q: "Wanneer kiest u voor AI implementatie en wanneer voor AI automatisering?",
+    a: "AI implementatie is geschikt wanneer Claude, ChatGPT of bestaande AI-tools goed moeten worden ingericht in uw werk. AI automatisering past wanneer een proces zelfstandig moet doorlopen met agents, koppelingen en waar nodig maatwerkcode.",
   },
   {
-    q: "Wat doet een OpenClaw setup concreet?",
-    a: "Een OpenClaw setup laat meerdere AI agents samenwerken met inbox, CRM en workflowtools. Denk aan mail begrijpen, intake starten, leads analyseren, support routeren en opvolging klaarzetten of uitvoeren.",
+    q: "Wat valt onder AI automatisering?",
+    a: "Dat kan een losse OpenClaw agent zijn die een taak uitvoert, maar ook een volledig geautomatiseerd proces met formulieren, CRM, inbox, documenten, dashboards en maatwerkcode. We kiezen de vorm die past bij het proces.",
   },
   {
-    q: "Kunnen we ook direct starten met AI integraties of AI agents?",
-    a: "Ja. Je hoeft niet altijd via een vaste funnel te gaan. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor een Claude integratie, ChatGPT integratie of OpenClaw AI agents.",
+    q: "Kunnen we ook direct starten met AI implementatie of automatisering?",
+    a: "Ja. U hoeft niet altijd via een vaste funnel te gaan. Sommige bedrijven starten met een AI audit, anderen kiezen direct voor Claude, ChatGPT of een concrete automatisering van een proces.",
   },
   {
     q: "Is AI implementatie ook geschikt voor MKB en groeiende teams?",
     a: "Ja. Juist MKB-bedrijven profiteren vaak snel van AI implementatie omdat support, documentwerk, intake en interne kennisprocessen relatief veel handmatig werk bevatten.",
   },
   {
-    q: "Hoe snel kan AI support automation, document AI of een agentflow live zijn?",
-    a: "Een AI audit kan snel gepland worden. Een gerichte AI integratie of eerste OpenClaw agentflow is vaak binnen enkele weken operationeel, afhankelijk van koppelingen, data en interne afstemming.",
+    q: "Hoe snel kan AI support automation, document AI of automatisering live zijn?",
+    a: "Een AI audit kan snel gepland worden. Een gerichte AI implementatie of eerste automatisering is vaak binnen enkele weken operationeel, afhankelijk van koppelingen, data en interne afstemming.",
   },
   {
     q: "Wat kost een AI Audit?",
@@ -89,7 +89,7 @@ export const homeFaq = [
   },
   {
     q: "Hoe snel kunnen we starten?",
-    a: "Na een eerste gesprek kunnen we binnen één à twee weken starten. De AI Audit duurt gemiddeld twee tot drie weken. Een eerste OpenClaw setup is doorgaans binnen vier weken live.",
+    a: "Na een eerste gesprek kunnen we binnen één à twee weken starten. De AI Audit duurt gemiddeld twee tot drie weken. Een eerste AI automatisering of OpenClaw agent is doorgaans binnen enkele weken live.",
   },
   {
     q: "Werkt dit ook voor kleinere bedrijven?",
@@ -117,11 +117,11 @@ export const demoTabs = [
       "Documenten geraadpleegd. Antwoordconcept klaar met correcte voorwaarden, samenvatting voor het team toegevoegd en ticket automatisch gelabeld als 'contractvraag - prioriteit hoog'. De AI integratie heeft context opgehaald uit de kennisbank en documentatie.",
   },
   {
-    label: "AI Agents",
-    title: "OpenClaw AI agents die inbox, leads en support slimmer afhandelen",
+    label: "AI Automatisering",
+    title: "AI automatisering die processen zelfstandig laat doorlopen",
     prompt: "Nieuwe lead via inbox: beoordeel fit, start intake automation, verzamel context uit CRM en bereid opvolging voor.",
     answer:
-      "Lead verrijkt met CRM-data. Intakevragen verstuurd, urgentie ingeschat als hoog, conceptantwoord voorbereid en follow-up taak klaargezet voor sales. Twee OpenClaw agents hebben intake en CRM-check parallel afgehandeld.",
+      "Lead verrijkt met CRM-data. Intakevragen verstuurd, urgentie ingeschat als hoog, conceptantwoord voorbereid en follow-up taak klaargezet voor sales. De automatisering combineert AI agents, koppelingen en vaste procesregels.",
   },
 ];
 
@@ -187,7 +187,7 @@ export const intakeSteps = [
         id: "route",
         label: "Welke dienst lijkt nu het best te passen?",
         type: "chips",
-        options: ["AI Audit", "AI Implementatie", "OpenClaw Agents", "Weet ik nog niet"],
+        options: ["AI Audit", "AI Implementatie", "AI Automatisering", "Weet ik nog niet"],
       },
       {
         id: "timeline",
@@ -199,7 +199,7 @@ export const intakeSteps = [
   },
   {
     title: "Contact",
-    description: "Laatste stap. Hiermee zorgen we dat we snel en persoonlijk kunnen opvolgen met de juiste AI audit, integratie of agent-aanpak.",
+    description: "Laatste stap. Hiermee zorgen we dat we snel en persoonlijk kunnen opvolgen met de juiste AI audit, implementatie of automatisering.",
     fields: [
       { id: "email", label: "E-mail", type: "email", placeholder: "naam@bedrijf.nl", required: true },
       { id: "phone", label: "Telefoon (optioneel)", type: "text", placeholder: "+31 6 ...", optional: true },
@@ -230,7 +230,7 @@ export const homeIntakeSteps = [
         options: [
           "AI Audit",
           "AI Implementatie",
-          "OpenClaw Agents",
+          "AI Automatisering",
           "Weet ik nog niet",
         ],
       },

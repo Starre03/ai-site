@@ -1,33 +1,243 @@
 import IntakeForm from "../components/IntakeForm";
+import { useState } from "react";
 import { contactSteps } from "../content/siteContent";
 import Faq from "../components/Faq";
 import { BODY, C } from "../lib/theme";
 import { GlowCard, PageHero, PageSection, PrimaryButton, Reveal, SectionHeading, usePageSeo } from "../components/ui";
 
-const agentFaqItems = [
+const automationFaqItems = [
   {
-    q: "Wat is precies een AI agent?",
-    a: "Een AI agent voert zelfstandig taken uit op basis van een trigger, context en duidelijke regels. Denk aan content voorbereiden, inboxen opvolgen, informatie verzamelen of een volgende stap klaarzetten.",
+    q: "Wat valt onder AI automatisering?",
+    a: "AI automatisering kan een losse agent zijn die een taak uitvoert, maar ook een volledig proces met formulieren, CRM, inbox, documenten, dashboards en maatwerkcode. We kiezen de vorm die past bij uw proces.",
   },
   {
-    q: "Hoe lang duurt het om een agent te bouwen?",
-    a: "Een eerste agent voor content, marketing of inboxwerk kan vaak binnen één tot drie weken live staan. Complexere flows met meerdere systemen of stappen vragen meer afstemming.",
+    q: "Wat is het verschil tussen OpenClaw agents en maatwerkautomatisering?",
+    a: "OpenClaw agents zijn sterk voor losse taken of processtappen, zoals opvolging, triage, samenvatting of conceptoutput. Maatwerkautomatisering gebruiken we wanneer meerdere systemen, data en stappen betrouwbaar samen moeten werken.",
   },
   {
     q: "Zijn onze gegevens veilig?",
     a: "Ja. We werken met de beveiligde API's van Anthropic en OpenAI zonder dat uw data wordt gebruikt voor training. We tekenen een verwerkingsovereenkomst waar dat nodig is.",
   },
   {
-    q: "Wat als onze situatie afwijkt van een standaard setup?",
-    a: "Dat bespreken we graag. We werken samen met ervaren software engineers die jarenlang hebben gebouwd bij innovatieve bedrijven, waardoor maatwerk ook mogelijk is als uw situatie daarom vraagt.",
+    q: "Kunnen jullie ook het hele proces bouwen?",
+    a: "Ja. Als een proces meer nodig heeft dan een losse agent, bouwen we de benodigde koppelingen, logica, interne tooling of dashboards met ervaren software engineers. Zo kan een proces echt end-to-end worden geautomatiseerd.",
   },
 ];
 
+const automationRoutes = [
+  {
+    id: "agent",
+    label: "OpenClaw agent",
+    summary: "Voor één duidelijke taak of processtap die snel zelfstandig kan draaien.",
+    steps: [
+      "Trigger uit inbox, formulier of planning",
+      "AI voert triage, samenvatting of opvolging uit",
+      "Team keurt goed of krijgt alleen uitzonderingen",
+    ],
+  },
+  {
+    id: "workflow",
+    label: "Proces op maat",
+    summary: "Voor complete workflows waarin systemen, data en mensen samen moeten werken.",
+    steps: [
+      "Proces ontwerpen en systemen koppelen",
+      "Maatwerkcode bouwt logica, dashboard en controles",
+      "Workflow draait door met beheer en verbeteringen",
+    ],
+  },
+];
+
+function AutomationRoutePreview() {
+  const [activeRoute, setActiveRoute] = useState("agent");
+  const activeIndex = automationRoutes.findIndex((route) => route.id === activeRoute);
+  const active = automationRoutes[activeIndex] || automationRoutes[0];
+
+  return (
+    <GlowCard style={{ background: C.bg2, maxWidth: 540, width: "100%" }}>
+      <div style={{ padding: "1.35rem" }}>
+        <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
+          Kies uw route
+        </div>
+
+        <div
+          style={{
+            position: "relative",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 8,
+            marginTop: 14,
+            padding: 4,
+            border: `1px solid ${C.border}`,
+            borderRadius: 14,
+            background: "rgba(255,255,255,0.03)",
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 4,
+              bottom: 4,
+              left: `calc(${activeIndex * 50}% + 4px)`,
+              width: "calc(50% - 8px)",
+              borderRadius: 10,
+              background: C.primary,
+              boxShadow: `0 10px 26px ${C.primary}25`,
+              transition: "left 420ms cubic-bezier(.22,1,.36,1)",
+            }}
+          />
+          {automationRoutes.map((route) => {
+            const selected = route.id === activeRoute;
+            return (
+              <button
+                key={route.id}
+                type="button"
+                onClick={() => setActiveRoute(route.id)}
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  border: "none",
+                  background: "transparent",
+                  color: selected ? "#fff" : C.textSoft,
+                  fontFamily: BODY,
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  padding: "0.72rem 0.55rem",
+                  cursor: "pointer",
+                  transition: "color 220ms ease",
+                }}
+              >
+                {route.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ position: "relative", height: 28, margin: "12px 14px 0" }} aria-hidden="true">
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: 13,
+              height: 1,
+              background: "linear-gradient(90deg, rgba(255,255,255,0.08), rgba(14,165,233,0.45), rgba(255,255,255,0.08))",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: 7,
+              left: activeIndex === 0 ? "0%" : "100%",
+              width: 14,
+              height: 14,
+              borderRadius: 999,
+              background: C.primary,
+              boxShadow: `0 0 18px ${C.primary}88`,
+              transform: "translateX(-50%)",
+              transition: "left 520ms cubic-bezier(.22,1,.36,1)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 9,
+              width: 10,
+              height: 10,
+              borderRadius: 999,
+              border: `1px solid ${C.primary}66`,
+              background: C.bg2,
+              transform: "translateX(-50%)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 9,
+              width: 10,
+              height: 10,
+              borderRadius: 999,
+              border: `1px solid ${C.primary}66`,
+              background: C.bg2,
+              transform: "translateX(50%)",
+            }}
+          />
+        </div>
+
+        <div style={{ marginTop: 16, minHeight: 214 }}>
+          <p
+            key={`${active.id}-summary`}
+            style={{
+              margin: 0,
+              color: C.text,
+              fontFamily: BODY,
+              fontSize: "0.86rem",
+              lineHeight: 1.7,
+              opacity: 1,
+            }}
+          >
+            {active.summary}
+          </p>
+
+          <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, marginTop: 16 }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                left: 10,
+                top: 12,
+                bottom: 12,
+                width: 1,
+                background: `linear-gradient(180deg, ${C.primary}66, rgba(255,255,255,0.08))`,
+              }}
+            />
+            {active.steps.map((step, index) => (
+              <div
+                key={`${active.id}-${step}`}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 10,
+                  transform: "translateX(0)",
+                  transition: `opacity 260ms ease ${index * 40}ms, transform 260ms ease ${index * 40}ms`,
+                }}
+              >
+                <div
+                  style={{
+                    minWidth: 22,
+                    height: 22,
+                    borderRadius: 999,
+                    background: C.primary,
+                    color: "#fff",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: 1,
+                    flexShrink: 0,
+                    zIndex: 1,
+                  }}
+                >
+                  {index + 1}
+                </div>
+                <div style={{ fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.6, color: C.textSoft }}>{step}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </GlowCard>
+  );
+}
+
 export default function AgentsPage() {
   usePageSeo({
-    title: "OpenClaw AI Agents voor bedrijven — Inbox & lead automation | StarLeo",
+    title: "AI Automatisering voor bedrijven — Agents, koppelingen & maatwerkcode | StarLeo",
     description:
-      "OpenClaw AI agents en agent systems voor bedrijven. Voor inbox automation, lead qualification, intake automation, support routing en AI workflow automatisering.",
+      "AI automatisering voor bedrijven. Van OpenClaw agents voor losse taken tot volledige procesautomatisering met koppelingen, dashboards en maatwerkcode.",
   });
 
   return (
@@ -41,104 +251,67 @@ export default function AgentsPage() {
         fullCenter
         title={
           <>
-            AI agents die processen
-            <span style={{ display: "block" }}>zelfstandig uitvoeren</span>
-            <span style={{ display: "block", color: C.primary }}>en laten doorlopen.</span>
+            AI automatisering die processen
+            <span style={{ display: "block" }}>zelfstandig laat doorlopen.</span>
+            <span style={{ display: "block", color: C.primary }}>Met agents, koppelingen en maatwerkcode.</span>
           </>
         }
-        text="Wij bouwen AI agents voor content, marketing, inboxen, opvolging en andere terugkerende processen. Waar mogelijk automatisch, en waar gewenst met human in the loop."
+        text="Wij automatiseren terugkerende processen met AI agents, bestaande tools en waar nodig maatwerkcode. Soms is een losse OpenClaw agent genoeg. Soms bouwen we de volledige workflow, inclusief koppelingen, dashboards en controlepunten."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
             document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}>
-            Bespreek AI agents →
+            Bespreek AI automatisering →
           </PrimaryButton>,
           <PrimaryButton key="integrations" secondary to="/ai-integraties">
-            Bekijk AI integraties
+            Bekijk AI implementatie
           </PrimaryButton>,
         ]}
-        aside={
-          <GlowCard style={{ background: C.bg2, maxWidth: 500, width: "100%" }}>
-            <div style={{ padding: "1.35rem" }}>
-              <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                Wat een agent zelfstandig doet
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
-                {[
-                  "Verwerkt input uit briefing, inbox of formulier",
-                  "Maakt content, zet taken klaar of bereidt een volgende stap voor",
-                  "Stuurt door, rapporteert terug of vraagt om akkoord",
-                ].map((step, index) => (
-                  <div key={step} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                    <div
-                      style={{
-                        minWidth: 22,
-                        height: 22,
-                        borderRadius: 999,
-                        background: C.primary,
-                        color: "#fff",
-                        fontSize: "0.7rem",
-                        fontWeight: 700,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: 1,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {index + 1}
-                    </div>
-                    <div style={{ fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.6, color: C.textSoft }}>{step}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </GlowCard>
-        }
+        aside={<AutomationRoutePreview />}
       />
 
       <PageSection bg={C.lightBg} minH="100vh" centerY>
         <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
-            tag="Wat OpenClaw doet"
+            tag="Wat we automatiseren"
             centered
             light
             title={
               <>
-                OpenClaw helpt niet alleen met antwoorden.
+                Van losse taak tot volledig proces.
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  Het voert werk ook echt uit.
+                  Wij bouwen wat nodig is.
                 </span>
               </>
             }
-            text="Juist daardoor is deze dienst sterk voor terugkerende processen waarin meerdere stappen op elkaar aansluiten. Agents kunnen informatie ophalen, formats vullen, acties klaarzetten en werk tussen systemen en mensen laten doorlopen."
+            text="AI automatisering hoeft niet altijd groot te beginnen. We kunnen een losse agent instellen voor een terugkerende taak, maar ook een volledige workflow bouwen met code, API-koppelingen en menselijke controle waar dat nodig blijft."
           />
           <div className="card-grid-two" style={{ marginTop: 28 }}>
             {[
               {
-                title: "Input omzetten in output",
-                body: "Een agent zet een briefing of ruwe input om in concrete invalshoeken, formats en voorstellen voor content.",
+                title: "OpenClaw agents instellen",
+                body: "Voor losse taken zoals inbox triage, leadopvolging, samenvattingen, conceptantwoorden, rapportvoorbereiding of taakroutering.",
               },
               {
-                title: "Concepten voorbereiden",
-                body: "Blogs, social posts, mailteksten of landingspagina's worden voorbereid in uw tone of voice, klaar voor review.",
+                title: "Maatwerkcode bouwen",
+                body: "Als een proces meer nodig heeft dan een agent, bouwen we gerichte software die data, stappen en beslissingen betrouwbaar laat samenwerken.",
               },
               {
-                title: "Planning bewaken",
-                body: "Een agent houdt onderwerpen, deadlines en opvolging bij, zodat contentproductie niet stilvalt.",
+                title: "Systemen koppelen",
+                body: "We verbinden formulieren, CRM, inbox, documenten, planningen en dashboards zodat informatie automatisch door het proces beweegt.",
               },
               {
-                title: "Inbox en reacties opvolgen",
-                body: "Binnenkomende vragen, reacties of leads worden beoordeeld, beantwoord of doorgestuurd naar de juiste vervolgactie.",
+                title: "Interne tools en dashboards",
+                body: "Wanneer teams overzicht nodig hebben, bouwen we eenvoudige tools of dashboards waarin AI-output, status en controles samenkomen.",
               },
               {
-                title: "Informatie verzamelen en verrijken",
-                body: "Een agent haalt context uit documenten, eerdere content of systemen en gebruikt die direct in het volgende werk.",
+                title: "Human-in-the-loop",
+                body: "Automatisering hoeft niet blind te werken. We bouwen controlepunten in zodat uw team kan goedkeuren, corrigeren of escaleren.",
               },
               {
-                title: "Taken tussen systemen doorzetten",
-                body: "OpenClaw kan acties klaarzetten of uitvoeren in CRM, planning, inbox of andere tools die in het proces meedraaien.",
+                title: "Beheer en doorontwikkeling",
+                body: "Na livegang kunnen we blijven verbeteren, nieuwe stappen toevoegen en automatiseringen aanpassen wanneer uw proces verandert.",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.12 + index * 0.04} fill>
@@ -166,31 +339,31 @@ export default function AgentsPage() {
             tag="Wanneer dit past"
             title={
               <>
-                Kies AI agents zodra processen
+                Kies AI automatisering zodra werk
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  zelfstandig moeten doorlopen.
+                  structureel zelfstandig moet doorlopen.
                 </span>
               </>
             }
-            text="Deze dienst past wanneer werk niet mag blijven hangen in losse prompts of handmatig gedoe. Dan is het waardevol dat een agent niet alleen helpt, maar ook bewaakt, doorzet en afrondt."
+            text="Deze dienst past wanneer werk niet mag blijven hangen in losse prompts, losse tools of handmatig overzetten. Dan bouwen we de laag die het proces bewaakt, doorzet en afrondt."
           />
           <div className="card-grid-two" style={{ marginTop: 32 }}>
             {[
               {
-                title: "Veel werk, weinig ritme",
-                body: "Voor teams die genoeg ideeën hebben, maar moeite hebben om content consequent uit te werken en te publiceren.",
+                title: "Een losse agent is genoeg",
+                body: "Voor afgebakende taken zoals samenvatten, beoordelen, opvolgen, concepten maken of informatie verzamelen.",
               },
               {
-                title: "Van briefing naar output",
-                body: "Voor processen waarin input steeds opnieuw moet worden omgezet in teksten, formats, analyses of vervolgstappen.",
+                title: "Het hele proces moet lopen",
+                body: "Voor workflows waarin input, beoordeling, output, opvolging en rapportage automatisch op elkaar moeten aansluiten.",
               },
               {
-                title: "Inbox en leads blijven liggen",
-                body: "Voor organisaties waar aanvragen, reacties of opvolging te veel blijven wachten op handmatig werk.",
+                title: "Systemen praten niet met elkaar",
+                body: "Voor situaties waarin informatie steeds handmatig tussen inbox, CRM, documenten, spreadsheets of dashboards wordt overgezet.",
               },
               {
-                title: "Werk moet doorlopen",
-                body: "Voor situaties waarin taken automatisch naar de juiste persoon, tool of volgende stap moeten worden gestuurd.",
+                title: "Controle blijft belangrijk",
+                body: "Voor processen waar AI veel mag voorbereiden of uitvoeren, maar waar mensen bij uitzonderingen of besluiten betrokken blijven.",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
@@ -213,34 +386,34 @@ export default function AgentsPage() {
           <SectionHeading
             centered
             light
-            tag="Waarom OpenClaw"
+            tag="Agents of maatwerk"
             title={
               <>
-                Niet één prompt, maar agents die
+                Niet elk proces vraagt dezelfde oplossing.
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  samen werk laten doorlopen.
+                  Daarom bouwen we in lagen.
                 </span>
               </>
             }
-            text="OpenClaw wordt krachtig zodra meerdere stappen op elkaar moeten aansluiten. De ene agent verzamelt context, de volgende maakt output klaar en een derde bewaakt opvolging of publicatie."
+            text="Soms is OpenClaw de snelste route: een agent die één duidelijk stuk werk uitvoert. Als het proces breder is, voegen we koppelingen, eigen logica, dashboards of maatwerksoftware toe."
           />
           <div className="card-grid-two" style={{ marginTop: 32 }}>
             {[
               {
-                title: "Vaste structuur en tone of voice",
-                body: "Agents kunnen werken met formats, richtlijnen en merkregels, zodat output consistenter wordt.",
+                title: "OpenClaw voor losse onderdelen",
+                body: "Sterk wanneer één taak of processtap terugkomt: triage, opvolging, samenvatting, conceptoutput of interne voorbereiding.",
               },
               {
-                title: "Planning en opvolging",
-                body: "Een agent kan deadlines bewaken, vervolgacties klaarzetten en signaleren wanneer iets blijft liggen.",
+                title: "Code voor volledige workflows",
+                body: "Sterk wanneer meerdere systemen, datastromen, uitzonderingen en acties betrouwbaar samen moeten werken.",
               },
               {
-                title: "Samenwerking tussen tools",
-                body: "Inbox, planning, documenten en CRM kunnen logisch op elkaar aansluiten binnen één flow.",
+                title: "Keuze op basis van proces",
+                body: "We starten niet vanuit een favoriete tool, maar vanuit wat het proces nodig heeft om sneller, consistenter en betrouwbaarder te lopen.",
               },
               {
-                title: "Maatwerk altijd bespreekbaar",
-                body: "Als uw situatie afwijkt, kijken we samen wat slim is. Waar nodig werken we met ervaren engineers om maatwerk goed uit te voeren.",
+                title: "Engineeringteam achter de hand",
+                body: "Voor maatwerk werken we met ervaren software engineers, zodat complexe automatisering niet blijft steken in een prototype.",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
@@ -265,35 +438,35 @@ export default function AgentsPage() {
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <Faq
             centered
-            items={agentFaqItems}
+            items={automationFaqItems}
             title={
               <>
                 Veelgestelde vragen over
                 <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
-                  AI agents en OpenClaw setups.
+                  AI automatisering.
                 </span>
               </>
             }
-            text="Heldere antwoorden over bouwtijd, veiligheid en hoe een agent zich gedraagt in de praktijk."
+            text="Heldere antwoorden over agents, maatwerkcode, veiligheid en wanneer volledige automatisering zinvol is."
           />
         </div>
       </PageSection>
 
       <IntakeForm
-        preferredRoute="AI Agents"
+        preferredRoute="AI Automatisering"
         centered
         tagLabel="Contact"
         steps={contactSteps}
         submissionKind="contact"
         title={
           <>
-            Interesse in een OpenClaw setup?
+            Interesse in AI automatisering?
             <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
               Laat het ons weten.
             </span>
           </>
         }
-        text="Vertel kort welk proces u wilt automatiseren. Dan kijken we samen of een OpenClaw setup past."
+        text="Vertel kort welk proces u wilt automatiseren. Dan kijken we samen of een losse agent, een koppeling of maatwerkautomatisering het beste past."
         submitLabel="Verstuur bericht →"
         doneTitle="Bericht ontvangen"
         doneText="We nemen contact op om uw situatie en wensen verder te bespreken."

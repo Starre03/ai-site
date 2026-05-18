@@ -28,7 +28,7 @@ export default function Faq({
           title || (
             <>
               Veelgestelde vragen over
-              <em style={{ color: C.primary, fontStyle: "italic" }}> AI audit, integraties en AI agents</em>
+              <em style={{ color: C.primary, fontStyle: "italic" }}> AI audit, implementatie en automatisering</em>
             </>
           )
         }

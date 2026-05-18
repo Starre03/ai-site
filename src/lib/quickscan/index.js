@@ -1132,7 +1132,7 @@ export function getCTA(result) {
       primaryService === "audit"
         ? "analyse-en-prioritering"
         : primaryService === "agents"
-          ? "agentflow-ontwerp"
+          ? "automatiseringsontwerp"
           : primaryService === "optimization" || primaryService === "advice"
             ? "gerichte-optimalisatie"
             : "gerichte-implementatie",
@@ -1146,7 +1146,7 @@ export function getCTA(result) {
       primaryService === "audit"
         ? "Een eerste contactgesprek helpt scherp krijgen waar de meeste tijd weglekt en welke quick wins realistisch zijn."
         : primaryService === "agents"
-          ? "Een eerste contactgesprek helpt toetsen of een agentflow past bij de huidige tools, opvolging en overdracht."
+          ? "Een eerste contactgesprek helpt toetsen of een losse agent, koppeling of maatwerkautomatisering past bij de huidige tools, opvolging en overdracht."
           : primaryService === "optimization" || primaryService === "advice"
             ? "Een eerste contactgesprek helpt bepalen waar optimalisatie nog zinvol is zonder het bestaande proces onnodig te verstoren."
             : "Een eerste contactgesprek helpt bepalen welke koppeling of automatisering het meest logisch is.",

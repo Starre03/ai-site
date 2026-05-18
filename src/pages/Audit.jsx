@@ -270,7 +270,7 @@ export default function AuditPage() {
                 },
                 {
                   title: "Kansrijke use-cases",
-                  body: "U ziet welke toepassingen logisch zijn voor een audit, integratie of agent-aanpak.",
+                  body: "U ziet welke toepassingen logisch zijn voor een audit, implementatie of automatiseringsaanpak.",
                 },
                 {
                   title: "Tool- en modeladvies",
@@ -328,7 +328,7 @@ export default function AuditPage() {
                 points: [
                   "Brengt prioriteiten en focus aan",
                   "Maakt interne gesprekken concreter",
-                  "Geeft richting voor implementatie of agents",
+                  "Geeft richting voor implementatie of automatisering",
                 ],
               },
               {
@@ -336,7 +336,7 @@ export default function AuditPage() {
                 points: [
                   "Inzicht in waar AI direct tijd kan terugwinnen",
                   "Duidelijk welke processen de meeste winst opleveren",
-                  "Sneller zien waar integratie of agents logisch zijn",
+                  "Sneller zien waar implementatie of automatisering logisch is",
                 ],
               },
             ].map((item, index) => (

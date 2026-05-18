@@ -56,8 +56,8 @@ export default function IntegrationsPage() {
           }}>
             Bespreek AI integraties →
           </PrimaryButton>,
-          <PrimaryButton key="agents" secondary to="/ai-agents">
-            Bekijk AI agents
+          <PrimaryButton key="automation" secondary to="/ai-automatisering">
+            Bekijk AI automatisering
           </PrimaryButton>,
         ]}
         aside={

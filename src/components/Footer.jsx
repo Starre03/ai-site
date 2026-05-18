@@ -8,7 +8,7 @@ export default function Footer() {
   const serviceLinks = [
     { label: "AI Audit", to: "/ai-audit" },
     { label: "AI Implementatie", to: "/ai-integraties" },
-    { label: "OpenClaw Agents", to: "/ai-agents" },
+    { label: "AI Automatisering", to: "/ai-automatisering" },
     { label: "Gratis quickscan", to: "/quickscan" },
   ];
 
@@ -74,7 +74,7 @@ export default function Footer() {
               <BrandMark />
             </div>
             <div style={{ color: C.textMuted, fontSize: "0.82rem", lineHeight: 1.7, fontFamily: BODY, maxWidth: 280 }}>
-              AI audit, implementatie &amp; agents voor bedrijven
+              AI audit, implementatie &amp; automatisering voor bedrijven
             </div>
             <div style={{ color: C.textMuted, fontSize: "0.76rem", lineHeight: 1.7, fontFamily: BODY }}>
               KvK: 42033972

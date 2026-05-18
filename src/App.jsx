@@ -67,6 +67,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/ai-audit" element={<AuditPage />} />
             <Route path="/ai-integraties" element={<IntegrationsPage />} />
+            <Route path="/ai-automatisering" element={<AgentsPage />} />
             <Route path="/ai-agents" element={<AgentsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/callback" element={<AuthCallbackPage />} />

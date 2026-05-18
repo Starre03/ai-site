@@ -220,7 +220,7 @@ export default function METRSection() {
             },
             {
               title: "Daarom werkt StarLeo met drie diensten die los te starten zijn",
-              text: "Soms is een AI audit de beste eerste stap. Soms kun je direct door met een Claude integratie of ChatGPT integratie. En soms is het momentum er voor OpenClaw AI agents die werk uitvoeren.",
+              text: "Soms is een AI audit de beste eerste stap. Soms kunt u direct door met een Claude integratie of ChatGPT implementatie. En soms is het momentum er voor AI automatisering die werk echt laat doorlopen.",
             },
             {
               title: "Niet meer tools kopen, maar slimmer automatiseren",

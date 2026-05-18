@@ -4,13 +4,13 @@ import { PageSection, Reveal, SectionHeading, usePageSeo } from "../components/u
 export default function TermsPage() {
   usePageSeo({
     title: "StarLeo | Algemene Voorwaarden",
-    description: "Algemene voorwaarden van StarLeo voor AI audit, AI integraties en OpenClaw AI agent dienstverlening.",
+    description: "Algemene voorwaarden van StarLeo voor AI audit, AI implementatie en AI automatisering.",
   });
 
   const sections = [
     {
       title: "1. Definities",
-      text: "In deze algemene voorwaarden wordt verstaan onder: Opdrachtnemer: StarLeo. Opdrachtgever: de natuurlijke of rechtspersoon die een overeenkomst aangaat met StarLeo. Diensten: alle werkzaamheden die StarLeo verricht, waaronder AI audit, AI integraties en OpenClaw AI agent setups. Overeenkomst: elke afspraak tussen opdrachtgever en StarLeo over het leveren van diensten.",
+      text: "In deze algemene voorwaarden wordt verstaan onder: Opdrachtnemer: StarLeo. Opdrachtgever: de natuurlijke of rechtspersoon die een overeenkomst aangaat met StarLeo. Diensten: alle werkzaamheden die StarLeo verricht, waaronder AI audit, AI implementatie en AI automatisering. Overeenkomst: elke afspraak tussen opdrachtgever en StarLeo over het leveren van diensten.",
     },
     {
       title: "2. Toepasselijkheid",

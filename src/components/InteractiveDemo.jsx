@@ -113,7 +113,7 @@ export default function InteractiveDemo() {
             <em style={{ color: C.primary, fontStyle: "italic" }}> zodra AI echt in het werk landt</em>
           </>
         }
-        text="Van AI audit tot Claude integratie en OpenClaw AI agents: hieronder zie je hoe AI implementatie eruitziet zodra support, documentprocessen, leads of intake echt slimmer worden ingericht."
+        text="Van AI audit tot Claude implementatie en AI automatisering: hieronder ziet u hoe AI waarde toevoegt zodra support, documentprocessen, leads of intake echt slimmer worden ingericht."
       />
       <Reveal delay={0.16}>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 26 }}>
@@ -154,7 +154,7 @@ export default function InteractiveDemo() {
                 ? "Voor bedrijven die eerst een AI audit willen: waar zitten de bottlenecks, welke AI kansen zijn haalbaar en welke implementatievolgorde levert het meeste op."
                 : active === 1
                   ? "Voor teams die Claude of ChatGPT praktisch willen inzetten in support, documentanalyse, kenniswerk en bestaande workflows zonder direct een agentlaag op te zetten."
-                  : "Voor organisaties die OpenClaw AI agents willen inzetten voor inbox automation, lead qualification, intake automation en support routing met meerdere samenwerkende agents."}
+                  : "Voor organisaties die processen willen automatiseren met OpenClaw agents, koppelingen en waar nodig maatwerkcode."}
             </p>
           </div>
           <GlowCard style={{ background: C.bg }}>

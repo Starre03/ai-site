@@ -440,7 +440,7 @@ export const SAVINGS_SCENARIOS = {
 export const SERVICE_LABELS = {
   audit: "AI Audit",
   integrations: "AI Integraties",
-  agents: "AI Agents / OpenClaw",
+  agents: "AI Automatisering",
   optimization: "Gerichte optimalisatie",
   advice: "Strategisch advies",
 };

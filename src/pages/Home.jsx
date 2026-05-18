@@ -124,9 +124,9 @@ const serviceCards = [
     to: "/ai-integraties",
   },
   {
-    title: "AI Agents",
-    desc: "Laat processen volledig automatisch verlopen. Van inbox en leadopvolging tot contentcreatie en marketingflows.",
-    to: "/ai-agents",
+    title: "AI Automatisering",
+    desc: "We bouwen AI agents, koppelingen en maatwerkcode die terugkerende processen zelfstandig laten doorlopen.",
+    to: "/ai-automatisering",
   },
 ];
 
@@ -189,7 +189,7 @@ const processCards = [
   {
     title: "Keuze",
     bullets: [
-      "Samen bepalen we of audit, implementatie of een agentflow nu de logische stap is.",
+      "Samen bepalen we of audit, implementatie of automatisering nu de logische stap is.",
       "U kiest wat past bij het team, het proces en de gewenste uitkomst.",
       "Wij houden de eerste stap klein genoeg om beheersbaar te blijven, maar groot genoeg om waarde te leveren.",
     ],
@@ -735,10 +735,10 @@ function ServicesOverview() {
               fontFamily: BODY,
             }}
           >
-            U kunt starten met een audit, direct kiezen voor implementatie of een agentflow laten bouwen.
+            U kunt starten met een audit, direct kiezen voor implementatie of een proces laten automatiseren.
           </p>
         </Reveal>
-        <ServicesFlow steps={["Audit", "Implementatie", "Agents"]} activeIndex={hoveredIndex} />
+        <ServicesFlow steps={["Audit", "Implementatie", "Automatisering"]} activeIndex={hoveredIndex} />
         <div className="card-grid-three" style={{ marginTop: 8 }}>
           {serviceCards.map((card, index) => (
             <Reveal key={card.title} delay={0.16 + index * 0.05} fill>
@@ -1204,9 +1204,9 @@ function IntakeCtaSection() {
 
 export default function Home() {
   usePageSeo({
-    title: "StarLeo | AI audit, AI integraties en OpenClaw AI agents voor bedrijven",
+    title: "StarLeo | AI audit, AI implementatie en AI automatisering voor bedrijven",
     description:
-      "StarLeo helpt bedrijven met AI audit, AI consultancy, AI implementatie, Claude integraties, ChatGPT integraties en OpenClaw AI agents voor support, documentprocessen en workflow automatisering.",
+      "StarLeo helpt bedrijven met AI audit, AI implementatie, Claude en ChatGPT integraties en AI automatisering voor support, documentprocessen en terugkerende workflows.",
   });
 
   return (

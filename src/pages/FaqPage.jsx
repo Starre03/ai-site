@@ -6,9 +6,9 @@ import { usePageSeo } from "../components/ui";
 
 export default function FaqPage() {
   usePageSeo({
-    title: "FAQ over AI audit, implementatie & agents | StarLeo",
+    title: "FAQ over AI audit, implementatie & automatisering | StarLeo",
     description:
-      "Veelgestelde vragen over AI audit, AI implementatie en OpenClaw agents voor bedrijven.",
+      "Veelgestelde vragen over AI audit, AI implementatie en AI automatisering voor bedrijven.",
   });
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function FaqPage() {
           title={
             <>
               Veelgestelde vragen over
-              <em style={{ color: C.primary, fontStyle: "italic" }}> AI audit, implementatie en OpenClaw agents</em>
+              <em style={{ color: C.primary, fontStyle: "italic" }}> AI audit, implementatie en automatisering</em>
             </>
           }
           text="Heldere antwoorden voor bedrijven die willen begrijpen welke stap het beste past en wat AI concreet kan opleveren."

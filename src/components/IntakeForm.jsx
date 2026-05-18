@@ -282,7 +282,7 @@ export default function IntakeForm({
               </h2>
               <p style={{ color: C.textSoft, marginTop: 12, lineHeight: 1.7, fontFamily: BODY }}>
                 {doneText ||
-                  "We gebruiken je antwoorden om direct inhoudelijk te spreken over AI audit, AI integraties of OpenClaw AI agents. Zo verlies je geen tijd aan een generiek eerste gesprek."}
+                  "We gebruiken uw antwoorden om direct inhoudelijk te spreken over AI audit, AI implementatie of AI automatisering. Zo verliest u geen tijd aan een generiek eerste gesprek."}
               </p>
             </div>
           </GlowCard>
@@ -400,7 +400,7 @@ export default function IntakeForm({
             }
             text={
               text ||
-              "Deze premium intake helpt StarLeo snel bepalen welke dienst past: AI audit, AI integraties of OpenClaw AI agents. Zo wordt het eerste gesprek direct concreet."
+              "Deze premium intake helpt StarLeo snel bepalen welke dienst past: AI audit, AI implementatie of AI automatisering. Zo wordt het eerste gesprek direct concreet."
             }
           />
         )}
