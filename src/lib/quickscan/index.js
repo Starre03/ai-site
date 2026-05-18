@@ -242,12 +242,12 @@ const CTA_BY_URGENCY = {
 };
 
 const PRIMARY_CONCLUSIONS = {
-  klantcontact: "Je grootste winst zit nu in klantcontact en opvolging.",
-  administratie: "Je grootste winst zit nu in administratie en invoer.",
-  content: "Je grootste winst zit nu in content en marketing.",
-  offertes: "Je grootste winst zit nu in offertes en documentwerk.",
-  planning: "Je grootste winst zit nu in planning en interne afstemming.",
-  data: "Je grootste winst zit nu in data en rapportages.",
+  klantcontact: "Uw grootste winst zit nu in klantcontact en opvolging.",
+  administratie: "Uw grootste winst zit nu in administratie en invoer.",
+  content: "Uw grootste winst zit nu in content en marketing.",
+  offertes: "Uw grootste winst zit nu in offertes en documentwerk.",
+  planning: "Uw grootste winst zit nu in planning en interne afstemming.",
+  data: "Uw grootste winst zit nu in data en rapportages.",
 };
 
 const PRIMARY_CONCLUSION_DETAILS = {
@@ -896,7 +896,7 @@ export function getSavingsRange(answers, scenarioKey = "gemiddeld") {
     Number.isFinite(Number.parseFloat(answers.hourlyValueManual)) && Number.parseFloat(answers.hourlyValueManual) > 0
       ? `€${formatHoursNumber(Number.parseFloat(answers.hourlyValueManual))}`
       : hourlyValue.label;
-  const formulaText = `Indicatie op basis van jouw input (${formatHoursNumber(numericHours)} uur/week × ${rateLabel} × 4,3 weken)`;
+  const formulaText = `Indicatie op basis van uw input (${formatHoursNumber(numericHours)} uur/week × ${rateLabel} × 4,3 weken)`;
   const timeInfoText = formulaText;
 
   return {
@@ -985,7 +985,7 @@ export function getOpportunityBullets(result) {
 }
 
 export function getPrimaryConclusion(result) {
-  const companyName = result.answers.companyName || "je bedrijf";
+  const companyName = result.answers.companyName || "uw bedrijf";
   const focusLabel = PROCESS_LABELS[getFocusProcessType(result.answers)]?.toLowerCase() || "het gekozen proces";
   const painPointDetail = PRIMARY_CONCLUSION_DETAILS[result.answers.painPoint];
 
@@ -1007,7 +1007,7 @@ function getConclusionSummary(result) {
     ? ` Ook ${secondaryProcessTypes.map((processType) => PROCESS_LABELS[processType]?.toLowerCase()).filter(Boolean).join(" en ")} telt mee in deze analyse.`
     : "";
   const aiIssueText = result.answers.aiIssue
-    ? ` Je gaf ook aan dat ${AI_FOLLOWUP_LABELS[result.answers.aiIssue]?.toLowerCase()} bij AI-gebruik nog niet goed werkt.`
+    ? ` U gaf ook aan dat ${AI_FOLLOWUP_LABELS[result.answers.aiIssue]?.toLowerCase()} bij AI-gebruik nog niet goed werkt.`
     : "";
 
   return `${summary}${secondaryText}${aiIssueText}`;
@@ -1150,7 +1150,7 @@ export function getCTA(result) {
           : primaryService === "optimization" || primaryService === "advice"
             ? "Een eerste contactgesprek helpt bepalen waar optimalisatie nog zinvol is zonder het bestaande proces onnodig te verstoren."
             : "Een eerste contactgesprek helpt bepalen welke koppeling of automatisering het meest logisch is.",
-    auditPrompt: "Als je eerst meer scherpte of prioritering wilt, is een AI Audit de logische vervolgstap.",
+    auditPrompt: "Als u eerst meer scherpte of prioritering wilt, is een AI Audit de logische vervolgstap.",
     microcopy: "Eerste contactgesprek · Online of op locatie · Rustige verkenning van scope, proces en passende vervolgstap",
   };
 }

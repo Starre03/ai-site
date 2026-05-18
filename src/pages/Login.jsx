@@ -100,7 +100,7 @@ export default function LoginPage() {
     }
 
     setPhase("sent");
-    setFeedback(`De magic link is verstuurd naar ${normalizedEmail}. Open de mail op dit apparaat om je sessie te starten.`);
+    setFeedback(`De magic link is verstuurd naar ${normalizedEmail}. Open de mail op dit apparaat om uw sessie te starten.`);
   }
 
   return (
@@ -184,7 +184,7 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    placeholder="jij@bedrijf.nl"
+                    placeholder="u@bedrijf.nl"
                     style={inputStyle}
                   />
                 </label>
@@ -221,7 +221,7 @@ export default function LoginPage() {
                   minHeight: 48,
                 }}
               >
-                {feedback || "Gebruik een bestaand account in je Supabase project."}
+                {feedback || "Gebruik een bestaand account in uw Supabase project."}
               </p>
               <div style={{ marginTop: 8 }}>
                 <Link

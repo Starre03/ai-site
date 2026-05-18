@@ -174,11 +174,11 @@ export default function QuickscanPage() {
       const nextErrors = {};
 
       if (!answers.name.trim()) {
-        nextErrors.name = "Vul je naam in.";
+        nextErrors.name = "Vul uw naam in.";
       }
 
       if (!answers.companyName.trim()) {
-        nextErrors.companyName = "Vul je bedrijfsnaam in.";
+        nextErrors.companyName = "Vul uw bedrijfsnaam in.";
       }
 
       if (Object.keys(nextErrors).length > 0) {
@@ -335,7 +335,7 @@ export default function QuickscanPage() {
     const nextErrors = {};
 
     if (!contact.email.trim()) {
-      nextErrors.email = "Vul je e-mailadres in.";
+      nextErrors.email = "Vul uw e-mailadres in.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim())) {
       nextErrors.email = "Gebruik een geldig e-mailadres.";
     }
@@ -478,7 +478,7 @@ export default function QuickscanPage() {
                 <span style={{ display: "block" }}>
                   Zie in <span style={{ color: "#38BDF8" }}>2</span> minuten
                 </span>
-                <span style={{ display: "block" }}>waar je bedrijf</span>
+                <span style={{ display: "block" }}>waar uw bedrijf</span>
                 <span style={{ display: "block" }}>tijd en geld laat liggen.</span>
               </h1>
               <p
@@ -492,7 +492,7 @@ export default function QuickscanPage() {
                   animationDelay: "120ms",
                 }}
               >
-                Je ziet waar tijd en geld te winnen valt, welke kansen er liggen en welke stap nu logisch is.
+                U ziet waar tijd en geld te winnen valt, welke kansen er liggen en welke stap nu logisch is.
               </p>
             </div>
 

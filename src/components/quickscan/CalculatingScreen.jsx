@@ -25,7 +25,7 @@ export default function CalculatingScreen({ durationMs = 5600, companyName, mess
   const trimmedCompany = (companyName || "").trim();
   const headline = trimmedCompany
     ? `We stellen het AI-rapport voor ${trimmedCompany} samen`
-    : "We stellen jouw persoonlijke AI-rapport samen";
+    : "We stellen uw persoonlijke AI-rapport samen";
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function CalculatingScreen({ durationMs = 5600, companyName, mess
             lineHeight: 1.6,
           }}
         >
-          Onze modellen wegen je antwoorden tegen elkaar af en zoeken de grootste kansen. Nog een paar seconden.
+          Onze modellen wegen uw antwoorden tegen elkaar af en zoeken de grootste kansen. Nog een paar seconden.
         </p>
       </div>
 

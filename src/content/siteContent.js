@@ -7,12 +7,12 @@ export const serviceMenuLinks = [
   {
     label: "AI Implementatie",
     to: "/ai-integraties",
-    description: "Claude, ChatGPT en OpenAI integraties voor support, documenten en kenniswerk.",
+    description: "Claude, ChatGPT en OpenAI praktisch ingericht voor support, documenten en kenniswerk.",
   },
   {
     label: "AI Automatisering",
     to: "/ai-automatisering",
-    description: "AI agents, koppelingen en maatwerkcode voor processen die zelfstandig doorlopen.",
+    description: "AI-agenten, koppelingen en maatwerkcode voor processen die zelfstandig doorlopen.",
   },
 ];
 
@@ -35,7 +35,7 @@ export const serviceCards = [
     eyebrow: "Dienst 02",
     title: "AI Implementatie",
     summary:
-      "Claude integratie, ChatGPT integratie en OpenAI integratie voor support, kenniswerk, documentanalyse en bestaande bedrijfsprocessen.",
+      "Claude, ChatGPT en OpenAI goed ingericht voor support, kenniswerk, documentanalyse en bestaande bedrijfsprocessen.",
     points: [
       "AI kennisassistenten op eigen data",
       "Document AI en samenvattingen",
@@ -48,9 +48,9 @@ export const serviceCards = [
     eyebrow: "Dienst 03",
     title: "AI Automatisering",
     summary:
-      "AI automatisering voor terugkerende processen. Van losse OpenClaw agent tot volledige workflow met koppelingen en maatwerkcode.",
+      "AI automatisering voor terugkerende processen. Van losse AI-agent tot volledige workflow met koppelingen en maatwerkcode.",
     points: [
-      "AI agents voor losse processtappen",
+      "AI-agenten voor losse processtappen",
       "Volledige workflows met maatwerkcode",
       "CRM, inbox, documenten en dashboards koppelen",
       "Human-in-the-loop waar controle nodig blijft",
@@ -61,15 +61,15 @@ export const serviceCards = [
 export const homeFaq = [
   {
     q: "Wat is een AI audit voor bedrijven precies?",
-    a: "Een AI audit brengt in kaart waar AI in jouw bedrijf het meeste oplevert. StarLeo kijkt naar workflows, bottlenecks, AI kansen, tooladvies en een logische implementatie roadmap. De audit is een zelfstandige dienst en hoeft niet gevolgd te worden door implementatie.",
+    a: "Een AI audit brengt in kaart waar AI in uw bedrijf het meeste oplevert. StarLeo kijkt naar workflows, bottlenecks, AI kansen, tooladvies en een logische implementatie roadmap. De audit is een zelfstandige dienst en hoeft niet gevolgd te worden door implementatie.",
   },
   {
     q: "Wanneer kiest u voor AI implementatie en wanneer voor AI automatisering?",
-    a: "AI implementatie is geschikt wanneer Claude, ChatGPT of bestaande AI-tools goed moeten worden ingericht in uw werk. AI automatisering past wanneer een proces zelfstandig moet doorlopen met agents, koppelingen en waar nodig maatwerkcode.",
+    a: "AI implementatie is geschikt wanneer Claude, ChatGPT of bestaande AI-tools goed moeten worden ingericht in uw werk. AI automatisering past wanneer een proces zelfstandig moet doorlopen met AI-agenten, koppelingen en waar nodig maatwerkcode.",
   },
   {
     q: "Wat valt onder AI automatisering?",
-    a: "Dat kan een losse OpenClaw agent zijn die een taak uitvoert, maar ook een volledig geautomatiseerd proces met formulieren, CRM, inbox, documenten, dashboards en maatwerkcode. We kiezen de vorm die past bij het proces.",
+    a: "Dat kan een losse AI-agent zijn die een taak uitvoert, maar ook een volledig geautomatiseerd proces met formulieren, CRM, inbox, documenten, dashboards en maatwerkcode. We kiezen de vorm die past bij het proces.",
   },
   {
     q: "Kunnen we ook direct starten met AI implementatie of automatisering?",
@@ -89,7 +89,7 @@ export const homeFaq = [
   },
   {
     q: "Hoe snel kunnen we starten?",
-    a: "Na een eerste gesprek kunnen we binnen één à twee weken starten. De AI Audit duurt gemiddeld twee tot drie weken. Een eerste AI automatisering of OpenClaw agent is doorgaans binnen enkele weken live.",
+    a: "Na een eerste gesprek kunnen we binnen één à twee weken starten. De AI Audit duurt gemiddeld twee tot drie weken. Een eerste AI automatisering of losse AI-agent is doorgaans binnen enkele weken live.",
   },
   {
     q: "Werkt dit ook voor kleinere bedrijven?",
@@ -107,21 +107,21 @@ export const demoTabs = [
     title: "AI audit voor bedrijven die eerst helder willen krijgen waar AI rendeert",
     prompt: "Analyseer ons klantproces van intake tot opvolging en laat zien welke AI implementatie nu het meeste oplevert.",
     answer:
-      "Workflowscan afgerond. Grootste winst zit in intake, documentverwerking en support triage. Advies: start met een AI audit voor prioritering, daarna een AI integratie voor documentanalyse. Verwachte besparing: 11-16 uur per week.",
+      "Workflowscan afgerond. Grootste winst zit in intake, documentverwerking en support triage. Advies: start met een AI audit voor prioritering, daarna AI implementatie voor documentanalyse. Verwachte besparing: 11-16 uur per week.",
   },
   {
-    label: "AI Integraties",
-    title: "Claude en ChatGPT integraties voor support, document AI en kenniswerk",
-    prompt: "Vat deze klantmail samen, haal actiepunten eruit en controleer relevante documentatie voordat je een supportantwoord voorbereidt.",
+    label: "AI Implementatie",
+    title: "Claude en ChatGPT implementatie voor support, document AI en kenniswerk",
+    prompt: "Vat deze klantmail samen, haal actiepunten eruit en controleer relevante documentatie voordat u een supportantwoord voorbereidt.",
     answer:
-      "Documenten geraadpleegd. Antwoordconcept klaar met correcte voorwaarden, samenvatting voor het team toegevoegd en ticket automatisch gelabeld als 'contractvraag - prioriteit hoog'. De AI integratie heeft context opgehaald uit de kennisbank en documentatie.",
+      "Documenten geraadpleegd. Antwoordconcept klaar met correcte voorwaarden, samenvatting voor het team toegevoegd en ticket automatisch gelabeld als 'contractvraag - prioriteit hoog'. De AI implementatie heeft context opgehaald uit de kennisbank en documentatie.",
   },
   {
     label: "AI Automatisering",
     title: "AI automatisering die processen zelfstandig laat doorlopen",
     prompt: "Nieuwe lead via inbox: beoordeel fit, start intake automation, verzamel context uit CRM en bereid opvolging voor.",
     answer:
-      "Lead verrijkt met CRM-data. Intakevragen verstuurd, urgentie ingeschat als hoog, conceptantwoord voorbereid en follow-up taak klaargezet voor sales. De automatisering combineert AI agents, koppelingen en vaste procesregels.",
+      "Lead verrijkt met CRM-data. Intakevragen verstuurd, urgentie ingeschat als hoog, conceptantwoord voorbereid en follow-up taak klaargezet voor sales. De automatisering combineert AI-agenten, koppelingen en vaste procesregels.",
   },
 ];
 
@@ -130,7 +130,7 @@ export const intakeSteps = [
     title: "Bedrijf",
     description: "Eerst de basis. Zo kunnen we inschatten voor wat voor type bedrijf en team we AI implementatie beoordelen.",
     fields: [
-      { id: "name", label: "Naam", type: "text", placeholder: "Je volledige naam", required: true },
+      { id: "name", label: "Naam", type: "text", placeholder: "Uw volledige naam", required: true },
       { id: "company", label: "Bedrijf", type: "text", placeholder: "Naam van het bedrijf", required: true },
       {
         id: "size",

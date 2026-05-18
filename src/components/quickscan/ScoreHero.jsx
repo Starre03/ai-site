@@ -338,19 +338,19 @@ function getMicroTitle(title) {
     return "Content";
   }
 
-  if (compact.includes("integratie")) {
-    return "Integratie";
+  if (compact.includes("integratie") || compact.includes("implementatie")) {
+    return "Implementatie";
   }
 
   return getCompactTitle(title);
 }
 
 const CLASSIFICATION_DESCRIPTIONS = {
-  "Grote AI-kans": "Er ligt nu een duidelijke en direct relevante AI-kans in je proces.",
-  "Sterke AI-kans": "Je hebt een sterke AI-kans, met concrete winst in tijd en efficiëntie.",
+  "Grote AI-kans": "Er ligt nu een duidelijke en direct relevante AI-kans in uw proces.",
+  "Sterke AI-kans": "U heeft een sterke AI-kans, met concrete winst in tijd en efficiëntie.",
   "Duidelijke AI-kans": "Er zijn duidelijke AI-kansen zichtbaar, vooral in repetitief of handmatig werk.",
   "AI-kans in opbouw": "Er zijn aanknopingspunten voor AI, maar de directe winst lijkt nog beperkter.",
-  Verkenningsfase: "Je zit nog in een vroege fase waarin AI vooral interessant is om te verkennen.",
+  Verkenningsfase: "U zit nog in een vroege fase waarin AI vooral interessant is om te verkennen.",
 };
 
 const SCORE_DIMENSIONS = [
@@ -382,7 +382,7 @@ function getDimensionExplanation(key, value) {
   }
 
   if (key === "d3_koopbereidheid") {
-    if (level === "Hoog") return "Je antwoorden laten zien dat er duidelijke bereidheid is om dit echt te verbeteren.";
+    if (level === "Hoog") return "Uw antwoorden laten zien dat er duidelijke bereidheid is om dit echt te verbeteren.";
     if (level === "Gemiddeld") return "Er is interesse om te verbeteren, maar de stap naar uitvoering lijkt nog deels verkennend.";
     return "De behoefte lijkt nu nog minder urgent of vooral bedoeld om eerst te oriënteren.";
   }
@@ -420,11 +420,11 @@ function getScoreStatusLine(score) {
   if (!score) return "";
 
   if (score.d1_tijdverlies >= 18 && score.d2_automatiseerbaarheid >= 18) {
-    return "Je grootste winst zit nu in taken die veel tijd kosten en relatief goed te automatiseren zijn.";
+    return "Uw grootste winst zit nu in taken die veel tijd kosten en relatief goed te automatiseren zijn.";
   }
 
   if (score.d1_tijdverlies >= 16 && score.d4_geldverlies >= 16) {
-    return "Je score laat zien dat er duidelijke AI-kansen liggen, vooral waar handmatig werk en geldverlies samenkomen.";
+    return "Uw score laat zien dat er duidelijke AI-kansen liggen, vooral waar handmatig werk en geldverlies samenkomen.";
   }
 
   if (score.d2_automatiseerbaarheid >= 18) {
@@ -432,7 +432,7 @@ function getScoreStatusLine(score) {
   }
 
   if (score.d3_koopbereidheid >= 18) {
-    return "Je antwoorden laten zien dat er niet alleen kans is, maar ook bereidheid om hier echt mee te bewegen.";
+    return "Uw antwoorden laten zien dat er niet alleen kans is, maar ook bereidheid om hier echt mee te bewegen.";
   }
 
   if (score.total_score >= 45) {
@@ -774,7 +774,7 @@ function ScoreSection({ score, benchmark }) {
             lineHeight: 1.5,
           }}
         >
-          Deze quickscan-score is een interne inschatting op basis van je antwoorden en de onderliggende scoreverdeling.
+          Deze quickscan-score is een interne inschatting op basis van uw antwoorden en de onderliggende scoreverdeling.
         </p>
       </div>
     </div>
@@ -782,7 +782,7 @@ function ScoreSection({ score, benchmark }) {
 }
 
 export default function ScoreHero({ result, recommendations, onCtaClick }) {
-  const titleText = result.primaryConclusion || result.hero?.headline || `Je grootste winst zit nu in ${result.opportunityLabel.toLowerCase()}.`;
+  const titleText = result.primaryConclusion || result.hero?.headline || `Uw grootste winst zit nu in ${result.opportunityLabel.toLowerCase()}.`;
   const scoreSummary = result.score
     ? `Quickscan-score: ${result.score.total_score}/100 · ${result.score.classification}`
     : null;
@@ -885,7 +885,7 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
         <SummaryCard
           label="Geld"
           value={`${formatCurrency(result.savings.monthlyLow)} - ${formatCurrency(result.savings.monthlyHigh)} p/m`}
-          note={`${result.savings.yearlyLabel}\nDit is een indicatie op basis van jouw antwoorden en inschattingen.`}
+          note={`${result.savings.yearlyLabel}\nDit is een indicatie op basis van uw antwoorden en inschattingen.`}
           details={result.savings.timeInfoText}
           accent
           animationDelay="460ms"

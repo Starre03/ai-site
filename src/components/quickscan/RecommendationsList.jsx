@@ -9,7 +9,7 @@ export default function RecommendationsList({ items }) {
           Wat nu direct beter kan
         </h3>
         <p style={{ margin: 0, color: C.textSoft, lineHeight: 1.65, fontFamily: BODY }}>
-          Dit zijn de 3 meest logische verbeteringen op basis van je antwoorden.
+          Dit zijn de 3 meest logische verbeteringen op basis van uw antwoorden.
         </p>
       </div>
       <div style={{ display: "grid", gap: 12 }}>

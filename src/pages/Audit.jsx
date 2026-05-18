@@ -151,7 +151,7 @@ export default function AuditPage() {
               },
               {
                 title: "Concrete AI kansen",
-                body: "U ziet per proces waar AI direct waarde toevoegt, welke tooling daarbij past en of een kennisassistent, integratie of agent de juiste aanpak is.",
+                body: "U ziet per proces waar AI direct waarde toevoegt, welke tooling daarbij past en of een kennisassistent, implementatie of automatisering de juiste aanpak is.",
               },
               {
                 title: "Roadmap en prioriteiten",

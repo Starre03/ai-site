@@ -11,15 +11,15 @@ export default function PrivacyPage() {
   const sections = [
     {
       title: "1. Wie is verantwoordelijk?",
-      text: `${siteConfig.legalName} is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Voor vragen over deze verklaring kun je contact opnemen via ${siteConfig.contactEmail}.`,
+      text: `${siteConfig.legalName} is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Voor vragen over deze verklaring kunt u contact opnemen via ${siteConfig.contactEmail}.`,
     },
     {
       title: "2. Welke gegevens verzamelen wij?",
-      text: "Via het intakeformulier en de quickscan verzamelen wij: naam, bedrijfsnaam, e-mailadres, telefoonnummer (optioneel), bedrijfsgrootte, AI use-cases, huidige tools, quickscan-antwoorden en eventuele extra context die je zelf invult. Daarnaast kunnen wij privacyvriendelijke webstatistieken en funnel-events verwerken, zoals paginabezoeken en formulierstappen, zonder advertentiecookies.",
+      text: "Via het intakeformulier en de quickscan verzamelen wij: naam, bedrijfsnaam, e-mailadres, telefoonnummer (optioneel), bedrijfsgrootte, AI use-cases, huidige tools, quickscan-antwoorden en eventuele extra context die u zelf invult. Daarnaast kunnen wij privacyvriendelijke webstatistieken en funnel-events verwerken, zoals paginabezoeken en formulierstappen, zonder advertentiecookies.",
     },
     {
       title: "3. Waarvoor gebruiken wij deze gegevens?",
-      text: "Wij gebruiken je gegevens uitsluitend om contact met je op te nemen naar aanleiding van je intake, om het gesprek inhoudelijk voor te bereiden, en om onze dienstverlening te verbeteren. Wij delen je gegevens niet met derden voor marketingdoeleinden.",
+      text: "Wij gebruiken uw gegevens uitsluitend om contact met u op te nemen naar aanleiding van uw intake, om het gesprek inhoudelijk voor te bereiden, en om onze dienstverlening te verbeteren. Wij delen uw gegevens niet met derden voor marketingdoeleinden.",
     },
     {
       title: "4. Hoe lang bewaren wij gegevens?",
@@ -27,11 +27,11 @@ export default function PrivacyPage() {
     },
     {
       title: "5. Beveiliging",
-      text: "Wij nemen passende technische en organisatorische maatregelen om je persoonsgegevens te beschermen tegen ongeoorloofde toegang, verlies of misbruik.",
+      text: "Wij nemen passende technische en organisatorische maatregelen om uw persoonsgegevens te beschermen tegen ongeoorloofde toegang, verlies of misbruik.",
     },
     {
-      title: "6. Jouw rechten",
-      text: `Je hebt het recht om je gegevens in te zien, te corrigeren of te laten verwijderen. Ook kun je bezwaar maken tegen de verwerking of verzoeken om gegevensoverdracht. Neem hiervoor contact op via ${siteConfig.contactEmail}.`,
+      title: "6. Uw rechten",
+      text: `U heeft het recht om uw gegevens in te zien, te corrigeren of te laten verwijderen. Ook kunt u bezwaar maken tegen de verwerking of verzoeken om gegevensoverdracht. Neem hiervoor contact op via ${siteConfig.contactEmail}.`,
     },
     {
       title: "7. Cookies",
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
       <SectionHeading
         tag="Privacy"
         title="Privacyverklaring"
-        text="Hoe StarLeo omgaat met je gegevens."
+        text="Hoe StarLeo omgaat met uw gegevens."
       />
       <div style={{ marginTop: 32, maxWidth: 720 }}>
         {sections.map((section, index) => (

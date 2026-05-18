@@ -87,7 +87,7 @@ export default function QuestionStep({
               <input
                 id="quickscan-profile-name"
                 type="text"
-                placeholder="Je naam"
+                placeholder="Uw naam"
                 value={answers.name || ""}
                 onChange={(event) => onProfileChange("name", event.target.value)}
                 aria-invalid={Boolean(errors.name)}

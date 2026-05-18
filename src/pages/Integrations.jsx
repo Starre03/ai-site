@@ -25,9 +25,9 @@ const integrationsFaqItems = [
 
 export default function IntegrationsPage() {
   usePageSeo({
-    title: "Claude & ChatGPT integratie voor bedrijven — AI implementatie | StarLeo",
+    title: "Claude & ChatGPT implementatie voor bedrijven — AI implementatie | StarLeo",
     description:
-      "AI integraties voor bedrijven met Claude, ChatGPT en OpenAI. Voor support, documentanalyse, AI kennisassistenten en workflow verbetering in bestaande processen.",
+      "AI implementatie voor bedrijven met Claude, ChatGPT en OpenAI. Voor support, documentanalyse, AI kennisassistenten en workflow verbetering in bestaande processen.",
   });
 
   return (
@@ -54,7 +54,7 @@ export default function IntegrationsPage() {
             event.preventDefault();
             document.getElementById("intake")?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}>
-            Bespreek AI integraties →
+            Bespreek AI implementatie →
           </PrimaryButton>,
           <PrimaryButton key="automation" secondary to="/ai-automatisering">
             Bekijk AI automatisering
@@ -64,7 +64,7 @@ export default function IntegrationsPage() {
           <GlowCard style={{ background: C.bg2, maxWidth: 360 }}>
             <div style={{ padding: "1.35rem" }}>
               <div style={{ color: C.primary, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: BODY }}>
-                Van idee naar werkende integratie
+                Van idee naar werkende implementatie
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
                 {[
@@ -285,7 +285,7 @@ export default function IntegrationsPage() {
       </PageSection>
 
       <IntakeForm
-        preferredRoute="AI Integraties"
+        preferredRoute="AI Implementatie"
         centered
         tagLabel="Contact"
         steps={contactSteps}
@@ -298,7 +298,7 @@ export default function IntegrationsPage() {
             </span>
           </>
         }
-        text="Beschrijf uw situatie kort. Dan kijken we samen welke integratie het meeste oplevert."
+        text="Beschrijf uw situatie kort. Dan kijken we samen welke implementatie het meeste oplevert."
         submitLabel="Verstuur bericht →"
         doneTitle="Bericht ontvangen"
         doneText="We nemen contact op om uw situatie en wensen verder te bespreken."

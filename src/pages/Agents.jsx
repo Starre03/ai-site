@@ -11,8 +11,8 @@ const automationFaqItems = [
     a: "AI automatisering kan een losse agent zijn die een taak uitvoert, maar ook een volledig proces met formulieren, CRM, inbox, documenten, dashboards en maatwerkcode. We kiezen de vorm die past bij uw proces.",
   },
   {
-    q: "Wat is het verschil tussen OpenClaw agents en maatwerkautomatisering?",
-    a: "OpenClaw agents zijn sterk voor losse taken of processtappen, zoals opvolging, triage, samenvatting of conceptoutput. Maatwerkautomatisering gebruiken we wanneer meerdere systemen, data en stappen betrouwbaar samen moeten werken.",
+    q: "Wat is het verschil tussen een losse AI-agent en maatwerkautomatisering?",
+    a: "Een losse AI-agent is sterk voor afgebakende taken of processtappen, zoals opvolging, triage, samenvatting of conceptoutput. Maatwerkautomatisering gebruiken we wanneer meerdere systemen, data en stappen betrouwbaar samen moeten werken.",
   },
   {
     q: "Zijn onze gegevens veilig?",
@@ -27,7 +27,7 @@ const automationFaqItems = [
 const automationRoutes = [
   {
     id: "agent",
-    label: "OpenClaw agent",
+    label: "Losse AI-agent",
     summary: "Voor één duidelijke taak of processtap die snel zelfstandig kan draaien.",
     steps: [
       "Trigger uit inbox, formulier of planning",
@@ -44,6 +44,33 @@ const automationRoutes = [
       "Maatwerkcode bouwt logica, dashboard en controles",
       "Workflow draait door met beheer en verbeteringen",
     ],
+  },
+];
+
+const automationExamples = [
+  {
+    title: "Leadopvolging",
+    body: "Nieuwe aanvragen beoordelen, verrijken, prioriteren en automatisch klaarzetten voor opvolging.",
+  },
+  {
+    title: "Offerteflow",
+    body: "Input uit formulieren of gesprekken omzetten naar conceptoffertes, documenten en interne taken.",
+  },
+  {
+    title: "Documentverwerking",
+    body: "Contracten, dossiers of rapporten laten uitlezen, samenvatten, controleren en routeren.",
+  },
+  {
+    title: "Supporttriage",
+    body: "Binnenkomende vragen categoriseren, beantwoorden of doorzetten naar de juiste persoon.",
+  },
+  {
+    title: "Rapportage",
+    body: "Data uit meerdere bronnen verzamelen en vertalen naar terugkerende rapportages of dashboards.",
+  },
+  {
+    title: "Contentplanning",
+    body: "Briefings, onderwerpen, concepten en publicatiestappen automatisch voorbereiden en bewaken.",
   },
 ];
 
@@ -235,9 +262,9 @@ function AutomationRoutePreview() {
 
 export default function AgentsPage() {
   usePageSeo({
-    title: "AI Automatisering voor bedrijven — Agents, koppelingen & maatwerkcode | StarLeo",
+    title: "AI Automatisering voor bedrijven — AI-agenten, koppelingen & maatwerkcode | StarLeo",
     description:
-      "AI automatisering voor bedrijven. Van OpenClaw agents voor losse taken tot volledige procesautomatisering met koppelingen, dashboards en maatwerkcode.",
+      "AI automatisering voor bedrijven. Van losse AI-agenten voor afgebakende taken tot volledige procesautomatisering met koppelingen, dashboards en maatwerkcode.",
   });
 
   return (
@@ -253,10 +280,10 @@ export default function AgentsPage() {
           <>
             AI automatisering die processen
             <span style={{ display: "block" }}>zelfstandig laat doorlopen.</span>
-            <span style={{ display: "block", color: C.primary }}>Met agents, koppelingen en maatwerkcode.</span>
+            <span style={{ display: "block", color: C.primary }}>Met AI-agenten, koppelingen en maatwerkcode.</span>
           </>
         }
-        text="Wij automatiseren terugkerende processen met AI agents, bestaande tools en waar nodig maatwerkcode. Soms is een losse OpenClaw agent genoeg. Soms bouwen we de volledige workflow, inclusief koppelingen, dashboards en controlepunten."
+        text="Wij automatiseren terugkerende processen met AI-agenten, bestaande tools en waar nodig maatwerkcode. Soms is een losse AI-agent genoeg. Soms bouwen we de volledige workflow, inclusief koppelingen, dashboards en controlepunten."
         actions={[
           <PrimaryButton key="intake" href="#intake" onClick={(event) => {
             event.preventDefault();
@@ -290,7 +317,7 @@ export default function AgentsPage() {
           <div className="card-grid-two" style={{ marginTop: 28 }}>
             {[
               {
-                title: "OpenClaw agents instellen",
+                title: "Losse AI-agenten instellen",
                 body: "Voor losse taken zoals inbox triage, leadopvolging, samenvattingen, conceptantwoorden, rapportvoorbereiding of taakroutering.",
               },
               {
@@ -333,9 +360,42 @@ export default function AgentsPage() {
       </PageSection>
 
       <PageSection bg={C.bg} minH="100vh" centerY>
+        <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
+          <SectionHeading
+            centered
+            tag="Voorbeelden"
+            title={
+              <>
+                Processen die wij
+                <span style={{ display: "block", color: C.primary, fontStyle: "italic" }}>
+                  concreet kunnen automatiseren.
+                </span>
+              </>
+            }
+            text="De beste automatisering begint klein genoeg om betrouwbaar te bouwen, maar groot genoeg om merkbaar tijd terug te winnen."
+          />
+          <div className="card-grid-three" style={{ marginTop: 32 }}>
+            {automationExamples.map((item, index) => (
+              <Reveal key={item.title} delay={0.14 + index * 0.04} fill>
+                <GlowCard style={{ background: C.bg2, height: "100%" }}>
+                  <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
+                    <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 700, lineHeight: 1.35 }}>{item.title}</h3>
+                    <p style={{ color: C.textSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                      {item.body}
+                    </p>
+                  </div>
+                </GlowCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </PageSection>
+
+      <PageSection bg={C.lightBg} minH="100vh" centerY>
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
             centered
+            light
             tag="Wanneer dit past"
             title={
               <>
@@ -367,10 +427,10 @@ export default function AgentsPage() {
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
-                <GlowCard style={{ background: C.bg2, height: "100%" }}>
+                <GlowCard light style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
                   <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
                     <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.35 }}>{item.title}</h3>
-                    <p style={{ color: C.text, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                    <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
                       {item.body}
                     </p>
                   </div>
@@ -381,12 +441,11 @@ export default function AgentsPage() {
         </div>
       </PageSection>
 
-      <PageSection bg={C.lightBg} minH="100vh" centerY>
+      <PageSection bg={C.bg} minH="100vh" centerY>
         <div style={{ maxWidth: 1120, margin: "0 auto", textAlign: "center" }}>
           <SectionHeading
             centered
-            light
-            tag="Agents of maatwerk"
+            tag="AI-agenten of maatwerk"
             title={
               <>
                 Niet elk proces vraagt dezelfde oplossing.
@@ -395,12 +454,12 @@ export default function AgentsPage() {
                 </span>
               </>
             }
-            text="Soms is OpenClaw de snelste route: een agent die één duidelijk stuk werk uitvoert. Als het proces breder is, voegen we koppelingen, eigen logica, dashboards of maatwerksoftware toe."
+            text="Soms is een losse AI-agent de snelste route: één duidelijk stuk werk automatiseren met OpenClaw waar dat past. Als het proces breder is, voegen we koppelingen, eigen logica, dashboards of maatwerksoftware toe."
           />
           <div className="card-grid-two" style={{ marginTop: 32 }}>
             {[
               {
-                title: "OpenClaw voor losse onderdelen",
+                title: "Losse AI-agenten voor onderdelen",
                 body: "Sterk wanneer één taak of processtap terugkomt: triage, opvolging, samenvatting, conceptoutput of interne voorbereiding.",
               },
               {
@@ -418,12 +477,11 @@ export default function AgentsPage() {
             ].map((item, index) => (
               <Reveal key={item.title} delay={0.18 + index * 0.05} fill>
                 <GlowCard
-                  light
-                  style={{ background: C.lightCard, height: "100%", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                  style={{ background: C.bg2, height: "100%" }}
                 >
                   <div style={{ padding: "1.35rem", height: "100%", textAlign: "left" }}>
                     <h3 style={{ color: C.primary, fontFamily: BODY, fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.35 }}>{item.title}</h3>
-                    <p style={{ color: C.lightTextSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
+                    <p style={{ color: C.textSoft, fontFamily: BODY, fontSize: "0.82rem", lineHeight: 1.75, marginTop: 10 }}>
                       {item.body}
                     </p>
                   </div>
@@ -434,9 +492,10 @@ export default function AgentsPage() {
         </div>
       </PageSection>
 
-      <PageSection bg={C.bg} minH="100vh" centerY>
+      <PageSection bg={C.lightBg} minH="100vh" centerY>
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <Faq
+            light
             centered
             items={automationFaqItems}
             title={
@@ -447,7 +506,7 @@ export default function AgentsPage() {
                 </span>
               </>
             }
-            text="Heldere antwoorden over agents, maatwerkcode, veiligheid en wanneer volledige automatisering zinvol is."
+            text="Heldere antwoorden over AI-agenten, maatwerkcode, veiligheid en wanneer volledige automatisering zinvol is."
           />
         </div>
       </PageSection>

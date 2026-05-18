@@ -278,7 +278,7 @@ export default function IntakeForm({
                 ✓
               </div>
               <h2 style={{ fontFamily: BODY, fontSize: "1.6rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
-                {doneTitle || "Je intake voor StarLeo is binnen"}
+                {doneTitle || "Uw intake voor StarLeo is binnen"}
               </h2>
               <p style={{ color: C.textSoft, marginTop: 12, lineHeight: 1.7, fontFamily: BODY }}>
                 {doneText ||

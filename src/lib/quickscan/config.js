@@ -126,36 +126,36 @@ export const TOOL_OPTIONS_BY_PROCESS = {
 };
 
 const AI_USAGE_TITLE_BY_PAIN_POINT = {
-  "losse-vragen-berichten": "Gebruik je al AI bij het beantwoorden van terugkerende vragen?",
-  "leads-niet-opgevolgd": "Gebruik je al AI bij lead- en klantopvolging?",
-  "leads-buiten-kantooruren": "Gebruik je al AI bij het opvangen van leads buiten kantooruren?",
-  "informatie-verspreid": "Gebruik je al AI bij het bundelen van klantinformatie?",
-  "overdracht-kost-tijd": "Gebruik je al AI bij overdracht en opvolging?",
-  "gegevens-overzetten": "Gebruik je al AI bij invoer en verwerking van gegevens?",
-  "invoer-controles": "Gebruik je al AI bij controles en checks?",
-  "documenten-facturen": "Gebruik je al AI bij facturen en documentverwerking?",
-  "overzichten-maken": "Gebruik je al AI bij het maken van overzichten?",
-  "fouten-herstellen": "Gebruik je al AI bij foutcontrole en correcties?",
-  "briefings-input": "Gebruik je al AI bij het bedenken van content?",
-  "content-handwerk": "Gebruik je al AI bij het maken van content?",
-  "feedback-afstemming": "Gebruik je al AI om content consistenter te maken?",
-  "publicatie-planning": "Gebruik je al AI bij publicatie en planning?",
-  "campagnes-doorvertalen": "Gebruik je al AI bij het doorvertalen van campagnes?",
-  "offertes-opstellen": "Gebruik je al AI bij het opstellen van offertes?",
-  "documenten-aanpassen": "Gebruik je al AI bij het aanpassen van documenten?",
-  "versies-feedback": "Gebruik je al AI bij versiebeheer en feedbackverwerking?",
-  "dossiers-opbouwen": "Gebruik je al AI bij het opbouwen van dossiers?",
-  "informatie-opnieuw-invullen": "Gebruik je al AI bij het hergebruiken van gegevens in documenten?",
-  "planning-handwerk": "Gebruik je al AI bij planning en afstemming?",
-  "overdracht-onduidelijk": "Gebruik je al AI bij overdracht tussen mensen?",
-  "taken-versnipperd": "Gebruik je al AI bij het bundelen van taken en afspraken?",
-  "losse-berichten": "Gebruik je al AI bij interne afstemming via berichten?",
-  "opvolging-niet-strak": "Gebruik je al AI bij interne opvolging?",
-  "data-verzamelen": "Gebruik je al AI bij het verzamelen van data?",
-  "rapportages-langzaam": "Gebruik je al AI bij het maken van rapportages?",
-  "te-veel-bronnen": "Gebruik je al AI bij het combineren van informatie uit meerdere systemen?",
-  "controle-opschoning": "Gebruik je al AI bij controle en opschoning van data?",
-  "inzicht-te-laat": "Gebruik je al AI om sneller inzicht uit data te halen?",
+  "losse-vragen-berichten": "Gebruikt u al AI bij het beantwoorden van terugkerende vragen?",
+  "leads-niet-opgevolgd": "Gebruikt u al AI bij lead- en klantopvolging?",
+  "leads-buiten-kantooruren": "Gebruikt u al AI bij het opvangen van leads buiten kantooruren?",
+  "informatie-verspreid": "Gebruikt u al AI bij het bundelen van klantinformatie?",
+  "overdracht-kost-tijd": "Gebruikt u al AI bij overdracht en opvolging?",
+  "gegevens-overzetten": "Gebruikt u al AI bij invoer en verwerking van gegevens?",
+  "invoer-controles": "Gebruikt u al AI bij controles en checks?",
+  "documenten-facturen": "Gebruikt u al AI bij facturen en documentverwerking?",
+  "overzichten-maken": "Gebruikt u al AI bij het maken van overzichten?",
+  "fouten-herstellen": "Gebruikt u al AI bij foutcontrole en correcties?",
+  "briefings-input": "Gebruikt u al AI bij het bedenken van content?",
+  "content-handwerk": "Gebruikt u al AI bij het maken van content?",
+  "feedback-afstemming": "Gebruikt u al AI om content consistenter te maken?",
+  "publicatie-planning": "Gebruikt u al AI bij publicatie en planning?",
+  "campagnes-doorvertalen": "Gebruikt u al AI bij het doorvertalen van campagnes?",
+  "offertes-opstellen": "Gebruikt u al AI bij het opstellen van offertes?",
+  "documenten-aanpassen": "Gebruikt u al AI bij het aanpassen van documenten?",
+  "versies-feedback": "Gebruikt u al AI bij versiebeheer en feedbackverwerking?",
+  "dossiers-opbouwen": "Gebruikt u al AI bij het opbouwen van dossiers?",
+  "informatie-opnieuw-invullen": "Gebruikt u al AI bij het hergebruiken van gegevens in documenten?",
+  "planning-handwerk": "Gebruikt u al AI bij planning en afstemming?",
+  "overdracht-onduidelijk": "Gebruikt u al AI bij overdracht tussen mensen?",
+  "taken-versnipperd": "Gebruikt u al AI bij het bundelen van taken en afspraken?",
+  "losse-berichten": "Gebruikt u al AI bij interne afstemming via berichten?",
+  "opvolging-niet-strak": "Gebruikt u al AI bij interne opvolging?",
+  "data-verzamelen": "Gebruikt u al AI bij het verzamelen van data?",
+  "rapportages-langzaam": "Gebruikt u al AI bij het maken van rapportages?",
+  "te-veel-bronnen": "Gebruikt u al AI bij het combineren van informatie uit meerdere systemen?",
+  "controle-opschoning": "Gebruikt u al AI bij controle en opschoning van data?",
+  "inzicht-te-laat": "Gebruikt u al AI om sneller inzicht uit data te halen?",
 };
 
 const HOURLY_VALUE_TITLE_BY_PAIN_POINT = {
@@ -208,36 +208,36 @@ export const HOURLY_VALUE_OPTIONS = [
 ];
 
 const AI_FOLLOWUP_TITLE_BY_PAIN_POINT = {
-  "losse-vragen-berichten": "Wat werkt nog niet goed aan hoe je AI terugkerende vragen laat ondersteunen?",
-  "leads-niet-opgevolgd": "Wat werkt nog niet goed aan hoe je AI voor opvolging inzet?",
-  "leads-buiten-kantooruren": "Wat werkt nog niet goed aan hoe je AI buiten kantooruren inzet?",
-  "informatie-verspreid": "Wat werkt nog niet goed aan hoe je AI informatie laat bundelen?",
-  "overdracht-kost-tijd": "Wat werkt nog niet goed aan hoe je AI bij overdracht inzet?",
-  "gegevens-overzetten": "Wat werkt nog niet goed aan hoe je AI bij invoer inzet?",
-  "invoer-controles": "Wat werkt nog niet goed aan hoe je AI voor controles inzet?",
-  "documenten-facturen": "Wat werkt nog niet goed aan hoe je AI voor documenten en facturen inzet?",
-  "overzichten-maken": "Wat werkt nog niet goed aan hoe je AI voor overzichten inzet?",
-  "fouten-herstellen": "Wat werkt nog niet goed aan hoe je AI voor foutcontrole inzet?",
-  "briefings-input": "Wat werkt nog niet goed aan hoe je AI voor contentideeën inzet?",
-  "content-handwerk": "Wat werkt nog niet goed aan hoe je AI bij content maken inzet?",
-  "feedback-afstemming": "Wat werkt nog niet goed aan hoe je AI voor contentafstemming inzet?",
-  "publicatie-planning": "Wat werkt nog niet goed aan hoe je AI bij publicatie en planning inzet?",
-  "campagnes-doorvertalen": "Wat werkt nog niet goed aan hoe je AI voor campagnes inzet?",
-  "offertes-opstellen": "Wat werkt nog niet goed aan hoe je AI voor offertes inzet?",
-  "documenten-aanpassen": "Wat werkt nog niet goed aan hoe je AI voor documenten inzet?",
-  "versies-feedback": "Wat werkt nog niet goed aan hoe je AI voor versiebeheer inzet?",
-  "dossiers-opbouwen": "Wat werkt nog niet goed aan hoe je AI voor dossiers inzet?",
-  "informatie-opnieuw-invullen": "Wat werkt nog niet goed aan hoe je AI gegevens laat hergebruiken?",
-  "planning-handwerk": "Wat werkt nog niet goed aan hoe je AI voor planning inzet?",
-  "overdracht-onduidelijk": "Wat werkt nog niet goed aan hoe je AI voor overdracht inzet?",
-  "taken-versnipperd": "Wat werkt nog niet goed aan hoe je AI taken en afspraken laat bundelen?",
-  "losse-berichten": "Wat werkt nog niet goed aan hoe je AI bij interne berichten inzet?",
-  "opvolging-niet-strak": "Wat werkt nog niet goed aan hoe je AI voor interne opvolging inzet?",
-  "data-verzamelen": "Wat werkt nog niet goed aan hoe je AI voor dataverzameling inzet?",
-  "rapportages-langzaam": "Wat werkt nog niet goed aan hoe je AI voor rapportages inzet?",
-  "te-veel-bronnen": "Wat werkt nog niet goed aan hoe je AI informatie uit systemen combineert?",
-  "controle-opschoning": "Wat werkt nog niet goed aan hoe je AI voor data-opschoning inzet?",
-  "inzicht-te-laat": "Wat werkt nog niet goed aan hoe je AI sneller inzicht laat geven?",
+  "losse-vragen-berichten": "Wat werkt nog niet goed aan hoe u AI terugkerende vragen laat ondersteunen?",
+  "leads-niet-opgevolgd": "Wat werkt nog niet goed aan hoe u AI voor opvolging inzet?",
+  "leads-buiten-kantooruren": "Wat werkt nog niet goed aan hoe u AI buiten kantooruren inzet?",
+  "informatie-verspreid": "Wat werkt nog niet goed aan hoe u AI informatie laat bundelen?",
+  "overdracht-kost-tijd": "Wat werkt nog niet goed aan hoe u AI bij overdracht inzet?",
+  "gegevens-overzetten": "Wat werkt nog niet goed aan hoe u AI bij invoer inzet?",
+  "invoer-controles": "Wat werkt nog niet goed aan hoe u AI voor controles inzet?",
+  "documenten-facturen": "Wat werkt nog niet goed aan hoe u AI voor documenten en facturen inzet?",
+  "overzichten-maken": "Wat werkt nog niet goed aan hoe u AI voor overzichten inzet?",
+  "fouten-herstellen": "Wat werkt nog niet goed aan hoe u AI voor foutcontrole inzet?",
+  "briefings-input": "Wat werkt nog niet goed aan hoe u AI voor contentideeën inzet?",
+  "content-handwerk": "Wat werkt nog niet goed aan hoe u AI bij content maken inzet?",
+  "feedback-afstemming": "Wat werkt nog niet goed aan hoe u AI voor contentafstemming inzet?",
+  "publicatie-planning": "Wat werkt nog niet goed aan hoe u AI bij publicatie en planning inzet?",
+  "campagnes-doorvertalen": "Wat werkt nog niet goed aan hoe u AI voor campagnes inzet?",
+  "offertes-opstellen": "Wat werkt nog niet goed aan hoe u AI voor offertes inzet?",
+  "documenten-aanpassen": "Wat werkt nog niet goed aan hoe u AI voor documenten inzet?",
+  "versies-feedback": "Wat werkt nog niet goed aan hoe u AI voor versiebeheer inzet?",
+  "dossiers-opbouwen": "Wat werkt nog niet goed aan hoe u AI voor dossiers inzet?",
+  "informatie-opnieuw-invullen": "Wat werkt nog niet goed aan hoe u AI gegevens laat hergebruiken?",
+  "planning-handwerk": "Wat werkt nog niet goed aan hoe u AI voor planning inzet?",
+  "overdracht-onduidelijk": "Wat werkt nog niet goed aan hoe u AI voor overdracht inzet?",
+  "taken-versnipperd": "Wat werkt nog niet goed aan hoe u AI taken en afspraken laat bundelen?",
+  "losse-berichten": "Wat werkt nog niet goed aan hoe u AI bij interne berichten inzet?",
+  "opvolging-niet-strak": "Wat werkt nog niet goed aan hoe u AI voor interne opvolging inzet?",
+  "data-verzamelen": "Wat werkt nog niet goed aan hoe u AI voor dataverzameling inzet?",
+  "rapportages-langzaam": "Wat werkt nog niet goed aan hoe u AI voor rapportages inzet?",
+  "te-veel-bronnen": "Wat werkt nog niet goed aan hoe u AI informatie uit systemen combineert?",
+  "controle-opschoning": "Wat werkt nog niet goed aan hoe u AI voor data-opschoning inzet?",
+  "inzicht-te-laat": "Wat werkt nog niet goed aan hoe u AI sneller inzicht laat geven?",
 };
 
 export const QUESTIONS = [
@@ -245,13 +245,13 @@ export const QUESTIONS = [
     id: "profile",
     stepId: "v0-profiel",
     kind: "profile",
-    title: "Eerst even je gegevens.",
+    title: "Eerst even uw gegevens.",
   },
   {
     id: "processType",
     stepId: "v1-proces",
     kind: "single",
-    title: "Welk proces zou je als eerste willen verbeteren?",
+    title: "Welk proces zou u als eerste willen verbeteren?",
     options: PROCESS_OPTIONS,
   },
   {
@@ -279,7 +279,7 @@ export const QUESTIONS = [
     id: "hourlyValue",
     stepId: "v3-uurwaarde",
     kind: "hourly-value",
-    title: "Wat is ongeveer een uur in jouw bedrijf waard?",
+    title: "Wat is ongeveer een uur in uw bedrijf waard?",
     description: "Schatting is prima. Dit gebruiken we alleen voor een realistischer indicatie.",
     options: HOURLY_VALUE_OPTIONS,
   },
@@ -287,14 +287,14 @@ export const QUESTIONS = [
     id: "tools",
     stepId: "v4-tools",
     kind: "multi",
-    title: "Welke tools of kanalen gebruik je nu voor dit werk?",
+    title: "Welke tools of kanalen gebruikt u nu voor dit werk?",
     options: [],
   },
   {
     id: "aiUsage",
     stepId: "v5-ai",
     kind: "single",
-    title: "Gebruik je hier al AI voor?",
+    title: "Gebruikt u hier al AI voor?",
     options: [
       { value: "nog-niet", label: "Nog niet" },
       { value: "af-en-toe", label: "Af en toe" },
@@ -306,7 +306,7 @@ export const QUESTIONS = [
     id: "aiIssue",
     stepId: "v5-ai-frictie",
     kind: "single",
-    title: "Wat werkt nog niet goed aan hoe je AI nu inzet?",
+    title: "Wat werkt nog niet goed aan hoe u AI nu inzet?",
     options: [
       { value: "kwaliteit-wisselvallig", label: "Kwaliteit is wisselvallig" },
       { value: "handwerk-eromheen", label: "Te veel handmatig werk er omheen" },
@@ -347,10 +347,10 @@ export const getPainPointQuestionTitle = (processType) => {
 };
 
 export const getAiUsageQuestionTitle = (painPoint) =>
-  AI_USAGE_TITLE_BY_PAIN_POINT[painPoint] || "Gebruik je hier al AI voor?";
+  AI_USAGE_TITLE_BY_PAIN_POINT[painPoint] || "Gebruikt u hier al AI voor?";
 
 export const getAiFollowupQuestionTitle = (painPoint) =>
-  AI_FOLLOWUP_TITLE_BY_PAIN_POINT[painPoint] || "Wat werkt nog niet goed aan hoe je AI nu inzet?";
+  AI_FOLLOWUP_TITLE_BY_PAIN_POINT[painPoint] || "Wat werkt nog niet goed aan hoe u AI nu inzet?";
 
 export const getHourlyValueQuestionTitle = (painPoint, processType) =>
   HOURLY_VALUE_TITLE_BY_PAIN_POINT[painPoint] ||
@@ -439,7 +439,7 @@ export const SAVINGS_SCENARIOS = {
 
 export const SERVICE_LABELS = {
   audit: "AI Audit",
-  integrations: "AI Integraties",
+  integrations: "AI Implementatie",
   agents: "AI Automatisering",
   optimization: "Gerichte optimalisatie",
   advice: "Strategisch advies",
@@ -451,4 +451,4 @@ export const LIMITATIONS_TEXT =
   "Deze schatting houdt geen rekening met implementatiekosten, leercurve of bedrijfsspecifieke uitzonderingen.";
 
 export const DISCLAIMER_TEXT =
-  "Indicatieve schatting — Dit bedrag is een grove indicatie gebaseerd op je opgegeven uren en een standaard uurtarief. Het werkelijke resultaat hangt af van je specifieke situatie en de gekozen oplossing. Aan deze berekening kunnen geen rechten worden ontleend.";
+  "Indicatieve schatting — Dit bedrag is een grove indicatie gebaseerd op uw opgegeven uren en een standaard uurtarief. Het werkelijke resultaat hangt af van uw specifieke situatie en de gekozen oplossing. Aan deze berekening kunnen geen rechten worden ontleend.";

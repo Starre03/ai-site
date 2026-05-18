@@ -120,12 +120,12 @@ const serviceCards = [
   },
   {
     title: "AI Implementatie",
-    desc: "AI direct werkend in uw bestaande processen. Geen software bouwen, maar de juiste tool goed ingericht op uw situatie.",
+    desc: "We richten Claude, ChatGPT en andere AI-tools in op uw processen, zonder onnodig maatwerk te bouwen.",
     to: "/ai-integraties",
   },
   {
     title: "AI Automatisering",
-    desc: "We bouwen AI agents, koppelingen en maatwerkcode die terugkerende processen zelfstandig laten doorlopen.",
+    desc: "We bouwen AI-agenten, koppelingen en maatwerkcode die terugkerende processen zelfstandig laten doorlopen.",
     to: "/ai-automatisering",
   },
 ];
@@ -1013,7 +1013,7 @@ function QuickscanMockup() {
               letterSpacing: "0.05em",
             }}
           >
-            Jouw AI potentieel
+            Uw AI potentieel
           </div>
           <svg width="108" height="108" viewBox="0 0 120 120" style={{ display: "block" }}>
             <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(14,165,233,0.14)" strokeWidth="10" />
@@ -1206,7 +1206,7 @@ export default function Home() {
   usePageSeo({
     title: "StarLeo | AI audit, AI implementatie en AI automatisering voor bedrijven",
     description:
-      "StarLeo helpt bedrijven met AI audit, AI implementatie, Claude en ChatGPT integraties en AI automatisering voor support, documentprocessen en terugkerende workflows.",
+      "StarLeo helpt bedrijven met AI audit, AI implementatie, Claude en ChatGPT implementatie en AI automatisering voor support, documentprocessen en terugkerende workflows.",
   });
 
   return (

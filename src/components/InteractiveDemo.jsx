@@ -154,7 +154,7 @@ export default function InteractiveDemo() {
                 ? "Voor bedrijven die eerst een AI audit willen: waar zitten de bottlenecks, welke AI kansen zijn haalbaar en welke implementatievolgorde levert het meeste op."
                 : active === 1
                   ? "Voor teams die Claude of ChatGPT praktisch willen inzetten in support, documentanalyse, kenniswerk en bestaande workflows zonder direct een agentlaag op te zetten."
-                  : "Voor organisaties die processen willen automatiseren met OpenClaw agents, koppelingen en waar nodig maatwerkcode."}
+                  : "Voor organisaties die processen willen automatiseren met AI-agenten, koppelingen en waar nodig maatwerkcode."}
             </p>
           </div>
           <GlowCard style={{ background: C.bg }}>

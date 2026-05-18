@@ -31,8 +31,8 @@ export default function GateForm({
   submitError = "",
 }) {
   const teaserLabel = PAIN_POINT_LABELS[assessment?.answers?.painPoint] || "Meerdere dingen tegelijk";
-  const name = assessment?.answers?.name || "je";
-  const companyName = assessment?.answers?.companyName || "je bedrijf";
+  const name = assessment?.answers?.name || "u";
+  const companyName = assessment?.answers?.companyName || "uw bedrijf";
   const optInProcessLabel = PROCESS_LABELS[assessment?.answers?.processType]?.toLowerCase() || "dit proces";
   const urgencyDegrees = {
     laag: 110,
@@ -63,7 +63,7 @@ export default function GateForm({
               textAlign: "center",
             }}
           >
-            Bijna klaar, {name}. We berekenen nu jouw analyse voor {companyName}.
+            Bijna klaar, {name}. We berekenen nu uw analyse voor {companyName}.
           </h2>
           <p
             style={{
@@ -75,7 +75,7 @@ export default function GateForm({
               maxWidth: 620,
             }}
           >
-            We genereren je rapport op basis van je antwoorden.
+            We genereren uw rapport op basis van uw antwoorden.
           </p>
         </div>
 
@@ -123,7 +123,7 @@ export default function GateForm({
               lineHeight: 1.4,
             }}
           >
-            Je grootste tijdlek: <span style={{ color: "#EAF6FF" }}>{teaserLabel}</span>
+            Uw grootste tijdlek: <span style={{ color: "#EAF6FF" }}>{teaserLabel}</span>
           </div>
         </div>
 
@@ -237,7 +237,7 @@ export default function GateForm({
             textAlign: "center",
           }}
         >
-          Je analyse wordt automatisch opgebouwd op basis van je antwoorden. Lees voor meer informatie ons{" "}
+          Uw analyse wordt automatisch opgebouwd op basis van uw antwoorden. Lees voor meer informatie ons{" "}
           <Link to="/privacy" style={{ color: "rgba(125, 211, 252, 0.9)", fontFamily: BODY }}>
             Privacybeleid
           </Link>
