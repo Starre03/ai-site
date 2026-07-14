@@ -6,6 +6,9 @@ const corsHeaders = {
   "Vary": "Origin",
 };
 const MAX_PAYLOAD_BYTES = 64 * 1024;
+const EMAIL_MAX_ATTEMPTS = 3;
+const EMAIL_RETRY_DELAYS_MS = [250, 750];
+const EMAIL_TIMEOUT_MS = 4000;
 const ALLOWED_ORIGINS = new Set([
   "https://starreai.com",
   "https://www.starreai.com",
@@ -111,33 +114,80 @@ function buildKeyValueRows(items: Array<{ label: string; value: string }>) {
     .join("");
 }
 
-async function sendEmail(payload: Record<string, unknown>) {
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function createSubmissionId(idempotencyKey: string) {
+  if (!idempotencyKey) return null;
+
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(`starleo:intake:${idempotencyKey}`),
+  );
+  const bytes = new Uint8Array(digest).slice(0, 16);
+  bytes[6] = (bytes[6] & 0x0f) | 0x50;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+async function sendEmail(payload: Record<string, unknown>, idempotencyKey: string) {
   const resendApiKey = Deno.env.get("RESEND_API_KEY");
 
   if (!resendApiKey) {
-    console.error("[intake-submit] Missing RESEND_API_KEY; skipping email");
-    return;
+    console.warn("[intake-submit] email skipped: missing configuration");
+    return { sent: false, skipped: true };
   }
 
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...payload,
-        reply_to: REPLY_TO_EMAIL,
-      }),
-    });
+  for (let attempt = 1; attempt <= EMAIL_MAX_ATTEMPTS; attempt += 1) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), EMAIL_TIMEOUT_MS);
 
-    if (!response.ok) {
-      console.error("[intake-submit] Resend email failed", response.status, await response.text());
+    try {
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey.slice(0, 256),
+        },
+        body: JSON.stringify({
+          ...payload,
+          reply_to: REPLY_TO_EMAIL,
+        }),
+        signal: controller.signal,
+      });
+
+      if (response.ok) {
+        return { sent: true, skipped: false };
+      }
+
+      const retryable = response.status === 429 || response.status >= 500;
+      console.warn("[intake-submit] email request failed", {
+        attempt,
+        status: response.status,
+        retryable,
+      });
+
+      if (!retryable || attempt === EMAIL_MAX_ATTEMPTS) {
+        return { sent: false, skipped: false };
+      }
+    } catch {
+      console.warn("[intake-submit] email network error", { attempt });
+
+      if (attempt === EMAIL_MAX_ATTEMPTS) {
+        return { sent: false, skipped: false };
+      }
+    } finally {
+      clearTimeout(timeoutId);
     }
-  } catch (error) {
-    console.error("[intake-submit] Resend email request failed", error);
+
+    await delay(EMAIL_RETRY_DELAYS_MS[attempt - 1] || EMAIL_RETRY_DELAYS_MS.at(-1) || 750);
   }
+
+  return { sent: false, skipped: false };
 }
 
 function buildAdminNotificationHtml(row: Record<string, unknown>) {
@@ -189,33 +239,40 @@ function buildCustomerConfirmationHtml(row: Record<string, unknown>) {
 
 async function sendIntakeEmails(row: Record<string, unknown>) {
   const notificationEmail = Deno.env.get("NOTIFICATION_EMAIL");
+  const submissionId = String(row.id || "unknown");
 
   await Promise.allSettled([
     (async () => {
       if (!notificationEmail) {
-        console.error("[intake-submit] Missing NOTIFICATION_EMAIL; skipping admin notification");
+        console.warn("[intake-submit] admin email skipped: missing configuration");
         return;
       }
 
-      await sendEmail({
-        from: "StarLeo Notificaties <noreply@starreai.com>",
-        to: notificationEmail,
-        subject: `Nieuw contactformulier: ${row.name} van ${row.company_name}`,
-        html: buildAdminNotificationHtml(row),
-      });
+      await sendEmail(
+        {
+          from: "StarLeo Notificaties <noreply@starreai.com>",
+          to: notificationEmail,
+          subject: `Nieuw contactformulier: ${row.name} van ${row.company_name}`,
+          html: buildAdminNotificationHtml(row),
+        },
+        `website-intake-admin-${submissionId}`,
+      );
     })(),
     (async () => {
       if (!row.email) {
-        console.error("[intake-submit] Missing recipient email; skipping confirmation");
+        console.warn("[intake-submit] confirmation email skipped: missing recipient");
         return;
       }
 
-      await sendEmail({
-        from: "Menno van StarLeo <noreply@starreai.com>",
-        to: row.email,
-        subject: `Bedankt voor uw bericht, ${row.name}`,
-        html: buildCustomerConfirmationHtml(row),
-      });
+      await sendEmail(
+        {
+          from: "Menno van StarLeo <noreply@starreai.com>",
+          to: row.email,
+          subject: `Bedankt voor uw bericht, ${row.name}`,
+          html: buildCustomerConfirmationHtml(row),
+        },
+        `website-intake-confirmation-${submissionId}`,
+      );
     })(),
   ]);
 }
@@ -226,11 +283,13 @@ function isValidEmail(value: string) {
 
 function validatePayload(payload: any) {
   const email = String(payload?.contact?.email || "").trim();
+  const idempotencyKey = String(payload?.meta?.idempotencyKey || "").trim();
   const missing = [
     !payload?.contact?.name?.trim() && "contact.name",
     !payload?.contact?.companyName?.trim() && "contact.companyName",
     !payload?.contact?.email?.trim() && "contact.email",
     !payload?.answers && "answers",
+    idempotencyKey.length > 160 && "meta.idempotencyKey",
   ].filter(Boolean);
 
   if (email && !isValidEmail(email)) {
@@ -337,22 +396,42 @@ Deno.serve(async (req) => {
       },
     });
 
-    const row = mapPayloadToRow(payload);
-    const { data, error } = await serviceClient.from("intake_submissions").insert(row).select("id").single();
+    const idempotencyKey = String(payload.meta?.idempotencyKey || "").trim();
+    const submissionId = await createSubmissionId(idempotencyKey);
+    const row: Record<string, unknown> = mapPayloadToRow(payload);
+    if (submissionId) row.id = submissionId;
+
+    const { data, error } = await serviceClient
+      .from("intake_submissions")
+      .insert(row)
+      .select("id, created_at")
+      .single();
 
     if (error) {
-      console.error("[intake-submit] insert failed", error);
+      if (error.code === "23505" && submissionId) {
+        const { data: existing, error: lookupError } = await serviceClient
+          .from("intake_submissions")
+          .select("id, created_at")
+          .eq("id", submissionId)
+          .maybeSingle();
+
+        if (!lookupError && existing?.id) {
+          return jsonResponse(req, { ok: true, id: existing.id, deduplicated: true });
+        }
+      }
+
+      console.error("[intake-submit] insert failed", { code: error.code || "unknown" });
       return jsonResponse(req, { error: "Insert failed" }, 500);
     }
 
-    await sendIntakeEmails(row);
+    await sendIntakeEmails({ ...row, id: data?.id || submissionId || "" });
 
     return jsonResponse(req, {
       ok: true,
       id: data?.id || null,
     });
-  } catch (error) {
-    console.error("[intake-submit] unexpected error", error);
+  } catch {
+    console.error("[intake-submit] unexpected error");
     return jsonResponse(req, { error: "Unexpected function error" }, 500);
   }
 });

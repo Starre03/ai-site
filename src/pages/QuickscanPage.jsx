@@ -6,9 +6,9 @@ import QuestionStep from "../components/quickscan/QuestionStep.jsx";
 import ScoreHero from "../components/quickscan/ScoreHero.jsx";
 import { getPrimaryButtonStyle, pageCardStyle } from "../components/quickscan/styles.js";
 import { usePageSeo } from "../components/ui";
-import iconCost from "../assets/quickscan-icon-cost.png";
-import iconEfficiency from "../assets/quickscan-icon-efficiency.png";
-import iconTime from "../assets/quickscan-icon-time.png";
+import benefitCostIcon from "../assets/quickscan-benefit-cost.png";
+import benefitEfficiencyIcon from "../assets/quickscan-benefit-efficiency.png";
+import benefitTimeIcon from "../assets/quickscan-benefit-time.png";
 import { BODY, C } from "../lib/theme";
 import {
   getAiFollowupQuestionTitle,
@@ -22,7 +22,7 @@ import {
   STEP_IDS,
 } from "../lib/quickscan/config.js";
 import { buildSubmissionPayload, createQuickscanResult, quickscanLog } from "../lib/quickscan/index.js";
-import { siteConfig } from "../lib/site.js";
+import { createIdempotencyKey } from "../lib/submission.js";
 import { saveQuickscanSubmission } from "../lib/supabase/quickscan.js";
 
 function createInitialAnswers() {
@@ -44,15 +44,8 @@ function createInitialAnswers() {
 async function submitQuickscanPreview(payload) {
   const submission = await saveQuickscanSubmission(payload);
 
-  if (submission.skipped) {
-    console.warn("[quickscan] skipped:", submission.reason);
-  } else if (!submission.ok) {
-    console.error("[quickscan] failed after retries:", submission.error);
-  }
-
   quickscanLog("scan_complete", {
     submissionStatus: submission.ok ? "saved" : submission.skipped ? "skipped" : "failed",
-    submissionId: submission.data?.id || null,
     attempts: submission.attempts || null,
   });
 
@@ -132,6 +125,8 @@ export default function QuickscanPage() {
   const [goingBack, setGoingBack] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const lastStepRef = useRef(null);
+  const gateSubmittingRef = useRef(false);
+  const idempotencyKeyRef = useRef(createIdempotencyKey("quickscan"));
   const CALCULATION_DURATION_MS = 9600;
 
   useEffect(() => {
@@ -331,6 +326,7 @@ export default function QuickscanPage() {
 
   async function handleGateSubmit(event) {
     event.preventDefault();
+    if (gateSubmittingRef.current) return;
 
     const nextErrors = {};
 
@@ -350,6 +346,7 @@ export default function QuickscanPage() {
       return;
     }
 
+    gateSubmittingRef.current = true;
     setGateSubmitting(true);
     setGateSubmitError("");
 
@@ -360,18 +357,35 @@ export default function QuickscanPage() {
       marketingOptIn: contact.marketingOptIn,
       website: "",
     };
-    const payload = buildSubmissionPayload(assessment, nextContact);
+    const basePayload = buildSubmissionPayload(assessment, nextContact);
+    const payload = {
+      ...basePayload,
+      meta: {
+        ...basePayload.meta,
+        idempotencyKey: idempotencyKeyRef.current,
+      },
+    };
 
     setIsCalculating(true);
     const minDelay = new Promise((resolve) => setTimeout(resolve, CALCULATION_DURATION_MS));
-    const submission = submitQuickscanPreview(payload).catch((error) => {
-      console.error("[quickscan] submit error", error);
-      return null;
-    });
-    await Promise.all([submission, minDelay]);
-    setSubmittedContact(nextContact);
-    setScreenIndex(flowStepIds.length - 1);
-    setIsCalculating(false);
+
+    try {
+      const submission = await submitQuickscanPreview(payload).catch(() => null);
+
+      if (!submission?.ok) {
+        setGateSubmitError("Uw analyse kon niet worden opgeslagen. Probeer het nog een keer.");
+        setIsCalculating(false);
+        return;
+      }
+
+      await minDelay;
+      setSubmittedContact(nextContact);
+      setScreenIndex(flowStepIds.length - 1);
+      setIsCalculating(false);
+    } finally {
+      gateSubmittingRef.current = false;
+      setGateSubmitting(false);
+    }
   }
 
   function handleReset() {
@@ -383,10 +397,17 @@ export default function QuickscanPage() {
     });
     setSubmittedContact(null);
     setErrors({});
+    setGateSubmitError("");
+    setGateSubmitting(false);
+    gateSubmittingRef.current = false;
+    idempotencyKeyRef.current = createIdempotencyKey("quickscan");
     setScreenIndex(1);
   }
 
   function handleEditGate() {
+    setSubmittedContact(null);
+    setGateSubmitError("");
+    idempotencyKeyRef.current = createIdempotencyKey("quickscan");
     setScreenIndex(flowStepIds.length - 2);
   }
 
@@ -513,55 +534,19 @@ export default function QuickscanPage() {
             </div>
 
             <div
-              className={`quickscan-stagger${isMounted ? " is-mounted" : ""}`}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                gap: "clamp(10px, 1.8vh, 14px)",
-                width: "min(580px, 100%)",
-                margin: "0 auto",
-                animationDelay: "380ms",
-              }}
+              className={`quickscan-benefits quickscan-stagger${isMounted ? " is-mounted" : ""}`}
+              style={{ animationDelay: "380ms" }}
             >
               {[
-                { key: "time", label: "Tijd besparen", icon: iconTime },
-                { key: "efficiency", label: "Efficiënter werken", icon: iconEfficiency },
-                { key: "cost", label: "Kosten verlagen", icon: iconCost },
+                { key: "time", icon: benefitTimeIcon, label: "Tijd besparen" },
+                { key: "efficiency", icon: benefitEfficiencyIcon, label: "Efficiënter werken" },
+                { key: "cost", icon: benefitCostIcon, label: "Kosten verlagen" },
               ].map((item) => (
-                <div
-                  key={item.key}
-                  style={{
-                    display: "grid",
-                    justifyItems: "center",
-                    alignContent: "start",
-                    gap: "clamp(8px, 1.2vh, 10px)",
-                    color: C.textSoft,
-                    fontSize: "clamp(0.92rem, min(1.5vw, 2.2vh), 0.98rem)",
-                    textAlign: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "clamp(74px, min(7vw, 9vh), 86px)",
-                      height: "clamp(56px, min(5.8vw, 7vh), 66px)",
-                    }}
-                  >
-                    <img
-                      src={item.icon}
-                      alt=""
-                      aria-hidden="true"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "block",
-                        objectFit: "contain",
-                      }}
-                    />
+                <div key={item.key} className="quickscan-benefit">
+                  <span className="quickscan-benefit-icon" aria-hidden="true">
+                    <img src={item.icon} alt="" />
                   </span>
-                  <span style={{ lineHeight: 1.45 }}>{item.label}</span>
+                  <span className="quickscan-benefit-label">{item.label}</span>
                 </div>
               ))}
             </div>
@@ -627,7 +612,7 @@ export default function QuickscanPage() {
                 </button>
               </div>
               <div style={{ color: C.textSoft, lineHeight: 1.7, fontSize: "clamp(0.92rem, min(1.45vw, 2vh), 1rem)" }}>
-                Analyse gekoppeld aan {submissionPayload.contact.email}. De live koppeling voor rapport, CRM of opvolging kan later op deze payload worden aangesloten.
+                Uw analyse is veilig opgeslagen. U kunt de resultaten hierboven rustig bekijken.
               </div>
             </section>
           </section>

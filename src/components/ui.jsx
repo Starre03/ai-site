@@ -250,7 +250,17 @@ function renderBtnChildren(children) {
   );
 }
 
-export function PrimaryButton({ children, to, href, onClick, secondary = false, analyticsEvent, analyticsPayload }) {
+export function PrimaryButton({
+  children,
+  to,
+  href,
+  onClick,
+  secondary = false,
+  analyticsEvent,
+  analyticsPayload,
+  type = "button",
+  disabled = false,
+}) {
   const style = {
     display: "inline-flex",
     alignItems: "center",
@@ -265,7 +275,8 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false, 
     border: secondary ? `1px solid ${C.borderLight}` : "none",
     background: secondary ? "rgba(255,255,255,0.02)" : C.primary,
     color: "#fff",
-    cursor: "pointer",
+    cursor: disabled ? "not-allowed" : "pointer",
+    opacity: disabled ? 0.68 : 1,
     boxShadow: secondary ? "none" : `0 4px 24px ${C.primary}25`,
     transition: "transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s cubic-bezier(.22,1,.36,1), background 0.3s ease",
   };
@@ -273,6 +284,11 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false, 
   const className = secondary ? "lift-on-hover" : "btn-premium";
   const rendered = renderBtnChildren(children);
   const handleClick = (event) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+
     if (analyticsEvent) {
       trackEvent(analyticsEvent, analyticsPayload);
     }
@@ -297,7 +313,7 @@ export function PrimaryButton({ children, to, href, onClick, secondary = false, 
   }
 
   return (
-    <button className={className} type="button" onClick={handleClick} style={style}>
+    <button className={className} type={type} disabled={disabled} onClick={handleClick} style={style}>
       {rendered}
     </button>
   );
@@ -630,11 +646,44 @@ export function PageHero({
 
 export function BrandMark() {
   return (
-    <img
-      src="/starlion-logo.png"
-      alt="StarLion"
-      style={{ height: 38, width: "auto", display: "block" }}
-    />
+    <span
+      aria-hidden="true"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 9,
+        color: C.text,
+        fontFamily: BODY,
+        fontSize: "1rem",
+        fontWeight: 750,
+        letterSpacing: "-0.025em",
+      }}
+    >
+      <span
+        style={{
+          width: 32,
+          height: 32,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: `1px solid ${C.primary}40`,
+          borderRadius: 10,
+          background: `linear-gradient(145deg, ${C.primary}22, ${C.bg2})`,
+          color: C.primary,
+          boxShadow: `0 8px 22px ${C.primary}18`,
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 2.8c.7 4.8 3.4 7.5 8.2 8.2-4.8.7-7.5 3.4-8.2 8.2-.7-4.8-3.4-7.5-8.2-8.2 4.8-.7 7.5-3.4 8.2-8.2Z"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
+      <span>
+        Star<span style={{ color: C.primary }}>Leo</span>
+      </span>
+    </span>
   );
 }
 

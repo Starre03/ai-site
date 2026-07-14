@@ -695,10 +695,9 @@ export function getQuickscanScoreResult(answers, options = {}) {
   const scoreState = getMissingScoreFields(answers);
 
   if (scoreState.missing.length > 0) {
-    if (logErrors) {
+    if (logErrors && import.meta.env.DEV) {
       console.warn("[quickscan-score] Incomplete or invalid scoring input", {
         missing: scoreState.missing,
-        answers,
       });
     }
 
@@ -855,12 +854,6 @@ function getHourlyValueInput(answers) {
 
 export function quickscanLog(event, payload = {}) {
   trackEvent(event, payload);
-  console.log(
-    JSON.stringify({
-      event,
-      ...payload,
-    }),
-  );
 }
 
 export function getTimeOpportunity(answers) {
@@ -1141,7 +1134,7 @@ export function getCTA(result) {
     emailFollowUpAfterDays: urgencyCta.emailFollowUpAfterDays,
     showPhone: urgencyCta.showPhone,
     phonePending: urgencyCta.ctaType === "intake" || urgencyCta.ctaType === "direct",
-    href: "#quickscan-contact",
+    href: "/#contact",
     body:
       primaryService === "audit"
         ? "Een eerste contactgesprek helpt scherp krijgen waar de meeste tijd weglekt en welke quick wins realistisch zijn."

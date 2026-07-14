@@ -38,13 +38,14 @@ function ScrollManager() {
 
 export default function App() {
   const [ready, setReady] = useState(() => {
-    if (typeof window === "undefined") return false;
-    // Dev escape: ?intro=1 forces the intro to play on localhost so we can
-    // iterate on the animation; otherwise localhost skips it for fast reloads.
-    const forceIntro = typeof window !== "undefined" && window.location.search.includes("intro");
-    if (forceIntro) return false;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return true;
-    return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (typeof window === "undefined") return true;
+
+    const introPreviewEnabled =
+      import.meta.env.DEV &&
+      import.meta.env.VITE_ENABLE_INTRO_PREVIEW === "true" &&
+      new URLSearchParams(window.location.search).get("intro") === "1";
+
+    return !introPreviewEnabled || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   });
 
   return (
