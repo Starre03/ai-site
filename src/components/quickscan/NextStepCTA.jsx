@@ -5,7 +5,6 @@ import { getPrimaryButtonStyle, getSecondaryButtonStyle, pageCardStyle } from ".
 export default function NextStepCTA({ routing, onClick }) {
   return (
     <section
-      id="quickscan-contact"
       style={{ ...pageCardStyle, display: "grid", gap: 18, justifyItems: "center", textAlign: "center" }}
     >
       <div style={{ display: "grid", gap: 10, maxWidth: 760 }}>
@@ -22,8 +21,8 @@ export default function NextStepCTA({ routing, onClick }) {
         <a href={routing.href} style={getPrimaryButtonStyle(false)} onClick={() => onClick("plan-gesprek")}>
           Plan een gesprek
         </a>
-        <a href={routing.href} style={getSecondaryButtonStyle(false)} onClick={() => onClick("neem-contact-op")}>
-          Neem contact op
+        <a href="/#diensten" style={getSecondaryButtonStyle(false)} onClick={() => onClick("bekijk-oplossingen")}>
+          Bekijk onze oplossingen
         </a>
       </div>
 

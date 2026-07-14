@@ -1,12 +1,13 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { intakeSteps } from "../content/siteContent";
 import { trackEvent } from "../lib/analytics";
 import { buildIntakeSubmissionPayload } from "../lib/intake/index.js";
+import { createIdempotencyKey } from "../lib/submission.js";
 import { saveIntakeSubmission } from "../lib/supabase/intake.js";
 import { BODY, C } from "../lib/theme";
 import { GlowCard, PrimaryButton, Reveal, SectionHeading } from "./ui";
 
-function InputField({ field, value, onChange, selected, onToggle, error }) {
+function InputField({ field, fieldId, labelId, errorId, value, onChange, selected, onToggle, error, disabled }) {
   const [focused, setFocused] = useState(false);
 
   const chipStyle = (isSelected) => ({
@@ -25,16 +26,28 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
 
   if (field.type === "chips") {
     return (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {field.options.map((option) => {
+      <div
+        id={fieldId}
+        role="group"
+        aria-labelledby={labelId}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? errorId : undefined}
+        tabIndex={-1}
+        style={{ display: "flex", flexWrap: "wrap", gap: 6 }}
+      >
+        {field.options.map((option, index) => {
           const isSelected = value === option;
 
           return (
             <button
               key={option}
+              id={`${fieldId}-option-${index + 1}`}
+              name={field.id}
+              value={option}
               className={isSelected ? undefined : "chip-hover"}
               type="button"
               aria-pressed={isSelected}
+              disabled={disabled}
               onClick={() => onChange(field.id, option)}
               style={chipStyle(isSelected)}
             >
@@ -48,15 +61,27 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
 
   if (field.type === "multi") {
     return (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {field.options.map((option) => {
+      <div
+        id={fieldId}
+        role="group"
+        aria-labelledby={labelId}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? errorId : undefined}
+        tabIndex={-1}
+        style={{ display: "flex", flexWrap: "wrap", gap: 6 }}
+      >
+        {field.options.map((option, index) => {
           const isSelected = selected.includes(option);
           return (
             <button
               key={option}
+              id={`${fieldId}-option-${index + 1}`}
+              name={field.id}
+              value={option}
               className={isSelected ? undefined : "chip-hover"}
               type="button"
               aria-pressed={isSelected}
+              disabled={disabled}
               onClick={() => onToggle(field.id, option)}
               style={chipStyle(isSelected)}
             >
@@ -72,14 +97,18 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
   if (field.type === "textarea") {
     return (
       <textarea
-        id={field.id}
+        id={fieldId}
+        name={field.id}
         value={value}
         onChange={(event) => onChange(field.id, event.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder={field.placeholder}
         aria-invalid={Boolean(error)}
-        aria-describedby={error ? `${field.id}-error` : undefined}
+        aria-describedby={error ? errorId : undefined}
+        autoComplete="off"
+        required={Boolean(field.required)}
+        disabled={disabled}
         rows={4}
         style={{
           width: "100%",
@@ -99,15 +128,29 @@ function InputField({ field, value, onChange, selected, onToggle, error }) {
 
   return (
     <input
-      id={field.id}
-      type={field.type}
+      id={fieldId}
+      name={field.id}
+      type={field.id === "phone" ? "tel" : field.type === "email" ? "email" : "text"}
       value={value}
       onChange={(event) => onChange(field.id, event.target.value)}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       placeholder={field.placeholder}
       aria-invalid={Boolean(error)}
-      aria-describedby={error ? `${field.id}-error` : undefined}
+      aria-describedby={error ? errorId : undefined}
+      autoComplete={
+        field.id === "name"
+          ? "name"
+          : field.id === "company"
+            ? "organization"
+            : field.id === "email"
+              ? "email"
+              : field.id === "phone"
+                ? "tel"
+                : "off"
+      }
+      required={Boolean(field.required)}
+      disabled={disabled}
       style={{
         width: "100%",
         padding: "11px 14px",
@@ -144,6 +187,9 @@ export default function IntakeForm({
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [data, setData] = useState(() => (preferredRoute ? { route: preferredRoute } : {}));
+  const submittingRef = useRef(false);
+  const formStartedRef = useRef(false);
+  const idempotencyKeyRef = useRef(createIdempotencyKey("intake"));
 
   const current = steps[step];
   const isSingleStep = steps.length === 1;
@@ -152,6 +198,14 @@ export default function IntakeForm({
     () => `Stap ${step + 1} van ${steps.length}: ${current.title}`,
     [current.title, step, steps.length],
   );
+
+  const fieldDomId = (fieldId) => `${id}-${fieldId}`;
+
+  const handleFormStart = () => {
+    if (formStartedRef.current) return;
+    formStartedRef.current = true;
+    trackEvent("form_start", { formId: id, formKind: submissionKind });
+  };
 
   const update = (idValue, nextValue) => {
     setData((currentData) => ({ ...currentData, [idValue]: nextValue }));
@@ -175,7 +229,7 @@ export default function IntakeForm({
     return !String(value || "").trim();
   };
 
-  const validateCurrentStep = () => {
+  const validateCurrentStep = ({ focusFirst = true } = {}) => {
     const nextErrors = {};
 
     current.fields.forEach((field) => {
@@ -195,10 +249,17 @@ export default function IntakeForm({
     });
 
     setErrors((currentErrors) => ({ ...currentErrors, ...nextErrors }));
+
+    if (focusFirst && Object.keys(nextErrors).length > 0) {
+      const firstInvalidId = fieldDomId(Object.keys(nextErrors)[0]);
+      window.setTimeout(() => document.getElementById(firstInvalidId)?.focus(), 0);
+    }
+
     return Object.keys(nextErrors).length === 0;
   };
 
   const jump = (direction) => {
+    if (animating || submittingRef.current) return;
     if (direction > 0 && !validateCurrentStep()) return;
 
     setAnimating(true);
@@ -213,35 +274,40 @@ export default function IntakeForm({
   };
 
   const submit = async () => {
-    if (!validate()) return;
+    if (submittingRef.current || !validate()) return;
 
     if (data.website) {
       trackEvent("spam_honeypot_blocked", { formId: id, formKind: submissionKind });
       return;
     }
 
+    submittingRef.current = true;
     setSubmitting(true);
     trackEvent("form_submit_attempt", { formId: id, formKind: submissionKind });
     try {
       setSubmitError("");
-      const payload = buildIntakeSubmissionPayload({
+      const basePayload = buildIntakeSubmissionPayload({
         formId: id,
         formKind: submissionKind,
         preferredRoute,
         steps,
         answers: data,
       });
+      const payload = {
+        ...basePayload,
+        meta: {
+          ...basePayload.meta,
+          idempotencyKey: idempotencyKeyRef.current,
+        },
+      };
       const submission = await saveIntakeSubmission(payload);
 
       if (!submission.ok) {
-        if (!submission.skipped) {
-          console.error("Intake submission failed", submission.error);
-        }
-
         trackEvent("form_submit_failed", {
           formId: id,
           formKind: submissionKind,
           skipped: Boolean(submission.skipped),
+          errorClass: submission.skipped ? "configuration" : "network_or_server",
         });
         setSubmitError("Er ging iets mis bij het versturen. Probeer het nog een keer.");
         return;
@@ -249,9 +315,30 @@ export default function IntakeForm({
 
       trackEvent("form_submit_success", { formId: id, formKind: submissionKind });
       setDone(true);
+    } catch {
+      trackEvent("form_submit_failed", {
+        formId: id,
+        formKind: submissionKind,
+        skipped: false,
+        errorClass: "unexpected",
+      });
+      setSubmitError("Er ging iets mis bij het versturen. Probeer het nog een keer.");
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (submittingRef.current) return;
+
+    if (step < steps.length - 1) {
+      jump(1);
+      return;
+    }
+
+    submit();
   };
 
   if (done) {
@@ -405,7 +492,8 @@ export default function IntakeForm({
           />
         )}
         <Reveal delay={0.18}>
-          <GlowCard style={{ background: C.bg2, marginTop: centered ? 28 : 24 }}>
+          <form onSubmit={handleSubmit} onFocusCapture={handleFormStart} noValidate>
+            <GlowCard style={{ background: C.bg2, marginTop: centered ? 28 : 24 }}>
             <div style={{ padding: "clamp(1.2rem, 3vw, 2rem)" }}>
               <div style={{ marginBottom: 18 }}>
                 {!isSingleStep ? (
@@ -465,12 +553,14 @@ export default function IntakeForm({
                   autoComplete="off"
                   tabIndex={-1}
                   aria-hidden="true"
+                  disabled={submitting}
                   style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }}
                 />
                 {current.fields.map((field) => (
                   <div key={field.id}>
                     <label
-                      htmlFor={field.id}
+                      id={`${fieldDomId(field.id)}-label`}
+                      htmlFor={fieldDomId(field.id)}
                       style={{
                         display: "block",
                         fontSize: "0.8rem",
@@ -485,14 +575,22 @@ export default function IntakeForm({
                     </label>
                     <InputField
                       field={field}
+                      fieldId={fieldDomId(field.id)}
+                      labelId={`${fieldDomId(field.id)}-label`}
+                      errorId={`${fieldDomId(field.id)}-error`}
                       value={data[field.id] || ""}
                       selected={data[field.id] || []}
                       onChange={update}
                       onToggle={toggle}
                       error={errors[field.id]}
+                      disabled={submitting}
                     />
                     {errors[field.id] ? (
-                      <div id={`${field.id}-error`} style={{ fontSize: "0.72rem", color: C.danger, marginTop: 4, fontFamily: BODY }}>
+                      <div
+                        id={`${fieldDomId(field.id)}-error`}
+                        role="alert"
+                        style={{ fontSize: "0.72rem", color: C.danger, marginTop: 4, fontFamily: BODY }}
+                      >
                         {errors[field.id]}
                       </div>
                     ) : null}
@@ -512,7 +610,7 @@ export default function IntakeForm({
                   <button
                     type="button"
                     onClick={() => jump(-1)}
-                    disabled={step === 0}
+                    disabled={step === 0 || submitting}
                     style={{
                       padding: "10px 18px",
                       borderRadius: 8,
@@ -528,7 +626,7 @@ export default function IntakeForm({
                     ← Terug
                   </button>
                 ) : null}
-                <PrimaryButton onClick={() => (step < steps.length - 1 ? jump(1) : submit())}>
+                <PrimaryButton type="submit" disabled={submitting}>
                   {submitting ? (
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                       <span
@@ -553,6 +651,8 @@ export default function IntakeForm({
               </div>
               {submitError ? (
                 <div
+                  role="alert"
+                  aria-live="polite"
                   style={{
                     marginTop: 12,
                     fontSize: "0.78rem",
@@ -566,7 +666,8 @@ export default function IntakeForm({
                 </div>
               ) : null}
             </div>
-          </GlowCard>
+            </GlowCard>
+          </form>
         </Reveal>
       </div>
     </section>

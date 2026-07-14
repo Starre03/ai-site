@@ -1,116 +1,97 @@
-# Quickscan naar productie
+# Funnel naar productie
 
-Dit project gebruikt voor de quickscan:
+De contactformulieren en quickscan gebruiken dezelfde productieketen:
 
-- Vite frontend
-- Supabase database
-- Supabase Edge Function `quickscan-submit`
+- Vite-frontend
+- Supabase Edge Functions `intake-submit` en `quickscan-submit`
+- Supabase-tabellen `intake_submissions` en `quickscan_submissions`
+- Resend voor de interne melding en bevestiging aan de bezoeker
 
-De lokale flow is nu:
+## 1. Frontendvariabelen
 
-- frontend -> Edge Function
-- Edge Function -> `public.quickscan_submissions`
-
-## 1. Frontend env-vars
-
-Maak in productie deze frontend-variabelen beschikbaar:
+Zet deze waarden in Vercel Production:
 
 ```bash
-VITE_SUPABASE_URL=https://<project-ref>.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=<publishable-key>
+VITE_SUPABASE_URL=https://ncotqxnyhmntyovaqfcg.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=<production-publishable-key>
 ```
 
-Gebruik lokaal `.env.local` en in productie je hostingprovider-envs.
+`.env.local` wijst bewust naar de lokale Supabase-omgeving en hoort niet in productie te worden gebruikt.
 
-## 2. Supabase project koppelen
+## 2. Supabase koppelen
 
 ```bash
 npx supabase login
-npx supabase link --project-ref <project-ref>
+npx supabase link --project-ref ncotqxnyhmntyovaqfcg
 ```
 
-## 3. Database schema deployen
+## 3. Database
 
-De quickscan gebruikt deze migration:
+Voor deze release is geen database migration nodig. De frontend stuurt een idempotency-key mee en de Edge Function zet die via SHA-256 om in een geldige, deterministische UUID. De bestaande primary key van de submissiontabel blokkeert daardoor dubbele rijen atomair.
 
-- `supabase/migrations/20260415153000_create_quickscan_submissions.sql`
+Een oudere gecachete frontend zonder idempotency-key blijft compatibel: in dat geval gebruikt de database de bestaande `gen_random_uuid()` default.
 
-Deploy naar je gekoppelde project:
+## 4. E-mailsecrets controleren
+
+Beide functions gebruiken:
 
 ```bash
-npx supabase db push
+RESEND_API_KEY=<resend-api-key>
+NOTIFICATION_EMAIL=<intern-ontvangstadres>
 ```
 
-## 4. Edge Function deployen
-
-De quickscan submit loopt via:
-
-- `supabase/functions/quickscan-submit/index.ts`
-
-Omdat de quickscan publiek toegankelijk is, deploy je deze function zonder JWT-verificatie:
+Supabase levert `SUPABASE_URL` en `SUPABASE_SERVICE_ROLE_KEY` zelf aan hosted Edge Functions. Zet de Resend-secrets alleen als ze nog niet in het gekoppelde project staan:
 
 ```bash
+npx supabase secrets set RESEND_API_KEY=<resend-api-key> NOTIFICATION_EMAIL=<intern-ontvangstadres>
+```
+
+## 5. Functions deployen
+
+Beide endpoints zijn publiek en valideren de payload zelf. Deploy ze daarom zonder JWT-verificatie:
+
+```bash
+npx supabase functions deploy intake-submit --no-verify-jwt
 npx supabase functions deploy quickscan-submit --no-verify-jwt
 ```
 
-## 5. Secrets
+## 6. Frontend publiceren
 
-Voor deze function zijn op productie geen extra custom secrets nodig zolang de function alleen:
+Pas na de secretcheck en functions wordt de frontend naar `main` gemerged/gepusht. Vercel publiceert `main` automatisch naar `starreai.com`.
 
-- de payload valideert
-- in dezelfde Supabase-projectdatabase schrijft
+De veilige volgorde is dus:
 
-De function leest in productie eerst:
+1. Supabase-secrets controleren;
+2. beide Edge Functions deployen;
+3. frontend naar `main`;
+4. gecontroleerde productietest.
 
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+## 7. Productietest
 
-Lokaal valt hij terug op:
+Gebruik per formulier een herkenbaar testadres en controleer:
 
-- `LOCAL_SUPABASE_URL`
-- `LOCAL_SUPABASE_SERVICE_ROLE_KEY`
+1. intake/contact toont pas succes na een geslaagde serverresponse;
+2. de rij staat één keer in `intake_submissions`;
+3. quickscan toont bij een serverfout een retry en nog geen resultaat;
+4. een geslaagde quickscan staat één keer in `quickscan_submissions`;
+5. opnieuw versturen met dezelfde idempotency-key maakt geen dubbele rij of dubbele mail;
+6. `recommended_next_step`, `main_ai_opportunity`, `total_score` en `classification` zijn opgeslagen;
+7. de interne melding komt aan op `NOTIFICATION_EMAIL`;
+8. de bevestigingsmail komt aan bij de bezoeker;
+9. browserconsole en functionlogs bevatten geen naam, e-mailadres, telefoonnummer of antwoorden.
 
-Die lokale waarden staan in:
+## 8. Rollback
 
-- `supabase/functions/.env.local`
+Als de productietest mislukt, rol dan eerst alleen de frontenddeployment terug in Vercel. De nieuwe functions blijven compatibel met de vorige frontend; er is geen schemawijziging die teruggedraaid hoeft te worden.
 
-## 6. Wat lokaal blijft
+## 9. Lokaal ontwikkelen
 
-Lokaal gebruik je:
-
-- `npx supabase start`
-- `npx supabase db reset`
-- `npx supabase functions serve quickscan-submit --env-file supabase/functions/.env.local`
-
-Frontend lokaal:
+Met een draaiende Docker/Supabase-installatie:
 
 ```bash
+npx supabase start
+npx supabase db reset
+npx supabase functions serve intake-submit --env-file supabase/functions/.env.local
+npx supabase functions serve quickscan-submit --env-file supabase/functions/.env.local
 npm run dev
 ```
-
-## 7. Productie-checklist
-
-Voor livegang controleren:
-
-1. Frontend env-vars staan goed.
-2. Migration is gepusht.
-3. Function is gedeployed met `--no-verify-jwt`.
-4. Quickscan submission komt binnen in `quickscan_submissions`.
-5. `recommended_next_step`, `main_ai_opportunity`, `total_score` en `classification` worden correct opgeslagen.
-6. Directe inserts naar de tabel zijn niet meer toegestaan buiten de function.
-
-## 8. Volgende uitbreiding
-
-De huidige productieklare basis is:
-
-- payload validatie
-- Edge Function submit
-- veilige insert via backendlaag
-
-Latere uitbreidingen kunnen hierop voortbouwen:
-
-- website scraping
-- AI-analyse op site-inhoud
-- CRM/webhook push
-- rate limiting / anti-spam
-- extra leadstatusvelden

@@ -154,12 +154,16 @@ export default function GateForm({
             </label>
             <input
               id="quickscan-email"
+              name="email"
               type="email"
+              autoComplete="email"
+              required
               placeholder="naam@bedrijf.nl"
               value={contact.email}
               onChange={(event) => onChange("email", event.target.value)}
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? "quickscan-email-error" : undefined}
+              disabled={submitting}
               style={fieldStyle}
             />
             {errors.email ? <span id="quickscan-email-error" style={{ color: "#FCA5A5", fontSize: "0.88rem", fontFamily: BODY }}>{errors.email}</span> : null}
@@ -180,7 +184,14 @@ export default function GateForm({
               fontSize: "clamp(0.86rem, min(1.3vw, 1.8vh), 0.9rem)",
             }}
           >
-            <input type="checkbox" checked={contact.marketingOptIn} onChange={onToggleOptIn} style={{ marginTop: 4 }} />
+            <input
+              type="checkbox"
+              name="marketingOptIn"
+              checked={contact.marketingOptIn}
+              onChange={onToggleOptIn}
+              disabled={submitting}
+              style={{ marginTop: 4 }}
+            />
             <span>Ja, stuur me ook tips en updates over AI voor {optInProcessLabel}.</span>
           </label>
 
@@ -205,7 +216,7 @@ export default function GateForm({
                   Analyse opslaan...
                 </span>
               ) : (
-                "Toon analyse"
+                submitError ? "Opnieuw proberen" : "Toon analyse"
               )}
             </button>
           </div>

@@ -356,7 +356,6 @@ const CLASSIFICATION_DESCRIPTIONS = {
 const SCORE_DIMENSIONS = [
   { key: "d1_tijdverlies", label: "Tijdverlies" },
   { key: "d2_automatiseerbaarheid", label: "Automatiseerbaarheid" },
-  { key: "d3_koopbereidheid", label: "Koopbereidheid" },
   { key: "d4_geldverlies", label: "Geldverlies" },
 ];
 
@@ -381,12 +380,6 @@ function getDimensionExplanation(key, value) {
     return "Een deel van dit werk vraagt waarschijnlijk nog meer maatwerk of afstemming dan automatisering.";
   }
 
-  if (key === "d3_koopbereidheid") {
-    if (level === "Hoog") return "Uw antwoorden laten zien dat er duidelijke bereidheid is om dit echt te verbeteren.";
-    if (level === "Gemiddeld") return "Er is interesse om te verbeteren, maar de stap naar uitvoering lijkt nog deels verkennend.";
-    return "De behoefte lijkt nu nog minder urgent of vooral bedoeld om eerst te oriënteren.";
-  }
-
   if (key === "d4_geldverlies") {
     if (level === "Hoog") return "De verloren tijd vertaalt zich waarschijnlijk direct naar merkbare financiële impact.";
     if (level === "Gemiddeld") return "Er zit een duidelijke kostencomponent in dit proces, maar die loopt nog niet maximaal op.";
@@ -403,10 +396,6 @@ function getScoreAnalysisSummary(score) {
 
   if (score.d1_tijdverlies >= 17 && score.d2_automatiseerbaarheid >= 17 && score.d4_geldverlies >= 17) {
     return "Deze combinatie laat zien dat er nu niet alleen veel tijd weglekt, maar dat dit ook relatief goed te verbeteren is en direct financiële impact heeft.";
-  }
-
-  if (score.d2_automatiseerbaarheid >= 17 && score.d3_koopbereidheid >= 17) {
-    return "De grootste kracht zit hier in werk dat goed automatiseerbaar is, gecombineerd met duidelijke bereidheid om daar echt iets mee te doen.";
   }
 
   if (lowDimensions.length >= 2) {
@@ -431,10 +420,6 @@ function getScoreStatusLine(score) {
     return "Er ligt vooral winst in werk dat nu relatief goed te standaardiseren en te automatiseren is.";
   }
 
-  if (score.d3_koopbereidheid >= 18) {
-    return "Uw antwoorden laten zien dat er niet alleen kans is, maar ook bereidheid om hier echt mee te bewegen.";
-  }
-
   if (score.total_score >= 45) {
     return "Er liggen duidelijke AI-kansen, vooral in terugkerend werk waar nu nog veel handmatige tijd in gaat zitten.";
   }
@@ -448,7 +433,6 @@ function getLargestOpportunityLine(score) {
   const topScore = Math.max(
     score.d1_tijdverlies,
     score.d2_automatiseerbaarheid,
-    score.d3_koopbereidheid,
     score.d4_geldverlies,
   );
 
@@ -462,10 +446,6 @@ function getLargestOpportunityLine(score) {
 
   if (score.d2_automatiseerbaarheid === topScore) {
     return "Grootste kans: Automatiseerbaarheid";
-  }
-
-  if (score.d3_koopbereidheid === topScore) {
-    return "Grootste kans: Koopbereidheid";
   }
 
   if (score.d4_geldverlies === topScore) {
@@ -1003,8 +983,8 @@ export default function ScoreHero({ result, recommendations, onCtaClick }) {
             <a href={result.routing.href} style={getPrimaryButtonStyle(false)} onClick={() => onCtaClick("plan-gesprek")}>
               {result.routing.primaryButtonLabel || "Plan een gesprek"}
             </a>
-            <a href={result.routing.href} style={getSecondaryButtonStyle(false)} onClick={() => onCtaClick("neem-contact-op")}>
-              Bel ons
+            <a href="/#diensten" style={getSecondaryButtonStyle(false)} onClick={() => onCtaClick("bekijk-oplossingen")}>
+              Bekijk onze oplossingen
             </a>
           </div>
         </div>
